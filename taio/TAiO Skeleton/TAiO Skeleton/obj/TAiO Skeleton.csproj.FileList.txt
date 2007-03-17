@@ -1,0 +1,5 @@
+bin\Debug\TAiO Skeleton.exe
+bin\Debug\TAiO Skeleton.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\TAiO Skeleton.exe
+obj\Debug\TAiO Skeleton.pdb
