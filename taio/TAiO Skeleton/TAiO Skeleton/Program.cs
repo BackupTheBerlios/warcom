@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace TAiO_Rectangles
 {
@@ -9,6 +10,8 @@ namespace TAiO_Rectangles
     {
         static void Main(string[] args)
         {
+            MainWindow mainWindow = new MainWindow();
+            Application.Run(mainWindow);
             //IntersectionTest();
             //SubtractTest();
         }

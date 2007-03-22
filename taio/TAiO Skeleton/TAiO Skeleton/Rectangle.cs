@@ -23,6 +23,9 @@ namespace TAiO_Rectangles
             this.leftTop = new Point(leftTop.X, leftTop.Y);
             this.rightDown = new Point(leftTop.X + sideA, leftTop.Y + sideB);
 
+            this.sideA = rightDown.X - leftTop.X;
+            this.sideB = rightDown.Y - leftTop.Y;
+
             this.containedRectangles = new List<Rectangle>();
             this.fatherRectangle = fatherRectangle;
         }
