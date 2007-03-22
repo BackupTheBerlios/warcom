@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taio", "Taio\Taio.csproj", "{03D04BC6-582E-4765-99F3-EA62290D47AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Taio", "TAiO Skeleton\Taio.csproj", "{03D04BC6-582E-4765-99F3-EA62290D47AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
