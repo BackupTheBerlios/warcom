@@ -120,9 +120,16 @@ namespace TAiO_Rectangles
         // prostok¹t usuwany z listy prostok¹tów
         private void removeRectangleFromTreeView()
         {
-            int index = this.rectanglesTreeView.SelectedNode.Index;
-            rectangles.RemoveAt(index);
-            this.rectanglesTreeView.Nodes.RemoveAt(index);
+            int index = -1;
+
+            if (this.rectanglesTreeView.SelectedNode != null)
+                index = this.rectanglesTreeView.SelectedNode.Index;
+
+            if (index >= 0)
+            {
+                rectangles.RemoveAt(index);
+                this.rectanglesTreeView.Nodes.RemoveAt(index);
+            }
         }
         #endregion        
     }
