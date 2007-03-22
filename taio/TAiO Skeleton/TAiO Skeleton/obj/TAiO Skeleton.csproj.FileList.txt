@@ -3,3 +3,5 @@ bin\Debug\TAiO Skeleton.pdb
 obj\Debug\ResolveAssemblyReference.cache
 obj\Debug\TAiO Skeleton.exe
 obj\Debug\TAiO Skeleton.pdb
+obj\Debug\TAiO_Rectangles.MainWindow.resources
+obj\Debug\TAiO Skeleton.csproj.GenerateResource.Cache
