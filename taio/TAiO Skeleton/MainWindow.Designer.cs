@@ -29,9 +29,6 @@ namespace Taio
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("1 prostok¹t [10, 10, 100]");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Prostok¹ty", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,12 +50,14 @@ namespace Taio
             this.programHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.rectanglesTreeView = new System.Windows.Forms.TreeView();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.rectanglesContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.rectanglesContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -225,6 +224,10 @@ namespace Taio
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.rectanglesTreeView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.rectangleViewer);
             this.splitContainer1.Size = new System.Drawing.Size(502, 318);
             this.splitContainer1.SplitterDistance = 167;
             this.splitContainer1.TabIndex = 1;
@@ -235,17 +238,10 @@ namespace Taio
             this.rectanglesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rectanglesTreeView.Location = new System.Drawing.Point(0, 0);
             this.rectanglesTreeView.Name = "rectanglesTreeView";
-            treeNode1.Name = "singleRectangle1";
-            treeNode1.Text = "1 prostok¹t [10, 10, 100]";
-            treeNode2.Name = "rectangles";
-            treeNode2.Tag = "";
-            treeNode2.Text = "Prostok¹ty";
-            treeNode2.ToolTipText = "Lista prostok¹tów";
-            //this.rectanglesTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            //treeNode2});
             this.rectanglesTreeView.Size = new System.Drawing.Size(167, 318);
             this.rectanglesTreeView.TabIndex = 0;
             this.toolTip.SetToolTip(this.rectanglesTreeView, "toolTip");
+            this.rectanglesTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.rectanglesTreeView_AfterSelect);
             // 
             // rectanglesContextMenuStrip
             // 
@@ -253,7 +249,7 @@ namespace Taio
             this.addRectangleToolStripMenuItem,
             this.removeRectangleToolStripMenuItem});
             this.rectanglesContextMenuStrip.Name = "rectanglesContextMenuStrip";
-            this.rectanglesContextMenuStrip.Size = new System.Drawing.Size(163, 70);
+            this.rectanglesContextMenuStrip.Size = new System.Drawing.Size(163, 48);
             // 
             // addRectangleToolStripMenuItem
             // 
@@ -268,6 +264,20 @@ namespace Taio
             this.removeRectangleToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.removeRectangleToolStripMenuItem.Text = "Usuñ prostok¹t";
             this.removeRectangleToolStripMenuItem.Click += new System.EventHandler(this.removeRectangleToolStripMenuItem_Click);
+            // 
+            // rectangleViewer
+            // 
+            this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
+            this.rectangleViewer.BackgroundColor = System.Drawing.Color.White;
+            this.rectangleViewer.CanDraw = true;
+            this.rectangleViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
+            this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
+            this.rectangleViewer.Name = "rectangleViewer";
+            this.rectangleViewer.Size = new System.Drawing.Size(331, 318);
+            this.rectangleViewer.TabIndex = 0;
+            this.rectangleViewer.XBorder = 5;
+            this.rectangleViewer.YBorder = 5;
             // 
             // MainWindow
             // 
@@ -284,6 +294,7 @@ namespace Taio
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
             this.rectanglesContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -318,5 +329,6 @@ namespace Taio
         private System.Windows.Forms.ContextMenuStrip rectanglesContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem addRectangleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeRectangleToolStripMenuItem;
+        private Kontrolka_do_TAiO.RectDisplay rectangleViewer;
     }
 }

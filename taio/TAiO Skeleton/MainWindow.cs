@@ -11,11 +11,14 @@ namespace Taio
 {
     public partial class MainWindow : Form
     {
-        private ArrayList rectangles;
-
+        
+        private List<Rectangle> rectangles;
+        private int count;
+        
         public MainWindow()
         {
-            rectangles = new ArrayList();
+            count = 10;
+            rectangles = new List<Rectangle>();
             InitializeComponent();
         }
 
@@ -94,9 +97,10 @@ namespace Taio
         #region Menu kontektstowe
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Rectangle rect = new Rectangle(20, 10);
-            rectangles.Add(rect);
-            addRectangleToTreeView(rect);
+            Rectangle rect = new Rectangle(20 + count, 100 + count);
+            count += 10;
+            rectangles.Add(rect);            
+            viewRectangle(rect, addRectangleToTreeView(rect));       
         }
 
         private void removeRectangleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -107,14 +111,16 @@ namespace Taio
 
         #region Lista prostok¹tów
         // dodawany prostok¹t do listy prostok¹tów
-        private void addRectangleToTreeView(Rectangle rect)
+        private TreeNode addRectangleToTreeView(Rectangle rect)
         {
             TreeNode node = new TreeNode();
             int count = rectangles.Count;
-            node.Text = count + " prostok¹t [" + rect.LongerSide +
-                            ", " + rect.ShorterSide + ", " + rect.Area + "]";
+            node.Text = count + " prostok¹t [" + rect.SideA +
+                            ", " + rect.SideB + ", " + rect.Area + "]";
            
             this.rectanglesTreeView.Nodes.Add(node);
+
+            return node;
         }
 
         // prostok¹t usuwany z listy prostok¹tów
@@ -127,9 +133,55 @@ namespace Taio
 
             if (index >= 0)
             {
-                rectangles.RemoveAt(index);
+                rectangles.RemoveAt(index);                
                 this.rectanglesTreeView.Nodes.RemoveAt(index);
+                if (this.rectanglesTreeView.Nodes.Count == 0)
+                    viewRectangle(null, null);
+                indexChange(index);
             }
+        }
+
+        // aktualizacja indeksów prostok¹tów na liœcie, po usuniêciu prostok¹ta
+        private void indexChange(int indexOfRemoved)
+        {
+            for (IEnumerator it = this.rectanglesTreeView.Nodes.GetEnumerator(); it.MoveNext(); )
+            {
+                TreeNode node = (TreeNode)it.Current;
+                if (node.Index >= indexOfRemoved)
+                {
+                    Rectangle rect = (Rectangle)rectangles[node.Index];
+                    node.Text = node.Index + 1 + " prostok¹t [" + rect.SideA +
+                            ", " + rect.SideB + ", " + rect.Area + "]";
+                }
+            }
+        }
+
+        // uaktualnia prostok¹t wyœwietlany w kontrolce prostok¹ta
+        private void rectanglesTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            int index = -1;
+
+            if (this.rectanglesTreeView.SelectedNode != null)
+                index = this.rectanglesTreeView.SelectedNode.Index;
+
+            if (index >= 0)
+            {
+                viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);                
+            }
+            else
+                viewRectangle(null, null);            
+        }
+        #endregion        
+
+        #region Kontrolka prostok¹ta
+        // wyœwietlany prostok¹t w kontrolce
+        private void viewRectangle(Rectangle rect, TreeNode node)
+        {
+            this.rectanglesTreeView.SelectedNode = node;
+            this.rectangleViewer.Rectangle = rect;
+            this.rectangleViewer.RectanglePom = rect;
+            this.rectangleViewer.Node = node;
+            this.rectangleViewer.Refresh();
         }
         #endregion        
     }

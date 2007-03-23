@@ -180,24 +180,46 @@ namespace Taio
         public Point LeftTop
         {
             get { return leftTop; }
-            set { leftTop = value; }
+            set 
+            { 
+                leftTop = value;
+
+                this.sideA = rightDown.X - leftTop.X;
+                this.sideB = rightDown.Y - leftTop.Y;
+            }
         }
 
         public Point RightDown
         {
             get { return rightDown; }
-            set { rightDown = value; }
+            set 
+            { 
+                rightDown = value;
+
+                this.sideA = rightDown.X - leftTop.X;
+                this.sideB = rightDown.Y - leftTop.Y;
+            }
         }
 
         public int SideA
         {
-            set { sideA = value; }
+            set 
+            { 
+                sideA = value;
+
+                rightDown.X = leftTop.X + sideA;                
+            }
             get { return sideA; }
         }
 
         public int SideB
         {
-            set { sideB = value; }
+            set 
+            { 
+                sideB = value;
+
+                rightDown.Y = leftTop.Y + sideB;
+            }
             get { return sideB; }
         }
 

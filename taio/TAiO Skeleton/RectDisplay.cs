@@ -16,6 +16,10 @@ namespace Kontrolka_do_TAiO
         private Point realMousePosition = Point.Empty;
         //rectangle to display
         private Taio.Rectangle rectangle;
+        //rectangle to be actualize
+        private Taio.Rectangle rectanglePom;
+        //node of TreeView - corresponds to rectanglePom
+        private System.Windows.Forms.TreeNode node;
        //list of extracted rectangles from complex rectangle
         private List<Taio.Rectangle> extractedRectangles;
         //maximum x and y coordinate to display, when scale = 1
@@ -56,7 +60,7 @@ namespace Kontrolka_do_TAiO
             this.splitContainer.Panel1.BackColor = backgroundColor;
             this.splitContainer.Panel2.BackColor = backgroundColor;
             this.rectInfo.BackColor = backgroundColor;
-            axisTextFont = new Font("Arial", 6);
+            axisTextFont = new Font("Arial", 8);
         }
 
         private void displayArea_Paint(object sender, PaintEventArgs e)
@@ -97,9 +101,9 @@ namespace Kontrolka_do_TAiO
                     textToDisplay = "(0,0) - (" + realValue.X + "," + realValue.Y + ")";
                 else if (rectangle != null)
                     textToDisplay = TrySetComplexRectangleInfo(realMousePosition.X,
-                        realMousePosition.Y);
+                        realMousePosition.Y);                        
             }
-            rectInfo.Text = textToDisplay;
+            rectInfo.Text = textToDisplay;            
         }
 
         //tries to get information about rectangle from complex rectangle which is pointed by mouse pointer
@@ -117,6 +121,7 @@ namespace Kontrolka_do_TAiO
                     indexOfRectangleToDisplay = i;
                 }
             }
+            
             return textToDisplay;
         }
 
@@ -174,9 +179,19 @@ namespace Kontrolka_do_TAiO
         {
             bool validMousePos = DisplayMousePosition(e.X, e.Y);
             if (validMousePos && e.Button == MouseButtons.Left && canDraw)
+            {
                 this.realValue = realMousePosition;
+                                                
+                if (this.node != null && rectanglePom != null)
+                {
+                    rectanglePom.SideA = realValue.X;
+                    rectanglePom.SideB = realValue.Y;
+                    this.node.Text = this.node.Index + 1 + " prostok¹t [" + rectanglePom.SideA
+                                        + ", " + rectanglePom.SideB + ", " + rectanglePom.Area + "]";
+                }        
+            }
             TrySetRectangleInfo();
-            this.Refresh();
+            this.Refresh();           
         }
 
         //display mouse coordinates in real coordinates, and check whether this coordinates are above axis
@@ -288,19 +303,36 @@ namespace Kontrolka_do_TAiO
             }
             set
             {
-                if (value.ContainedRectangles.Count == 0)
+                if (value != null)
                 {
-                    realValue = new Point(value.RightDown.X, value.RightDown.Y);
-                }
-                else
-                {
-                    extractedRectangles = new List<Taio.Rectangle>();
-                    ExtractRectangles(value);
-                    SetColors();
-                    rectangle = value;
-                    canDraw = false;
-                }
+                    if (value.ContainedRectangles.Count == 0)
+                    {
+                        realValue = new Point(value.RightDown.X, value.RightDown.Y);                        
+                    }
+                    else
+                    {
+                        extractedRectangles = new List<Taio.Rectangle>();
+                        ExtractRectangles(value);
+                        SetColors();
+                        rectangle = value;
+                        canDraw = false;
+                    }
+                }                
             }
+        }
+
+        [Description("Rectangle to be actualize."), Category("General")]
+        internal Taio.Rectangle RectanglePom
+        {
+            get { return rectanglePom; }
+            set { rectanglePom = value; }
+        }
+
+        [Description("Node of TreeView. Corresponds to displayed Rectangle"), Category("General")]
+        internal System.Windows.Forms.TreeNode Node
+        {
+            get { return node; }
+            set { node = value; }
         }
         #endregion
 
@@ -360,6 +392,6 @@ namespace Kontrolka_do_TAiO
                 extractedRectangles.RemoveAt(indexOfRectangleToDisplay);
                 extractedRectangles.Add(rect);
             }
-        }
+        }        
     }
 }

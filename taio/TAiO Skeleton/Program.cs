@@ -11,7 +11,7 @@ namespace Taio
         static void Main(string[] args)
         {
             MainWindow mainWindow = new MainWindow();
-            Application.Run(mainWindow);
+            Application.Run(mainWindow);           
             //IntersectionTest();
             //SubtractTest();
         }
