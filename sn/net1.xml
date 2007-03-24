@@ -1,0 +1,65 @@
+<SOAP-ENV:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+<SOAP-ENV:Body>
+<a1:ElmansNetwork id="ref-1" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/SONStock/Projekt%20z%20sieci%2C%20Version%3D1.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Dnull">
+<entryValues href="#ref-3"/>
+<contextValues href="#ref-4"/>
+<hiddenValues href="#ref-5"/>
+<exitValues href="#ref-6"/>
+<entryHiddenWeights href="#ref-7"/>
+<contextHiddenWeights href="#ref-8"/>
+<hiddenExitWeights href="#ref-9"/>
+<numberOfEntryNeurons>5</numberOfEntryNeurons>
+<numberOfContextNeurons>2</numberOfContextNeurons>
+<numberOfHiddenNeurons>2</numberOfHiddenNeurons>
+<numberOfExitNeurons>1</numberOfExitNeurons>
+<numberOfLearningSets>1</numberOfLearningSets>
+<errorValues href="#ref-10"/>
+<eps>0.1</eps>
+<ni>0.1</ni>
+<delta>0.1</delta>
+</a1:ElmansNetwork>
+<SOAP-ENC:Array id="ref-3" SOAP-ENC:arrayType="xsd:double[5]">
+<item>7</item>
+<item>8</item>
+<item>9</item>
+<item>10</item>
+<item>11</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-4" SOAP-ENC:arrayType="xsd:double[2]">
+<item>6.5219558940836952</item>
+<item>5.6656764427505788</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-5" SOAP-ENC:arrayType="xsd:double[2]">
+<item>39.348263116791536</item>
+<item>41.6817705601743</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-6" SOAP-ENC:arrayType="xsd:double[1]">
+<item>36.31446038585316</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-7" SOAP-ENC:arrayType="xsd:double[5,2]">
+<item>0.953805924456132</item>
+<item>0.275645445779388</item>
+<item>0.29173370920695491</item>
+<item>0.79515151567558784</item>
+<item>0.96244303434265777</item>
+<item>0.49681701833230163</item>
+<item>0.84325278172385787</item>
+<item>0.50408527932284886</item>
+<item>0.27460521456467846</item>
+<item>0.58832390897297171</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-8" SOAP-ENC:arrayType="xsd:double[2,2]">
+<item>0.89363463253161324</item>
+<item>1.5808548516480248</item>
+<item>0.77560620889935161</item>
+<item>1.2526316692645243</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-9" SOAP-ENC:arrayType="xsd:double[2,1]">
+<item>0.6216209701299229</item>
+<item>0.28441102033205395</item>
+</SOAP-ENC:Array>
+<SOAP-ENC:Array id="ref-10" SOAP-ENC:arrayType="xsd:double[1]">
+<item>-0.051741394263917329</item>
+</SOAP-ENC:Array>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
