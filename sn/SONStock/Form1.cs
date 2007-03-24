@@ -234,7 +234,7 @@ namespace SONStock
                         this.AddNewDataFromFile(files[i], false);
                     }
                     this.addDataToExistingToolStripMenuItem.Enabled = true;
-                    if (data.Count >= elmanNet.NumberOfEntryNeurons)
+                    if (elmanNet!=null && data.Count >= elmanNet.NumberOfEntryNeurons)
                         this.performEstimationToolStripMenuItem.Enabled = true;
                 }
                 else
