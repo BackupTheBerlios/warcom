@@ -38,6 +38,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataLoader.cs" />
     <Compile Include="ElmansNetwork.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
