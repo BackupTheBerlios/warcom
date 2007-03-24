@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Taio.Algorithms
 {
-    class Algorithm1
+    class Algorithm1 : IAlgorithm
     {
         private List<Rectangle> rectangles;
 
@@ -15,7 +15,7 @@ namespace Taio.Algorithms
 
         public Rectangle ComputeMaximumRectangle()
         {
-
+            return null;
         }
     }
 }
