@@ -39,6 +39,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Algorithm1.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
+    <Compile Include="DataLLoader.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +61,7 @@
     <Compile Include="RectDisplay.designer.cs">
       <DependentUpon>RectDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Solution.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainWindow.resx">

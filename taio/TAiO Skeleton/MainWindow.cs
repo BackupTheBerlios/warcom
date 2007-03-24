@@ -13,7 +13,9 @@ namespace Taio
     {
         
         private List<Rectangle> rectangles;
+        private List<Solution> solutions = new List<Solution>();
         private int count;
+        private DataLLoader dataLoader = new DataLLoader();
         
         public MainWindow()
         {
@@ -33,19 +35,27 @@ namespace Taio
 
         }
 
+        private void DrawToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //@TODO
+            //pobraæ od u¿ytkownika ile ma losowaæ prostok¹tów i najwiêkszy bok
+            this.rectangles = this.dataLoader.DrawRectangles(10, 20);
+            this.solutions.Clear();
+        }
+
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.dataLoader.OpenFile(ref this.solutions, ref this.rectangles);
         }
 
         private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.dataLoader.SaveSolution(this.solutions, this.rectangles);
         }
 
         private void saveSolutionFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.dataLoader.SaveSolution(this.solutions, this.rectangles);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
