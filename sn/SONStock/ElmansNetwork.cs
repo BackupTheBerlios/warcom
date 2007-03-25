@@ -77,7 +77,7 @@ namespace SONStock
         public double[] ComputeExitValues(double[] entryValues)
         {
             if (entryValues.Length != this.entryValues.Length)
-                throw new Exception("Incorrect entry data set size: " + entryValues.Length + " powinno byæ " +
+                throw new Exception("Z³y rozmiar danych wejœiowych: jest " + entryValues.Length + " powinno byæ " +
                     this.entryValues.Length);
             else
             {
@@ -132,21 +132,22 @@ namespace SONStock
             return -ni * errorValues[exitNeuronIndex] * hiddenValues[hiddenNeuronIndex];
         }
 
-        private double CountEntryHiddenWeightsChange(int entryNeuronIndex, int hiddenNeuronIndex, double[] prevVals,
-            out double[] nextVals)
+        private double CountHiddenWeightsChange(int neuronIndex, int hiddenNeuronIndex, double[] prevVals,
+            double[] nextVals)
         {
             double retVal = 0;
-            nextVals = new double[prevVals.Length];
             for (int i = 0; i < numberOfExitNeurons; ++i)
             {
                 double tempGlobalSum = 0;
                 for (int j = 0; j < numberOfHiddenNeurons; ++j)
                 {
-                    double tempLocalSum = delta + entryValues[entryNeuronIndex];
+                    double tempLocalSum = (neuronIndex < numberOfEntryNeurons) ? 
+                        delta + entryValues[neuronIndex] : 
+                        delta + contextValues[neuronIndex - numberOfEntryNeurons];
                     for (int k = 0; k < numberOfHiddenNeurons; ++k)
                     {
-                        tempLocalSum += prevVals[k] * ContextHiddenWeights[k, j];
-                        nextVals[k] = tempLocalSum;
+                        tempLocalSum += prevVals[neuronIndex] * ContextHiddenWeights[k, j];
+                        nextVals[neuronIndex] = tempLocalSum;
                     }
                     tempGlobalSum += tempLocalSum * hiddenExitWeights[j, i];
                 }
@@ -155,44 +156,16 @@ namespace SONStock
             return retVal;
         }
 
-        private double CountContextHiddenWeightsChange(int contextNeuronIndex, int hiddenNeuronIndex, double[] prevVals,
-            out double[] nextVals)
-        {
-            double retVal = 0;
-            nextVals = new double[prevVals.Length];
-            for (int i = 0; i < numberOfExitNeurons; ++i)
-            {
-                double tempGlobalSum = 0;
-                for (int j = 0; j < numberOfHiddenNeurons; ++j)
-                {
-                    double tempLocalSum = delta + contextValues[contextNeuronIndex];
-                    for (int k = 0; k < numberOfHiddenNeurons; ++k)
-                    {
-                        tempLocalSum += prevVals[k] * ContextHiddenWeights[k, j];
-                        nextVals[k] = tempLocalSum;
-                    }
-                    tempGlobalSum += tempLocalSum * hiddenExitWeights[j, i];
-                }
-                retVal += errorValues[i] * tempGlobalSum;
-            }
-            return retVal;
-        }
-
-        private double[] ModifyEntryHiddenWeights(double[] prevVals)
+        private double[] ModifyEntryHiddenAndContextHiddenWeights(double[] prevVals)
         {
             double[] nextVals = new double[prevVals.Length];
             for (int i = 0; i < numberOfEntryNeurons; i++)
                 for (int j = 0; j < numberOfHiddenNeurons; j++)
-                    entryHiddenWeights[i, j] -= CountEntryHiddenWeightsChange(i, j, prevVals, out nextVals);
-            return nextVals;
-        }
-
-        private double[] ModifyContextHiddenWeights(double[] prevVals)
-        {
-            double[] nextVals = new double[prevVals.Length];
-            for (int i = 0; i < numberOfContextNeurons; i++)
-                for (int j = 0; j < numberOfHiddenNeurons; j++)
-                    contextHiddenWeights[i, j] -= CountContextHiddenWeightsChange(i, j, prevVals, out nextVals);
+                    entryHiddenWeights[i, j] -= CountHiddenWeightsChange(i, j, prevVals, nextVals);
+            for (int i = 0; i < numberOfContextNeurons; ++i)
+                for (int j = 0; j < numberOfHiddenNeurons; ++j)
+                    contextHiddenWeights[i, j] -= CountHiddenWeightsChange(i + numberOfEntryNeurons,
+                        j, prevVals, nextVals);
             return nextVals;
         }
 
@@ -211,7 +184,7 @@ namespace SONStock
             this.numberOfLearningSets++;
             this.entryValues = entryValues;
             double error = 99999;
-            double[] startVals = new double[numberOfHiddenNeurons];
+            double[] startVals = new double[numberOfEntryNeurons + numberOfContextNeurons];
             double[] temp;
             while (error > this.eps)
             {
@@ -227,17 +200,13 @@ namespace SONStock
                 //modyfikacja wag miêdy warstwami ukryt¹ a wyjœciow¹
                 ModifyHiddenExitWeights();
                 //modyfikacja wag miêdy warstwami wejœciow¹ a ukryt¹
-                temp = ModifyEntryHiddenWeights(startVals);
-                for (int i = 0; i < temp.Length; i++)
-                    startVals[i] = temp[i];
-                //modyfikacja wag miêdy warstwami kontekstow¹ a ukryt¹
-                temp = ModifyContextHiddenWeights(startVals);
+                temp = ModifyEntryHiddenAndContextHiddenWeights(startVals);
                 for (int i = 0; i < temp.Length; i++)
                     startVals[i] = temp[i];
             }
         }
 
-        #region Accessors
+        #region Geters
         public double[,] EntryHiddenWeights
         {
             get { return entryHiddenWeights; }
@@ -273,11 +242,6 @@ namespace SONStock
         public int NumberOfExitNeurons
         {
             get { return numberOfExitNeurons; }
-        }
-
-        public int NumberOfHiddenNeurons
-        {
-            get { return numberOfHiddenNeurons; }
         }
 
         //wspó³czynnik uczenia ??
