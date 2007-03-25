@@ -10,12 +10,37 @@ namespace Taio
     {
         static void Main(string[] args)
         {
+            //RotateTest();
+            //MoveTest();
+            ContainerTest();
             MainWindow mainWindow = new MainWindow();
-            Application.Run(mainWindow);           
+            Application.Run(mainWindow);
             //IntersectionTest();
             //SubtractTest();
         }
 
+        private static void ContainerTest()
+        {
+            List<Rectangle> a = new List<Rectangle>();
+            a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
+            a.Add(new Rectangle(new Point(4, 3), new Point(9, 4)));
+            a.Add(new Rectangle(new Point(3, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(2, 5), new Point(9, 6)));
+            a.Add(new Rectangle(new Point(10, 3), new Point(11, 5)));
+            a.Add(new Rectangle(new Point(6, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(6, 5), new Point(8, 8)));
+            a.Add(new Rectangle(new Point(3, 7), new Point(4, 8)));
+            a.Add(new Rectangle(new Point(6, 1), new Point(7, 3)));
+
+            RectangleContainer rc = new RectangleContainer();
+            rc.InsertRectangle(a[1], new Point(0,0), Rectangle.Orientation.Horizontal);
+            rc.InsertRectangle(a[2], a[2].LeftTop, Rectangle.Orientation.Vertical);
+
+        }
+
+        #region Tests
         public static void IntersectionTest()
         {
             Rectangle testRect = new Rectangle(new Point(4,3), new Point(7,6));
@@ -122,5 +147,59 @@ namespace Taio
             12:           (empty)
              */
         }
+
+        public static void RotateTest()
+        {
+            List<Rectangle> a = new List<Rectangle>();
+            a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
+            a.Add(new Rectangle(new Point(4, 3), new Point(9, 4)));
+            a.Add(new Rectangle(new Point(3, 4), new Point(7, 5)));
+
+            for (int i = 0; i < a.Count; i++)
+            {
+                a[i].Rotate();
+                Console.WriteLine(a[i]);
+            }
+
+            /*
+             * 
+             * correct answers:
+             *  {X=1,Y=1}, {X=3,Y=3}; area: 4
+                {X=5,Y=2}, {X=9,Y=3}; area: 4
+                {X=5,Y=2}, {X=10,Y=3}; area: 5
+                {X=4,Y=3}, {X=5,Y=8}; area: 5
+                {X=3,Y=4}, {X=4,Y=8}; area: 4
+             */
+        }
+
+        public static void MoveTest()
+        {
+            List<Rectangle> a = new List<Rectangle>();
+            a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
+            a.Add(new Rectangle(new Point(4, 3), new Point(9, 4)));
+            a.Add(new Rectangle(new Point(3, 4), new Point(7, 5)));
+
+            Point zeroPoint = new Point(0, 0);
+            for (int i = 0; i < a.Count; i++)
+            {
+                a[i].Move(zeroPoint);
+                Console.WriteLine(a[i]);
+            }
+
+            /*
+             * 
+             * correct answers:
+             *  {X=0,Y=0}, {X=2,Y=2}; area: 4
+                {X=0,Y=0}, {X=1,Y=4}; area: 4
+                {X=0,Y=0}, {X=1,Y=5}; area: 5
+                {X=0,Y=0}, {X=5,Y=1}; area: 5
+                {X=0,Y=0}, {X=4,Y=1}; area: 4
+             */
+        }
+        #endregion
     }
 }
