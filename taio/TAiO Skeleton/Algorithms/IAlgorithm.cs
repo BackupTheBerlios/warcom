@@ -6,6 +6,6 @@ namespace Taio.Algorithms
 {
     interface IAlgorithm
     {
-        Rectangle ComputeMaximumRectangle();
+        Rectangle ComputeMaximumRectangle(List<Rectangle> rectangles);
     }
 }
