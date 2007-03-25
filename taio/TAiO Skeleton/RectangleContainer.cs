@@ -289,11 +289,11 @@ namespace Taio
         }
 
         /// <summary>
-        /// Add rectangle to the container
+        /// Insert rectangle to the container
         /// </summary>
         /// <param name="r">Rectangle to be add</param>
         /// <param name="o">Added rectangle orientation</param>
-        public void AddRectangle(Rectangle r, Rectangle.Orientation o)
+        public void InsertRectangle(Rectangle r, Rectangle.Orientation o)
         {
             InsertRectangle(r, new Point(0, 0), o);
         }
