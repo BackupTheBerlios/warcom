@@ -20,18 +20,75 @@ namespace Taio.Algorithms
             ConcatenateRectangles(rects);
             Rectangle startRect = FindRectangleWithMaxArea(rects);
             bool change = true;
-
+            int currentSide = startRect.ShorterSide;
+            List<Rectangle> tempRectsList = new List<Rectangle>();
             while (change && rects.Count > 0)
             {
                 change = false;
-
+                Rectangle tempRect = TryFindRectangleToThenNextStep(currentSide, rects);
+                if (tempRect != null)
+                {
+                    tempRectsList.Add(tempRect);
+                }
             }
             return null;
         }
 
-        private Rectangle FindRectangleToThenNextStep()
+        private Rectangle TryFindNextRect(int shorterSide, int currentSide, int maxSide, List<Rectangle> rects)
         {
-            return null;
+            int index = -1;
+            int val = Int32.MaxValue;
+            Rectangle rect = null;
+            for (int i = 0; i < rects.Count; i++)
+            {
+                Rectangle tempRect = rects[i];
+                int lostAreaHorz = 0, lostAreaVert = 0;
+                if(currentSide + tempRect.LongerSide > maxSide)
+                    lostAreaHorz+= (currentSide + tempRect.LongerSide - maxSide) * tempRect.ShorterSide;
+                if(tempRect.ShorterSide < shorterSide)
+                    lostAreaHorz+=(shorterSide-tempRect.ShorterSide)*currentSide;
+                else if(tempRect.ShorterSide > shorterSide)
+                    lostAreaHorz+=(tempRect.ShorterSide - shorterSide)*tempRect.LongerSide;
+                if(currentSide + tempRect.ShorterSide > maxSide)
+                    lostAreaHorz+= (currentSide + tempRect.ShorterSide - maxSide) * tempRect.LongerSide;
+                if(tempRect.LongerSide < shorterSide)
+                    lostAreaHorz+=(shorterSide-tempRect.LongerSide)*currentSide;
+                else if(tempRect.LongerSide > shorterSide)
+                    lostAreaHorz+=(tempRect.LongerSide - shorterSide)*tempRect.ShorterSide;
+                int lostArea = Math.Min(lostAreaHorz, lostAreaVert);
+                if (lostArea < val)
+                {
+                    index = i;
+                    val = lostArea; ;
+                }
+            }
+            if (index != -1)
+            {
+                rect = rects[index];
+                rects.Remove(rect);
+            }
+            return rect;
+        }
+
+        private Rectangle TryFindRectangleToThenNextStep(int side, List<Rectangle> rects)
+        {
+            int index = -1;
+            int val = -1;
+            Rectangle rect = null;
+            for (int i = 0; i < rects.Count; i++)
+            {
+                if (rects[i].LongerSide < side && rects[i].LongerSide > val)
+                {
+                    index = i;
+                    val = rects[i].LongerSide;
+                }
+            }
+            if (val != -1)
+            {
+                rect = rects[index];
+                rects.Remove(rect);
+            }
+            return rect;
         }
 
 

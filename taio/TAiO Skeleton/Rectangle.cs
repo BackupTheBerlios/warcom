@@ -121,6 +121,13 @@ namespace Taio
             return new Rectangle(new Point(resLeftTopX, resLeftTopY), new Point(resRightDownX, resRightDownY));
         }
 
+        public void Rotate()
+        {
+            int temp = sideA;
+            sideA = sideB;
+            sideB = temp;
+        }
+
         public List<Rectangle> Subtract(Rectangle rect)
         {
             List<Rectangle> results = new List<Rectangle>();
