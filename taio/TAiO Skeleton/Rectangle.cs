@@ -12,11 +12,18 @@ namespace Taio
         private int sideA;
         private int sideB;
         private List<Rectangle> containedRectangles;
-        private Rectangle fatherRectangle;
+        private Rectangle parentRectangle;
         private Color color;
 
         #region Constructors
-        public Rectangle(int sideA, int sideB, Point leftTop, Rectangle fatherRectangle)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sideA">"Top/bottom" side's length</param>
+        /// <param name="sideB">"Left/right" side's length</param>
+        /// <param name="leftTop">Left-top rectangle's vertex</param>
+        /// <param name="parentRectangle">Rectangle which contains new rectangle</param>
+        public Rectangle(int sideA, int sideB, Point leftTop, Rectangle parentRectangle)
         {
             if (sideA <= 0 || sideB <= 0)
                 throw new ArgumentException("Incorrect rectangle side(s)");
@@ -28,16 +35,34 @@ namespace Taio
             this.sideB = rightDown.Y - leftTop.Y;
 
             this.containedRectangles = new List<Rectangle>();
-            this.fatherRectangle = fatherRectangle;
+            this.parentRectangle = parentRectangle;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sideA">"Top/bottom" side's length</param>
+        /// <param name="sideB">"Left/right" side's length</param>
+        /// <param name="leftTop">LeftTop rectangle's vertex</param>
         public Rectangle(int sideA, int sideB, Point leftTop)
             : this(sideA, sideB, leftTop, null) { }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sideA">"Top/bottom" side's length</param>
+        /// <param name="sideB">"Left/right" side's length</param>
         public Rectangle(int sideA, int sideB) 
             : this(sideA, sideB, new Point(0, 0)) { }
 
-        public Rectangle(Point leftTop, Point rightDown, Rectangle fatherRectangle)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="leftTop">Left-top rectangle's vertex</param>
+        /// <param name="rightDown">Right-down rectangle's vertex</param>
+        /// <param name="parentRectangle">Rectangle which contains new rectangle</param>
+        public Rectangle(Point leftTop, Point rightDown, Rectangle parentRectangle)
         {
             if (leftTop.X < 0 || leftTop.Y < 0)
                 throw new ArgumentException("Incorrect rectangle left-top coordinates");
@@ -53,13 +78,24 @@ namespace Taio
             this.sideB = rightDown.Y - leftTop.Y;
 
             this.containedRectangles = new List<Rectangle>();
-            this.fatherRectangle = fatherRectangle;
+            this.parentRectangle = parentRectangle;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="leftTop">Left-top rectangle's vertex</param>
+        /// <param name="rightDown">Right-down rectangle's vertex</param>
         public Rectangle(Point leftTop, Point rightDown)
             : this(leftTop, rightDown, null) { }
         #endregion
 
+        #region Geometry
+        /// <summary>
+        /// Whether rectangle covers the rectangle r
+        /// </summary>
+        /// <param name="r">Rectangle to check</param>
+        /// <returns>True if the rectangle r is covered, else if it does not</returns>
         public bool Covers(Rectangle r)
         {
             if (r.LeftTop.X >= this.leftTop.X && r.RightDown.X <= this.rightDown.X &&
@@ -69,6 +105,11 @@ namespace Taio
                 return false;
         }
 
+        /// <summary>
+        /// Find the intersection of two rectangles
+        /// </summary>
+        /// <param name="rect">Rectangle to intersect</param>
+        /// <returns>Intersection rectangle or null if intersection is empty</returns>
         public Rectangle IntersectionRect(Rectangle rect)
         {
             if (rect == null)
@@ -107,7 +148,7 @@ namespace Taio
             int resLeftTopX, resLeftTopY, resRightDownX, resRightDownY;
             resLeftTopX = r.LeftTop.X;
             resLeftTopY = d.LeftTop.Y;
-            
+
             if (r.RightDown.X <= l.RightDown.X)
                 resRightDownX = r.RightDown.X;
             else
@@ -121,13 +162,11 @@ namespace Taio
             return new Rectangle(new Point(resLeftTopX, resLeftTopY), new Point(resRightDownX, resRightDownY));
         }
 
-        public void Rotate()
-        {
-            int temp = sideA;
-            sideA = sideB;
-            sideB = temp;
-        }
-
+        /// <summary>
+        /// Find the subtraction of two rectangles
+        /// </summary>
+        /// <param name="rect">Rectangle to subtract</param>
+        /// <returns>List of rectangles from subtraction</returns>
         public List<Rectangle> Subtract(Rectangle rect)
         {
             List<Rectangle> results = new List<Rectangle>();
@@ -142,12 +181,12 @@ namespace Taio
                 return results; // puste
 
             int resLTx, resLTy, resRDx, resRDy;
-            
+
             resLTx = this.LeftTop.X;
             resLTy = this.LeftTop.Y;
             resRDx = intersection.LeftTop.X;
             resRDy = this.RightDown.Y;
-            if(resRDx - resLTx >0 && resRDy- resLTy>0)
+            if (resRDx - resLTx > 0 && resRDy - resLTy > 0)
                 results.Add(new Rectangle
                     (new Point(resLTx, resLTy), new Point(resRDx, resRDy)));
 
@@ -176,60 +215,108 @@ namespace Taio
                     (new Point(resLTx, resLTy), new Point(resRDx, resRDy)));
 
             return results;
+        } 
+        #endregion
+
+        #region Edition
+        /// <summary>
+        /// Resize rectangle (move right-down vertex)
+        /// </summary>
+        /// <param name="rightDown">New right-down vertex coordinates</param>
+        /// <returns>Resized rectangle</returns>
+        public Rectangle Resize(Point rightDown)
+        {
+            if (rightDown.X < 0 || rightDown.Y < 0 || rightDown.X <= this.leftTop.X || rightDown.Y <= this.leftTop.Y)
+                throw new ArgumentException("Incorrect right-down coordinates");
+
+            this.rightDown = rightDown;
+            this.sideA = this.rightDown.X - this.leftTop.X;
+            this.sideB = this.rightDown.Y - this.leftTop.Y;
+
+            return this;
         }
 
-        public override String ToString()
+        /// <summary>
+        /// Rotate rectangle (swap sideA and sideB, leftTop remains unchanged)
+        /// </summary>
+        /// <returns>Rotated rectangle</returns>
+        public Rectangle Rotate()
         {
-            return this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
+            Resize(new Point(this.leftTop.X + this.sideB, this.leftTop.Y + this.sideA));
+            return this;
         }
+
+        /// <summary>
+        /// Moves rectangle so that the left-top vertices lay in the given leftTop
+        /// </summary>
+        /// <param name="leftTop">New leftTop position</param>
+        /// <returns>Moved rectangle</returns>
+        public Rectangle Move(Point leftTop)
+        {
+            if (leftTop.X < 0 || leftTop.Y < 0)
+                throw new ArgumentException("Incorrect left-top vertex coordinates");
+
+            int xTransposition = leftTop.X - this.leftTop.X;
+            int yTransposition = leftTop.Y - this.leftTop.Y;
+
+            this.leftTop = leftTop;
+            this.rightDown.X += xTransposition;
+            this.rightDown.Y += yTransposition;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set parent for the rectangle
+        /// </summary>
+        /// <param name="parentRectangle">New parentRectangle</param>
+        public void SetParentRectangle(Rectangle parentRectangle)
+        {
+            this.parentRectangle = parentRectangle;
+            parentRectangle.containedRectangles.Add(this);
+        }
+        #endregion
 
         #region Accessors
+        /// <summary>
+        /// Rectangle's left-top vertex
+        /// </summary>
         public Point LeftTop
         {
             get { return leftTop; }
-            set 
-            { 
-                leftTop = value;
-
-                this.sideA = rightDown.X - leftTop.X;
-                this.sideB = rightDown.Y - leftTop.Y;
-            }
+            //set { leftTop = value; }
         }
 
+        /// <summary>
+        /// Rectangle's right-down vertex
+        /// </summary>
         public Point RightDown
         {
             get { return rightDown; }
-            set 
-            { 
-                rightDown = value;
-
-                this.sideA = rightDown.X - leftTop.X;
-                this.sideB = rightDown.Y - leftTop.Y;
-            }
+            //set { rightDown = value; }
         }
 
+        /// <summary>
+        /// Rectangle's top/bottom side length
+        /// </summary>
         public int SideA
         {
-            set 
-            { 
-                sideA = value;
-
-                rightDown.X = leftTop.X + sideA;                
-            }
+            //set { sideA = value; }
             get { return sideA; }
         }
 
+        /// <summary>
+        /// Rectangle's left/right side length
+        /// </summary>
         public int SideB
         {
-            set 
-            { 
-                sideB = value;
-
-                rightDown.Y = leftTop.Y + sideB;
-            }
+            //set { sideB = value; }
             get { return sideB; }
         }
 
+        /// <summary>
+        /// Rectangle's longer side length
+        /// </summary>
         public int LongerSide
         {
             get
@@ -241,6 +328,9 @@ namespace Taio
             }
         }
 
+        /// <summary>
+        /// Rectangle's shorter side length
+        /// </summary>
         public int ShorterSide
         {
             get
@@ -252,22 +342,33 @@ namespace Taio
             }
         }
 
+        /// <summary>
+        /// Rectangle area
+        /// </summary>
         public int Area
         {
             get { return sideA * sideB; }
         }
 
+        /// <summary>
+        /// Contained rectangles list
+        /// </summary>
         public List<Rectangle> ContainedRectangles
         {
             get { return containedRectangles; }
         }
 
-        public Rectangle FatherRectangle
+        /// <summary>
+        /// Rectangle containing given rectangle
+        /// </summary>
+        public Rectangle ParentRectangle
         {
-            get { return fatherRectangle; }
-            set { fatherRectangle = value; }
+            get { return parentRectangle; }
         }
 
+        /// <summary>
+        /// Rectangle's color
+        /// </summary>
         public Color Color
         {
             get { return color; }
@@ -275,7 +376,26 @@ namespace Taio
         }
         #endregion
 
-        public enum Orientation { Horizontal, Vertical }
+
+        public override String ToString()
+        {
+            return this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
+        }
+
+        /// <summary>
+        /// Rectangle's orientation
+        /// </summary>
+        public enum Orientation
+        { 
+            /// <summary>
+            /// Rectangle's SideA is not shorten than SideB
+            /// </summary>
+            Horizontal,
+            /// <summary>
+            /// Rectangle's SideB is not shorten than SideB
+            /// </summary>
+            Vertical
+        }
     }
 }
 

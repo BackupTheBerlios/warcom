@@ -12,9 +12,10 @@ namespace Taio
         {
             //RotateTest();
             //MoveTest();
-            ContainerTest();
+            
             MainWindow mainWindow = new MainWindow();
             Application.Run(mainWindow);
+            //ContainerTest();
             //IntersectionTest();
             //SubtractTest();
         }
@@ -37,7 +38,6 @@ namespace Taio
             RectangleContainer rc = new RectangleContainer();
             rc.InsertRectangle(a[1], new Point(0,0), Rectangle.Orientation.Horizontal);
             rc.InsertRectangle(a[2], a[2].LeftTop, Rectangle.Orientation.Vertical);
-
         }
 
         #region Tests
