@@ -184,8 +184,8 @@ namespace Kontrolka_do_TAiO
                                                 
                 if (this.node != null && rectanglePom != null)
                 {
-                    rectanglePom.SideA = realValue.X;
-                    rectanglePom.SideB = realValue.Y;
+                    //rectanglePom.SideA = realValue.X;
+                    //rectanglePom.SideB = realValue.Y;
                     this.node.Text = this.node.Index + 1 + " prostok¹t [" + rectanglePom.SideA
                                         + ", " + rectanglePom.SideB + ", " + rectanglePom.Area + "]";
                 }        

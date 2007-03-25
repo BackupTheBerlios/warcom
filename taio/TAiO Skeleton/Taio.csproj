@@ -9,8 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Taio</RootNamespace>
     <AssemblyName>TAiO Skeleton</AssemblyName>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>Taio.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

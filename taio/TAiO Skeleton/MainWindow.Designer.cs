@@ -32,7 +32,6 @@ namespace Taio
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.DrawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSolutionFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,7 +80,6 @@ namespace Taio
             this.fileMenuItem.AutoToolTip = true;
             this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newFileToolStripMenuItem,
-            this.DrawToolStripMenuItem,
             this.openFileToolStripMenuItem,
             this.saveFileToolStripMenuItem,
             this.saveSolutionFileToolStripMenuItem,
@@ -98,13 +96,6 @@ namespace Taio
             this.newFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.newFileToolStripMenuItem.Text = "Nowy";
             this.newFileToolStripMenuItem.Click += new System.EventHandler(this.newFileToolStripMenuItem_Click);
-            // 
-            // DrawToolStripMenuItem
-            // 
-            this.DrawToolStripMenuItem.Name = "DrawToolStripMenuItem";
-            this.DrawToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
-            this.DrawToolStripMenuItem.Text = "Losuj";
-            this.DrawToolStripMenuItem.Click += new System.EventHandler(this.DrawToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
@@ -339,6 +330,5 @@ namespace Taio
         private System.Windows.Forms.ToolStripMenuItem addRectangleToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeRectangleToolStripMenuItem;
         private Kontrolka_do_TAiO.RectDisplay rectangleViewer;
-        private System.Windows.Forms.ToolStripMenuItem DrawToolStripMenuItem;
     }
 }

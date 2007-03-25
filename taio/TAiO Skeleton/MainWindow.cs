@@ -37,10 +37,7 @@ namespace Taio
 
         private void DrawToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //@TODO
-            //pobraæ od u¿ytkownika ile ma losowaæ prostok¹tów i najwiêkszy bok
-            this.rectangles = this.dataLoader.DrawRectangles(10, 20);
-            this.solutions.Clear();
+           
         }
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -70,7 +67,10 @@ namespace Taio
 
         private void randomRectanglesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            //@TODO
+            //pobraæ od u¿ytkownika ile ma losowaæ prostok¹tów i najwiêkszy bok
+            this.rectangles = this.dataLoader.RandomRectangles(10, 20);
+            this.solutions.Clear();
         }
 
         private void preciseSolutionToolStripMenuItem_Click(object sender, EventArgs e)

@@ -8,16 +8,21 @@ namespace Taio
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             //RotateTest();
             //MoveTest();
-            
-            MainWindow mainWindow = new MainWindow();
-            Application.Run(mainWindow);
+
+            //MainWindow mainWindow = new MainWindow();
+            //Application.Run(mainWindow);
             //ContainerTest();
             //IntersectionTest();
             //SubtractTest();
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainWindow());
         }
 
         private static void ContainerTest()
