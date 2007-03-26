@@ -9,6 +9,16 @@ namespace Taio
         private Rectangle rectangle;
         private string tag;
 
+        public Solution()
+        {
+        }
+
+        public Solution(string tag, Rectangle rectangle)
+        {
+            this.tag = tag;
+            this.rectangle = rectangle;
+        }
+
         public string Tag
         {
             get { return tag; }

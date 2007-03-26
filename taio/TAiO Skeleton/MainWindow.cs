@@ -42,17 +42,17 @@ namespace Taio
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.dataLoader.OpenFile(ref this.solutions, ref this.rectangles);
+            this.dataLoader.OpenData(ref this.solutions, ref this.rectangles);
         }
 
         private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.dataLoader.SaveSolution(this.solutions, this.rectangles);
+            this.dataLoader.SaveData(this.solutions, this.rectangles);
         }
 
         private void saveSolutionFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.dataLoader.SaveSolution(this.solutions, this.rectangles);
+            this.dataLoader.SaveData(this.solutions, this.rectangles);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
