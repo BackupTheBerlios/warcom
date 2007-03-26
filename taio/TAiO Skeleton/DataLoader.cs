@@ -10,9 +10,9 @@ using System.Diagnostics;
 
 namespace Taio
 {
-    class DataLLoader
+    class DataLoader
     {
-        public void SaveSolution(List<Solution> solutions, List<Rectangle> rectangles)
+        public void SaveData(List<Solution> solutions, List<Rectangle> rectangles)
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Pliki TAiO (*.tao)|*.tao";
@@ -43,7 +43,7 @@ namespace Taio
 
         }
 
-        public void OpenFile(ref List<Solution> solutions, ref  List<Rectangle> rectangles)
+        public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Pliki TAiO (*.tao)|*.tao";
@@ -124,33 +124,36 @@ namespace Taio
             List<Solution> solutions = new List<Solution>();
             string wzorzec = "(?<tag>.{0,4}?)\r\n((?<x1>([0-9]*)?),(?<y1>([0-9]*)?),(?<x2>([0-9]*)?),(?<y2>([0-9]*)?)(\r\n)?)*";
             Regex wyr = new Regex(wzorzec, RegexOptions.IgnoreCase);
-
-                for (int k = 0; k < result.Count; ++k)
+            for (int k = 0; k < result.Count; ++k)
+            {
+                string r = result[k].Value;
+                Match elem = wyr.Match(r);
+                if (elem.Success)
                 {
-                    string r = result[k].Value;
-                    Match elem = wyr.Match(r);
-                    if (elem.Success)
+                    string tag = "";
+                    try
                     {
-                        string tag="";
-                        try
-                        {
-                            tag = elem.Groups["tag"].Value;
-                            CaptureCollection x1 = elem.Groups["x1"].Captures;
-                            CaptureCollection x2 = elem.Groups["x2"].Captures;
-                            CaptureCollection y1 = elem.Groups["y1"].Captures;
-                            CaptureCollection y2 = elem.Groups["y2"].Captures;
-                            List<Rectangle> rects = new List<Rectangle>();
-                            for (int i = 0; i < x1.Count; ++i)
-                            {
-                                rects.Add(new Rectangle(new System.Drawing.Point(Int32.Parse(x1[i].Value), Int32.Parse(y1[i].Value)),
-                                                        new System.Drawing.Point(Int32.Parse(x2[i].Value), Int32.Parse(y2[i].Value))));
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine("B³¹d w tagu " + tag + " : " + ex.Message + "\n\n" + ex.StackTrace);
-                        }
+                        tag = elem.Groups["tag"].Value;
+                        CaptureCollection x1 = elem.Groups["x1"].Captures;
+                        CaptureCollection x2 = elem.Groups["x2"].Captures;
+                        CaptureCollection y1 = elem.Groups["y1"].Captures;
+                        CaptureCollection y2 = elem.Groups["y2"].Captures;
+                        List<Rectangle> rects = new List<Rectangle>();
+                        for (int i = 0; i < x1.Count; ++i)
+                            rects.Add(new Rectangle(new System.Drawing.Point(Int32.Parse(x1[i].Value), Int32.Parse(y1[i].Value)),
+                                                    new System.Drawing.Point(Int32.Parse(x2[i].Value), Int32.Parse(y2[i].Value))));
+                        RectangleContainer rc = new RectangleContainer();
+                        rc.InsertRectangles(rects);
+                        if (!rc.IsCorrectRectangle)
+                            Debug.WriteLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
+                        else
+                            solutions.Add(new Solution(tag, rc.MaxCorrectRect));
                     }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("B³¹d w tagu " + tag + " : " + ex.Message + "\n\n" + ex.StackTrace);
+                    }
+                }
             }
             return solutions;
         }

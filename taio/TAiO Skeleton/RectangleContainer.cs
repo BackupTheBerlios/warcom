@@ -83,6 +83,23 @@ namespace Taio
         #endregion
 
         /// <summary>
+        /// Insert rectangles from rects to the container
+        /// </summary>
+        /// <param name="rects">Rectangles to insert</param>
+        public void InsertRectangles(List<Rectangle> rects)
+        {
+            if (rects == null)
+                throw new ArgumentNullException();
+            for (int i = 0; i < rects.Count; ++i)
+            {
+                Rectangle r = rects[i];
+                Rectangle.Orientation o = r.LongerSide == r.RightDown.X - r.LeftTop.X ?
+                    Rectangle.Orientation.Horizontal : Rectangle.Orientation.Vertical;
+                this.InsertRectangle(r, r.LeftTop, o);
+            }
+        }
+
+        /// <summary>
         /// Insert rectangle to the container
         /// </summary>
         /// <param name="r">Rectangle to insert</param>
