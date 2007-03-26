@@ -38,7 +38,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\Algorithm1.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
-    <Compile Include="DataLLoader.cs" />
+    <Compile Include="DataLoader.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

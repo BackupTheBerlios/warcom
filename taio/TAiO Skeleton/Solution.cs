@@ -6,7 +6,7 @@ namespace Taio
 {
     class Solution
     {
-        private List<Rectangle> rectangles;
+        private Rectangle rectangle;
         private string tag;
 
         public string Tag
@@ -15,10 +15,10 @@ namespace Taio
             set { tag = value; }
         }
 
-        public List<Rectangle> Rectangles
+        public Rectangle Rectangle
         {
-            get { return rectangles; }
-            set { rectangles = value; }
+            get { return rectangle; }
+            set { rectangle = value; }
         }
     }
 }

@@ -59,8 +59,8 @@ namespace Taio
             using (TextReader rd = new StreamReader(fileName))
             {
                 String str = null;
-                string wzorzec = "##\r\n(?<info>(.|\r|\n)*?)##\r\n(?<input>([0-9]*,[0-9]*\r\n)*)" +
-                    "##(\r\n)?(#(?<result>(.){0,4}\r\n([0-9]*,[0-9]*,[0-9]*,[0-9]*(\r\n)?)*))*";
+                string wzorzec = "##\r\n(?<info>(.|\r|\n)*?)##\r\n(?<input>([0-9]*,[0-9]*\r\n)*?)" +
+                    "##(\r\n)?(#(?<result>(.{0,4}\r\n([0-9]*,[0-9]*,[0-9]*,[0-9]*(\r\n)?)*)?))*";
                 Regex wyr = new Regex(wzorzec, RegexOptions.IgnoreCase);
                 if ((str = rd.ReadToEnd()) != null)
                 {
@@ -71,7 +71,7 @@ namespace Taio
                         if (elem.Success)
                         {
                             string info = elem.Groups["info"].Value;
-                            string result = elem.Groups["result"].Value;
+                            CaptureCollection result = elem.Groups["result"].Captures;
                             string input = elem.Groups["input"].Value;
                             rectangles = this.ReadInput(input);
                             solutions = this.ReadResult(result);
@@ -105,7 +105,7 @@ namespace Taio
                         str = str.Trim();
                         int noOfComa = str.IndexOf(',');
                         int sideA = Int32.Parse(str.Substring(0, noOfComa));
-                        int sideB = Int32.Parse(str.Substring(noOfComa+1, str.Length - noOfComa-1));
+                        int sideB = Int32.Parse(str.Substring(noOfComa + 1, str.Length - noOfComa - 1));
                         counter++;
                         rectangles.Add(new Rectangle(sideA, sideB));
                     }
@@ -119,10 +119,39 @@ namespace Taio
             return rectangles;
         }
 
-        private List<Solution> ReadResult(string result)
+        private List<Solution> ReadResult(CaptureCollection result)
         {
             List<Solution> solutions = new List<Solution>();
-            //TODO wczytaj rozwi¹zania
+            string wzorzec = "(?<tag>.{0,4}?)\r\n((?<x1>([0-9]*)?),(?<y1>([0-9]*)?),(?<x2>([0-9]*)?),(?<y2>([0-9]*)?)(\r\n)?)*";
+            Regex wyr = new Regex(wzorzec, RegexOptions.IgnoreCase);
+
+                for (int k = 0; k < result.Count; ++k)
+                {
+                    string r = result[k].Value;
+                    Match elem = wyr.Match(r);
+                    if (elem.Success)
+                    {
+                        string tag="";
+                        try
+                        {
+                            tag = elem.Groups["tag"].Value;
+                            CaptureCollection x1 = elem.Groups["x1"].Captures;
+                            CaptureCollection x2 = elem.Groups["x2"].Captures;
+                            CaptureCollection y1 = elem.Groups["y1"].Captures;
+                            CaptureCollection y2 = elem.Groups["y2"].Captures;
+                            List<Rectangle> rects = new List<Rectangle>();
+                            for (int i = 0; i < x1.Count; ++i)
+                            {
+                                rects.Add(new Rectangle(new System.Drawing.Point(Int32.Parse(x1[i].Value), Int32.Parse(y1[i].Value)),
+                                                        new System.Drawing.Point(Int32.Parse(x2[i].Value), Int32.Parse(y2[i].Value))));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine("B³¹d w tagu " + tag + " : " + ex.Message + "\n\n" + ex.StackTrace);
+                        }
+                    }
+            }
             return solutions;
         }
 
@@ -153,8 +182,37 @@ namespace Taio
 
         private bool CheckCorrect(List<Solution> solutions, List<Rectangle> rectangles)
         {
-            //TODO sprawdziæ czy w którymœ solutions nie ma przypadkiem prostk¹ta spoza recatangles
+            bool[] flags = new bool[rectangles.Count];
+            for (int i = 0; i < solutions.Count; ++i)
+            {
+                if (!this.CheckCorrect(solutions[i].Rectangle, rectangles, ref flags))
+                    return false;
+            }
             return true;
+        }
+
+        private bool CheckCorrect(Rectangle rect, List<Rectangle> rectangles, ref bool[] flags)
+        {
+            if (rect == null)
+                return true;
+            if (rect.ContainedRectangles != null)
+            {
+                for (int i = 0; i < rect.ContainedRectangles.Count; ++i)
+                    if (!this.CheckCorrect(rect.ContainedRectangles[i], rectangles, ref flags))
+                        return false;
+            }
+            else
+            {
+                for (int i = 0; i < rectangles.Count; ++i)
+                    if (!flags[i] &&
+                        ((rect.SideA == rectangles[i].SideA && rect.SideB == rectangles[i].SideB) ||
+                        (rect.SideB == rectangles[i].SideA && rect.SideA == rectangles[i].SideB)))
+                    {
+                        flags[i] = true;
+                        return true;
+                    }
+            }
+            return false;
         }
 
         public List<Rectangle> RandomRectangles(int count, int maxSide)
@@ -162,9 +220,8 @@ namespace Taio
             List<Rectangle> rectangles = new List<Rectangle>();
             Random random = new Random();
             for (int i = 0; i < count; ++i)
-                rectangles.Add(new Rectangle(random.Next() % maxSide, random.Next() % maxSide));
+                rectangles.Add(new Rectangle(random.Next() % maxSide + 1, random.Next() % maxSide + 1));
             return rectangles;
-
         }
     }
 }

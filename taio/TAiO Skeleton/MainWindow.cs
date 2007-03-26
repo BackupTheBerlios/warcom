@@ -15,7 +15,7 @@ namespace Taio
         private List<Rectangle> rectangles;
         private List<Solution> solutions = new List<Solution>();
         private int count;
-        private DataLLoader dataLoader = new DataLLoader();
+        private DataLoader dataLoader = new DataLoader();
         
         public MainWindow()
         {
