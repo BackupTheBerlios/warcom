@@ -20,15 +20,26 @@ namespace Taio.Algorithms
             ConcatenateRectangles(rects);
             Rectangle startRect = FindRectangleWithMaxArea(rects);
             bool change = true;
-            int currentSide = startRect.ShorterSide;
+            int currentSide = startRect.LongerSide;
             List<Rectangle> tempRectsList = new List<Rectangle>();
             while (change && rects.Count > 0)
             {
                 change = false;
+                int currentSum = 0;
                 Rectangle tempRect = TryFindRectangleToThenNextStep(currentSide, rects);
+                currentSum += tempRect.LongerSide;
                 if (tempRect != null)
                 {
                     tempRectsList.Add(tempRect);
+                    while (currentSum < currentSide)
+                    {
+                        //TODO finish it
+                        Rectangle tmp = TryFindNextRect(tempRect.ShorterSide, currentSum, currentSide, rects);
+                        currentSum += tmp.SideA;
+                        tempRectsList.Add(tmp);
+                    }
+                    RectangleContainer rc = new RectangleContainer();
+                    //rc.InsertRectangle(
                 }
             }
             return null;
@@ -38,6 +49,7 @@ namespace Taio.Algorithms
         {
             int index = -1;
             int val = Int32.MaxValue;
+            bool longerSide = true;
             Rectangle rect = null;
             for (int i = 0; i < rects.Count; i++)
             {
@@ -59,13 +71,22 @@ namespace Taio.Algorithms
                 if (lostArea < val)
                 {
                     index = i;
-                    val = lostArea; ;
+                    val = lostArea;
+                    if (lostArea == lostAreaHorz)
+                        longerSide = true;
+                    else
+                        longerSide = false;
                 }
             }
             if (index != -1)
             {
                 rect = rects[index];
                 rects.Remove(rect);
+                if (longerSide && rect.SideA != rect.LongerSide)
+                    rect.Rotate();
+                    //TODO jak bede mniej zmeczony, to przemyslec czy ten warunek jest poprawny
+                else if (!longerSide && rect.SideB != rect.ShorterSide)
+                    rect.Rotate();
             }
             return rect;
         }
