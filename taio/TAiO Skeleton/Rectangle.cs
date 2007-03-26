@@ -220,7 +220,7 @@ namespace Taio
 
         #region Edition
         /// <summary>
-        /// Resize rectangle (move right-down vertex)
+        /// Resize rectangle (move right-down vertex, left-top vertex remains unchanged)
         /// </summary>
         /// <param name="rightDown">New right-down vertex coordinates</param>
         /// <returns>Resized rectangle</returns>
@@ -232,6 +232,27 @@ namespace Taio
             this.rightDown = rightDown;
             this.sideA = this.rightDown.X - this.leftTop.X;
             this.sideB = this.rightDown.Y - this.leftTop.Y;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Resize rectangle (move right-down vertex, left-top vertex remains unchanged)
+        /// </summary>
+        /// <param name="sideA">New sideA length</param>
+        /// <param name="sideB">New sideB length</param>
+        /// <returns>Resized rectangle</returns>
+        public Rectangle Resize(int sideA, int sideB)
+        {
+            if (sideA <= 0 || sideB <= 0)
+                throw new ArgumentException("Incorrect side");
+
+            int rdx = this.leftTop.X + sideA;
+            int rdy = this.leftTop.Y + sideB;
+            this.rightDown = new Point(rdx, rdy);
+
+            this.sideA = sideA;
+            this.sideB = sideB;
 
             return this;
         }
