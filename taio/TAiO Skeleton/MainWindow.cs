@@ -107,10 +107,13 @@ namespace Taio
         #region Menu kontektstowe
         private void addRectangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Rectangle rect = new Rectangle(20 + count, 100 + count);
-            count += 10;
-            rectangles.Add(rect);            
-            viewRectangle(rect, addRectangleToTreeView(rect));       
+            Rectangle rect = rectangleViewer.Rectangle;
+            if (rect != null)
+            {
+                count += 10;
+                rectangles.Add(rect);
+                viewRectangle(rect, addRectangleToTreeView(rect));
+            }
         }
 
         private void removeRectangleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -125,8 +128,8 @@ namespace Taio
         {
             TreeNode node = new TreeNode();
             int count = rectangles.Count;
-            node.Text = count + " prostok¹t [" + rect.SideA +
-                            ", " + rect.SideB + ", " + rect.Area + "]";
+            node.Text = count + " prostok¹t [" + rect.SideB +
+                            ", " + rect.SideA + ", " + rect.Area + "]";
            
             this.rectanglesTreeView.Nodes.Add(node);
 
@@ -187,12 +190,12 @@ namespace Taio
         // wyœwietlany prostok¹t w kontrolce
         private void viewRectangle(Rectangle rect, TreeNode node)
         {
-            this.rectanglesTreeView.SelectedNode = node;
+            //this.rectanglesTreeView.SelectedNode = node;
             this.rectangleViewer.Rectangle = rect;
-            this.rectangleViewer.RectanglePom = rect;
-            this.rectangleViewer.Node = node;
+            //this.rectangleViewer.Node = node;
             this.rectangleViewer.Refresh();
         }
         #endregion        
+
     }
 }

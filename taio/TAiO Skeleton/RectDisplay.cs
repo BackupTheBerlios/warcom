@@ -8,6 +8,11 @@ using System.Windows.Forms;
 
 namespace Kontrolka_do_TAiO
 {
+    //UWAGA!!!!!!!!!
+    //Jedyny sposob aby ustawic lub pobrac prostokat z kontrolki jest zastosowanie
+    //wlasciwosci Rectangle, kazdy inny sposob jest niedozwolony, 
+    //REFERENCJA DO PROSTOKATA WEWNATRZ KONTROLKI I TA UDOSTEPNIONA NA ZEWNATRZ TO NIE JEST
+    //TA SAMA REFERENCJA 
     public partial class RectDisplay : UserControl
     {
         //upper right corner of rectangle - used only when creating one
@@ -16,10 +21,6 @@ namespace Kontrolka_do_TAiO
         private Point realMousePosition = Point.Empty;
         //rectangle to display
         private Taio.Rectangle rectangle;
-        //rectangle to be actualize
-        private Taio.Rectangle rectanglePom;
-        //node of TreeView - corresponds to rectanglePom
-        private System.Windows.Forms.TreeNode node;
        //list of extracted rectangles from complex rectangle
         private List<Taio.Rectangle> extractedRectangles;
         //maximum x and y coordinate to display, when scale = 1
@@ -182,13 +183,14 @@ namespace Kontrolka_do_TAiO
             {
                 this.realValue = realMousePosition;
                                                 
-                if (this.node != null && rectanglePom != null)
-                {
+                //if (this.node != null && rectangle != null)
+                //{
                     //rectanglePom.SideA = realValue.X;
                     //rectanglePom.SideB = realValue.Y;
-                    this.node.Text = this.node.Index + 1 + " prostok¹t [" + rectanglePom.SideA
-                                        + ", " + rectanglePom.SideB + ", " + rectanglePom.Area + "]";
-                }        
+               //     rectangle.Resize(realValue);
+                   // this.node.Text = this.node.Index + 1 + " prostok¹t [" + rectangle.SideA
+                    //                    + ", " + rectangle.SideB + ", " + rectangle.Area + "]";
+               // }        
             }
             TrySetRectangleInfo();
             this.Refresh();           
@@ -297,42 +299,27 @@ namespace Kontrolka_do_TAiO
                 int shorterSide = Math.Min(realValue.X, realValue.Y);
                 int longerSide = Math.Max(realValue.X, realValue.Y);
                 if (shorterSide == 0 || longerSide == 0)
-                    throw new ArgumentException("Zero lenght side!");
-                rectangle = new Taio.Rectangle(longerSide, shorterSide);
-                return rectangle;
+                    return null;
+                return new Taio.Rectangle(longerSide, shorterSide);
             }
             set
             {
                 if (value != null)
                 {
+                    extractedRectangles = new List<Taio.Rectangle>();
+                    ExtractRectangles(value);
+                    SetColors();
                     if (value.ContainedRectangles.Count == 0)
                     {
-                        realValue = new Point(value.RightDown.X, value.RightDown.Y);                        
+                        realValue = new Point(value.RightDown.X, value.RightDown.Y);
                     }
                     else
                     {
-                        extractedRectangles = new List<Taio.Rectangle>();
-                        ExtractRectangles(value);
-                        SetColors();
                         rectangle = value;
                         canDraw = false;
                     }
                 }                
             }
-        }
-
-        [Description("Rectangle to be actualize."), Category("General")]
-        internal Taio.Rectangle RectanglePom
-        {
-            get { return rectanglePom; }
-            set { rectanglePom = value; }
-        }
-
-        [Description("Node of TreeView. Corresponds to displayed Rectangle"), Category("General")]
-        internal System.Windows.Forms.TreeNode Node
-        {
-            get { return node; }
-            set { node = value; }
         }
         #endregion
 
@@ -354,7 +341,7 @@ namespace Kontrolka_do_TAiO
         private void ExtractRectangles(Taio.Rectangle rectangle)
         {
             if (rectangle.ContainedRectangles.Count == 0)
-                extractedRectangles.Add(rectangle);
+                extractedRectangles.Add(new Taio.Rectangle(rectangle.SideA, rectangle.SideB));
             else
                 for (int i = 0; i < rectangle.ContainedRectangles.Count; ++i)
                     ExtractRectangles(rectangle.ContainedRectangles[i]);
