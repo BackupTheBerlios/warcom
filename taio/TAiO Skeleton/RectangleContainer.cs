@@ -203,7 +203,6 @@ namespace Taio
         private void UpdateMaxRectangles(Rectangle insertedRectangle)
         {
             maxCorrectRect.Resize(insertedRectangle.RightDown);
-            maxCorrectRect.ContainedRectangles.Add(insertedRectangle);
             insertedRectangle.SetParentRectangle(maxCorrectRect);
                         
             maxPossibleRect.Resize(insertedRectangle.RightDown);
@@ -216,6 +215,7 @@ namespace Taio
         {
             this.maxCorrectRect.Resize(this.maxPossibleRect.RightDown);
             this.isCorrectRectangle = true;
+
             foreach (Rectangle r in rectangles)
                 if (!this.maxCorrectRect.ContainedRectangles.Contains(r))
                     this.maxCorrectRect.ContainedRectangles.Add(r);

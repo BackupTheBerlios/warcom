@@ -20,7 +20,7 @@ namespace Taio
         {
             rectangles = new List<Rectangle>();
             InitializeComponent();
-            //testDrawingComplexRects();
+            testDrawingComplexRects();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
