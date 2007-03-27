@@ -128,8 +128,8 @@ namespace Taio
         {
             TreeNode node = new TreeNode();
             int count = rectangles.Count;
-            node.Text = count + " prostok¹t [" + rect.SideB +
-                            ", " + rect.SideA + ", " + rect.Area + "]";
+            node.Text = count + " prostok¹t [" + rect.SideA +
+                            ", " + rect.SideB + ", " + rect.Area + "]";
            
             this.rectanglesTreeView.Nodes.Add(node);
 
@@ -190,12 +190,27 @@ namespace Taio
         // wyœwietlany prostok¹t w kontrolce
         private void viewRectangle(Rectangle rect, TreeNode node)
         {
-            //this.rectanglesTreeView.SelectedNode = node;
             this.rectangleViewer.Rectangle = rect;
-            //this.rectangleViewer.Node = node;
             this.rectangleViewer.Refresh();
         }
         #endregion        
+
+        private void acceptChangebutton_Click(object sender, EventArgs e)
+        {
+            int index = -1;
+            if (this.rectanglesTreeView.SelectedNode != null)
+                index = this.rectanglesTreeView.SelectedNode.Index;
+            if (index >= 0)
+            {
+                Taio.Rectangle rect = this.rectangleViewer.Rectangle;
+                if (rect != null)
+                {
+                    rectangles[index] = rect;
+                    this.rectanglesTreeView.SelectedNode.Text = (index + 1) + " prostok¹t [" + rect.SideA +
+                            ", " + rect.SideB + ", " + rect.Area + "]";
+                }
+            }
+        }
 
     }
 }

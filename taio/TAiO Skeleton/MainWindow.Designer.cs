@@ -160,6 +160,7 @@ namespace Taio
             this.acceptChangebutton.TabIndex = 1;
             this.acceptChangebutton.Text = "Akceptuj zmiany";
             this.acceptChangebutton.UseVisualStyleBackColor = true;
+            this.acceptChangebutton.Click += new System.EventHandler(this.acceptChangebutton_Click);
             // 
             // addRectbutton
             // 
@@ -300,14 +301,14 @@ namespace Taio
             // authorsHelpToolStripMenuItem
             // 
             this.authorsHelpToolStripMenuItem.Name = "authorsHelpToolStripMenuItem";
-            this.authorsHelpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.authorsHelpToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.authorsHelpToolStripMenuItem.Text = "Autorzy";
             this.authorsHelpToolStripMenuItem.Click += new System.EventHandler(this.authorsHelpToolStripMenuItem_Click);
             // 
             // programHelpToolStripMenuItem
             // 
             this.programHelpToolStripMenuItem.Name = "programHelpToolStripMenuItem";
-            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.programHelpToolStripMenuItem.Text = "O programie";
             this.programHelpToolStripMenuItem.Click += new System.EventHandler(this.programHelpToolStripMenuItem_Click);
             // 

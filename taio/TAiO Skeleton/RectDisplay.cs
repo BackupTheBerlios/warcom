@@ -296,11 +296,11 @@ namespace Kontrolka_do_TAiO
         {
             get
             {
-                int shorterSide = Math.Min(realValue.X, realValue.Y);
-                int longerSide = Math.Max(realValue.X, realValue.Y);
-                if (shorterSide == 0 || longerSide == 0)
+                int sideA = realValue.X;
+                int sideB = realValue.Y;
+                if (sideA == 0 || sideB == 0)
                     return null;
-                return new Taio.Rectangle(longerSide, shorterSide);
+                return new Taio.Rectangle(sideA, sideB);
             }
             set
             {
