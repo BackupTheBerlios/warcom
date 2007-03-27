@@ -190,7 +190,8 @@ namespace Taio
 
         private static void ContainerTest()
         {
-            List<Rectangle> a = new List<Rectangle>();
+            RectangleContainer rc = new RectangleContainer();
+            /*List<Rectangle> a = new List<Rectangle>();
             a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
             a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
             a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
@@ -203,9 +204,16 @@ namespace Taio
             a.Add(new Rectangle(new Point(3, 7), new Point(4, 8)));
             a.Add(new Rectangle(new Point(6, 1), new Point(7, 3)));
 
-            RectangleContainer rc = new RectangleContainer();
             rc.InsertRectangle(a[1], new Point(0, 0), Rectangle.Orientation.Horizontal);
-            rc.InsertRectangle(a[2], a[2].LeftTop, Rectangle.Orientation.Vertical);
+            rc.InsertRectangle(a[2], a[2].LeftTop, Rectangle.Orientation.Vertical);*/
+
+            Rectangle r1, r2, r3;
+            r1 = new Rectangle(2, 2);
+            r2 = new Rectangle(2, 3);
+            r3 = new Rectangle(2, 1);
+            rc.InsertRectangle(r1, Rectangle.Orientation.Horizontal);
+            rc.InsertRectangle(r2, new Point(2, 0), Rectangle.Orientation.Vertical);
+            rc.InsertRectangle(r3, new Point(0, 2), Rectangle.Orientation.Horizontal);
         }
         #endregion
     }

@@ -46,7 +46,7 @@ namespace Taio
         /// </summary>
         public Rectangle MaxCorrectRect
         {
-            get { return new Rectangle(maxCorrectRect.LeftTop, maxCorrectRect.RightDown); }
+            get { return maxCorrectRect; }
         }
 
         /// <summary>
@@ -216,6 +216,9 @@ namespace Taio
         {
             this.maxCorrectRect.Resize(this.maxPossibleRect.RightDown);
             this.isCorrectRectangle = true;
+            foreach (Rectangle r in rectangles)
+                if (!this.maxCorrectRect.ContainedRectangles.Contains(r))
+                    this.maxCorrectRect.ContainedRectangles.Add(r);
         }
 
         /// <summary>
@@ -249,15 +252,22 @@ namespace Taio
         {
             IEnumerator<Rectangle> enumerator = emptyFields.GetEnumerator();
             //sprawdzamy czy sa jakies puste, ktore zostaly calkowicie pokryte przez ostatnio dodany prostokat
+            List<Rectangle> toDelete = new List<Rectangle>();
             while (enumerator.MoveNext())
             {
                 Rectangle empty = enumerator.Current;
                 if (empty != null)
                     if (insertedRectangle.Covers(empty))
-                        emptyFields.Remove(empty);
+                        //emptyFields.Remove(empty);
+                        toDelete.Add(empty);
             }
+            foreach (Rectangle r in toDelete)
+                emptyFields.Remove(r);
+            toDelete.Clear();
 
-            enumerator.Reset();
+
+            enumerator = emptyFields.GetEnumerator();
+            List<Rectangle> toAdd = new List<Rectangle>();
             //sprawdzamy czy sa jakies czesciowo pokryte puste
             while (enumerator.MoveNext())
             {
@@ -267,12 +277,20 @@ namespace Taio
                     Rectangle intersection = insertedRectangle.IntersectionRect(empty);
                     if (intersection != null)
                     {
-                        emptyFields.Remove(empty);
+                        //emptyFields.Remove(empty);
+                        toDelete.Add(empty);
                         List<Rectangle> subtr = empty.Subtract(insertedRectangle);
-                        emptyFields.AddRange(subtr);
+                        //emptyFields.AddRange(subtr);
+                        toAdd.AddRange(subtr);
                     }
                 }
             }
+            foreach (Rectangle r in toDelete)
+                emptyFields.Remove(r);
+            toDelete.Clear();
+            foreach (Rectangle r in toAdd)
+                emptyFields.AddRange(toAdd);
+            toAdd.Clear();
 
             //sprawdzamy czy trzeba dodac jakies nowe EmptyFields
             AddNewEmptyFields(insertedRectangle);
