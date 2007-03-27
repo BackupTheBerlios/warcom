@@ -14,14 +14,13 @@ namespace Taio
         
         private List<Rectangle> rectangles;
         private List<Solution> solutions = new List<Solution>();
-        private int count;
         private DataLoader dataLoader = new DataLoader();
         
         public MainWindow()
         {
-            count = 10;
             rectangles = new List<Rectangle>();
             InitializeComponent();
+            //testDrawingComplexRects();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -110,7 +109,6 @@ namespace Taio
             Rectangle rect = rectangleViewer.Rectangle;
             if (rect != null)
             {
-                count += 10;
                 rectangles.Add(rect);
                 viewRectangle(rect, addRectangleToTreeView(rect));
             }
@@ -226,6 +224,22 @@ namespace Taio
                         this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[i];
                 }
             }
+        }
+
+        private void testDrawingComplexRects()
+        {
+             Rectangle t1 = new Rectangle(10, 20);
+             Rectangle t2 = new Rectangle(10, 20);
+             RectangleContainer rc = new RectangleContainer();
+             rc.InsertRectangle(t1, Rectangle.Orientation.Vertical);
+             rc.InsertRectangle(t2, new Point(10, 0), Rectangle.Orientation.Vertical);
+             Rectangle t3 = rc.MaxCorrectRect;
+             rectangles.Add(t1);
+             addRectangleToTreeView(t1);
+             rectangles.Add(t2);
+             addRectangleToTreeView(t2);
+             rectangleViewer.Rectangle = t3;
+             rectangleViewer.Refresh();
         }
 
     }
