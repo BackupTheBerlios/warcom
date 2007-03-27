@@ -212,7 +212,14 @@ namespace Taio
 
         private void AppendRectangle(Rectangle rect, TextWriter wr)
         {
-
+            if (rect.ContainedRectangles == null || rect.ContainedRectangles.Count==0)
+                wr.WriteLine(rect.LeftTop.X + "," + rect.LeftTop.Y + "," +
+                    rect.RightDown.X + "," + rect.RightDown.Y);
+            else
+            {
+                for (int i = 0; i < rect.ContainedRectangles.Count; ++i)
+                    this.AppendRectangle(rect.ContainedRectangles[i], wr);
+            }
         }
 
         private void AppendSolutions(string fileName, List<Solution> solutions, List<Rectangle> rectangles)
