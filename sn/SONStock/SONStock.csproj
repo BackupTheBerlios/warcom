@@ -38,6 +38,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataGraph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataGraph.Designer.cs">
+      <DependentUpon>DataGraph.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataLoader.cs" />
     <Compile Include="ElmansNetwork.cs" />
     <Compile Include="Form1.cs">
@@ -61,6 +67,10 @@
     <Compile Include="OpenDirectoryDialog.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DataGraph.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>DataGraph.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form1.cs</DependentUpon>

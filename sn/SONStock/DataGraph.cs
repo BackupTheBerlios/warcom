@@ -50,8 +50,7 @@ namespace SONStock
         {
             InitializeComponent();
             this.displayArea.BackColor = backgroundColor;
-            //this.zoomIn.BackColor = backgroundColor;
-            //this.zoomOut.BackColor = backgroundColor;
+
             axisTextFont = new Font("Arial", 8);
             valuesTextFont = new Font("Arial", 7, FontStyle.Italic);
 
@@ -71,22 +70,6 @@ namespace SONStock
             Color c = Color.FromArgb(r, g, b);
             dataBrushes.Add(new SolidBrush(c));
         }
-
-        /*private void ComputeScale()
-        {
-            if (data == null || data.Length == 0)
-            {
-                scale = 1;
-                return;
-            }
-
-            double m = data[0];
-            for (int i = 0; i < data.Length; i++)
-                if (data[i] > m)
-                    m = data[i];
-
-            scale = (int)Math.Ceiling(m / maxY);
-        }*/
 
         private void ComputeScale()
         {
@@ -145,22 +128,6 @@ namespace SONStock
             axisEndY[2] = new Point(yStopPoint.X + 5, yStopPoint.Y + 5);
             graph.FillPolygon(axisPen.Brush, axisEndX);
             graph.FillPolygon(axisPen.Brush, axisEndY);
-            
-            /*Point prev, p= new Point(0,0);
-            for (int i = 0; i < xValuesCounter; i++)
-            {
-                if (i >= data.Length)
-                    break;
-
-                if (i == 0)
-                    prev = zeroPoint;
-                else
-                    prev = p;
-                
-                p = new Point(zeroPoint.X + i * xUnit, ConvertRealValueToImagePosition(data[i]));
-                graph.DrawLine(Pens.Black, prev, p);
-                graph.DrawString(data[i].ToString(), valuesTextFont, axisTextBrush, new Point(p.X + 1, p.Y+2));
-            }*/
 
             for(int i =0; i<data.Count; i++)
                 PaintDataList(graph, zeroPoint, i);

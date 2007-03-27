@@ -45,6 +45,7 @@ namespace SONStock
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.wyczyœæDaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataGraph1 = new SONStock.DataGraph();
             this.exitValuesMatrixPreview = new SONStock.MatrixPreview();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -180,13 +181,20 @@ namespace SONStock
             this.settingsToolStripMenuItem.Text = "&Ustawienia";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
+            // dataGraph1
+            // 
+            this.dataGraph1.Location = new System.Drawing.Point(12, 38);
+            this.dataGraph1.Name = "dataGraph1";
+            this.dataGraph1.Size = new System.Drawing.Size(673, 236);
+            this.dataGraph1.TabIndex = 6;
+            // 
             // exitValuesMatrixPreview
             // 
             this.exitValuesMatrixPreview.BackColor = System.Drawing.SystemColors.Control;
             this.exitValuesMatrixPreview.CellWidth = 100;
-            this.exitValuesMatrixPreview.Location = new System.Drawing.Point(402, 42);
+            this.exitValuesMatrixPreview.Location = new System.Drawing.Point(268, 280);
             this.exitValuesMatrixPreview.Name = "exitValuesMatrixPreview";
-            this.exitValuesMatrixPreview.Size = new System.Drawing.Size(221, 203);
+            this.exitValuesMatrixPreview.Size = new System.Drawing.Size(292, 146);
             this.exitValuesMatrixPreview.TabIndex = 5;
             this.exitValuesMatrixPreview.Title = "";
             // 
@@ -195,6 +203,7 @@ namespace SONStock
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(697, 431);
+            this.Controls.Add(this.dataGraph1);
             this.Controls.Add(this.exitValuesMatrixPreview);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -230,6 +239,7 @@ namespace SONStock
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem wyczyœæDaneToolStripMenuItem;
         private MatrixPreview exitValuesMatrixPreview;
+        private DataGraph dataGraph1;
     }
 }
 
