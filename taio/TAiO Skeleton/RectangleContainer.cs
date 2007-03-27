@@ -191,19 +191,21 @@ namespace Taio
         {
             r.Move(new Point(0, 0));
             this.maxCorrectRect = new Rectangle(r.LeftTop, r.RightDown);
+            this.maxCorrectRect.ContainedRectangles.Add(r);
             this.maxPossibleRect = new Rectangle(r.LeftTop, r.RightDown);
             this.isCorrectRectangle = true;
         }
 
         /// <summary>
-        /// Update MaxCorrectRectangle when there were no EmptyFields
+        /// Update MaxCorrectRectangle and MaxPossibleRectangle when there were no EmptyFields
         /// </summary>
         /// <param name="insertedRectangle">Currently inserted rectangle</param>
         private void UpdateMaxRectangles(Rectangle insertedRectangle)
         {
             maxCorrectRect.Resize(insertedRectangle.RightDown);
+            maxCorrectRect.ContainedRectangles.Add(insertedRectangle);
             insertedRectangle.SetParentRectangle(maxCorrectRect);
-            
+                        
             maxPossibleRect.Resize(insertedRectangle.RightDown);
         }
 
