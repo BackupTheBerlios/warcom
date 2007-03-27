@@ -35,6 +35,7 @@ namespace Taio
             this.addRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
             this.acceptChangebutton = new System.Windows.Forms.Button();
             this.addRectbutton = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -57,7 +58,6 @@ namespace Taio
             this.authorsHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.programHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -94,7 +94,7 @@ namespace Taio
             this.rectanglesTreeView.Size = new System.Drawing.Size(255, 414);
             this.rectanglesTreeView.TabIndex = 0;
             this.toolTip.SetToolTip(this.rectanglesTreeView, "toolTip");
-            this.rectanglesTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.rectanglesTreeView_AfterSelect);
+            this.rectanglesTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rectanglesTreeView_NodeMouseClick);
             // 
             // rectanglesContextMenuStrip
             // 
@@ -137,6 +137,21 @@ namespace Taio
             this.splitContainer2.SplitterDistance = 338;
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 1;
+            // 
+            // rectangleViewer
+            // 
+            this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
+            this.rectangleViewer.BackgroundColor = System.Drawing.Color.White;
+            this.rectangleViewer.CanDraw = true;
+            this.rectangleViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
+            this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
+            this.rectangleViewer.Name = "rectangleViewer";
+            this.rectangleViewer.Size = new System.Drawing.Size(510, 338);
+            this.rectangleViewer.TabIndex = 0;
+            this.rectangleViewer.XBorder = 5;
+            this.rectangleViewer.YBorder = 5;
+            this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
             // 
             // acceptChangebutton
             // 
@@ -311,21 +326,6 @@ namespace Taio
             this.menuStrip1.Size = new System.Drawing.Size(769, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // rectangleViewer
-            // 
-            this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
-            this.rectangleViewer.BackgroundColor = System.Drawing.Color.White;
-            this.rectangleViewer.CanDraw = true;
-            this.rectangleViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
-            this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
-            this.rectangleViewer.Name = "rectangleViewer";
-            this.rectangleViewer.Size = new System.Drawing.Size(510, 338);
-            this.rectangleViewer.TabIndex = 0;
-            this.rectangleViewer.XBorder = 5;
-            this.rectangleViewer.YBorder = 5;
-            this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
             // 
             // MainWindow
             // 

@@ -119,10 +119,10 @@ namespace Kontrolka_do_TAiO
             {
                 Taio.Rectangle rectangle = extractedRectangles[i];
                 if (rectangle.ContainedRectangles.Count == 0 && rectangle.LeftTop.X <= rX
-                    && rectangle.RightDown.X >= rX && rectangle.LeftTop.Y >= rY && rectangle.RightDown.Y <= rY)
+                    && rectangle.RightDown.X >= rX && rectangle.LeftTop.Y <= rY && rectangle.RightDown.Y >= rY)
                 {
-                    textToDisplay += "(" + rectangle.LeftTop.X + "," + rectangle.RightDown.Y + ") - (" +
-                        rectangle.RightDown.X + "," + rectangle.LeftTop.Y + ")\n";
+                    textToDisplay += "(" + rectangle.LeftTop.X + "," + rectangle.LeftTop.Y + ") - (" +
+                        rectangle.RightDown.X + "," + rectangle.RightDown.Y + ")\n";
                     indexOfRectangleToDisplay = i;
                 }
             }
@@ -138,10 +138,10 @@ namespace Kontrolka_do_TAiO
                 Taio.Rectangle rectangle = extractedRectangles[i];
                 Point leftTop = ConvertRealPostionToImagePosition(rectangle.LeftTop);
                 Point rightDown = ConvertRealPostionToImagePosition(rectangle.RightDown);
-                graph.FillRectangle(new SolidBrush(rectangle.Color), leftTop.X, leftTop.Y ,
-                    rightDown.X - leftTop.X, rightDown.Y - leftTop.Y);
+                graph.FillRectangle(new SolidBrush(rectangle.Color), leftTop.X, rightDown.Y ,
+                    rightDown.X - leftTop.X, leftTop.Y - rightDown.Y);
                 graph.DrawRectangle(new Pen(new SolidBrush(GetColorInversion(rectangle.Color)), 2),
-                    leftTop.X, leftTop.Y, rightDown.X - leftTop.X, rightDown.Y - leftTop.Y);
+                    leftTop.X, rightDown.Y, rightDown.X - leftTop.X, leftTop.Y - rightDown.Y);
             }
         }
 
@@ -299,6 +299,7 @@ namespace Kontrolka_do_TAiO
             {
                 if (value != null)
                 {
+                    rectangle = null;
                     extractedRectangles = new List<Taio.Rectangle>();
                     ExtractRectangles(value);
                     SetColors();
@@ -320,7 +321,7 @@ namespace Kontrolka_do_TAiO
         {
             int MYSTERIOUS_VALUE = 2 << 24;
             int numberOfRectangles = extractedRectangles.Count;
-            int step = (MYSTERIOUS_VALUE - 1) / numberOfRectangles;
+            int step = (MYSTERIOUS_VALUE - 1) / (numberOfRectangles + 1);
             Random rand = new Random();
             int current = rand.Next(MYSTERIOUS_VALUE);
             for (int i = 0; i < extractedRectangles.Count; ++i, current = (current + step) % (MYSTERIOUS_VALUE))
@@ -334,7 +335,11 @@ namespace Kontrolka_do_TAiO
         private void ExtractRectangles(Taio.Rectangle rectangle)
         {
             if (rectangle.ContainedRectangles.Count == 0)
-                extractedRectangles.Add(new Taio.Rectangle(rectangle.SideA, rectangle.SideB));
+            {
+                Taio.Rectangle rec = new Taio.Rectangle(rectangle.SideA, rectangle.SideB, rectangle.LeftTop);
+                rec.Number = rectangle.Number;
+                extractedRectangles.Add(rec);
+            }
             else
                 for (int i = 0; i < rectangle.ContainedRectangles.Count; ++i)
                     ExtractRectangles(rectangle.ContainedRectangles[i]);

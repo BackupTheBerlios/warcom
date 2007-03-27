@@ -395,6 +395,7 @@ namespace Taio
         public int Number
         {
             get { return number; }
+            set { number = value; }
         }
 	
         #endregion

@@ -20,7 +20,7 @@ namespace Taio
         {
             rectangles = new List<Rectangle>();
             InitializeComponent();
-            testDrawingComplexRects();
+            //testDrawingComplexRects();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -167,21 +167,6 @@ namespace Taio
             }
         }
 
-        // uaktualnia prostok¹t wyœwietlany w kontrolce prostok¹ta
-        private void rectanglesTreeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            int index = -1;
-
-            if (this.rectanglesTreeView.SelectedNode != null)
-                index = this.rectanglesTreeView.SelectedNode.Index;
-
-            if (index >= 0)
-            {
-                viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);                
-            }
-            else
-                viewRectangle(null, null);            
-        }
         #endregion        
 
         #region Kontrolka prostok¹ta
@@ -214,25 +199,28 @@ namespace Taio
         {
             if (rectId >= 0)
             {
-                if (rectId < this.rectanglesTreeView.Nodes.Count)
+                if (rectId <= this.rectanglesTreeView.Nodes.Count)
                 {
                     int i = 0;
                     for (i = 0; i < this.rectangles.Count; ++i)
                         if (rectangles[i].Number == rectId)
                             break;
-                    if(i < this.rectangles.Count)
+                    if (i < this.rectangles.Count)
+                    {
                         this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[i];
+                        this.rectanglesTreeView.Refresh();
+                    }
                 }
             }
         }
 
         private void testDrawingComplexRects()
         {
-             Rectangle t1 = new Rectangle(10, 20);
-             Rectangle t2 = new Rectangle(10, 20);
+             Rectangle t1 = new Rectangle(100, 200);
+             Rectangle t2 = new Rectangle(100, 200);
              RectangleContainer rc = new RectangleContainer();
              rc.InsertRectangle(t1, Rectangle.Orientation.Vertical);
-             rc.InsertRectangle(t2, new Point(10, 0), Rectangle.Orientation.Vertical);
+             rc.InsertRectangle(t2, new Point(90, 0), Rectangle.Orientation.Vertical);
              Rectangle t3 = rc.MaxCorrectRect;
              rectangles.Add(t1);
              addRectangleToTreeView(t1);
@@ -240,6 +228,19 @@ namespace Taio
              addRectangleToTreeView(t2);
              rectangleViewer.Rectangle = t3;
              rectangleViewer.Refresh();
+        }
+
+        private void rectanglesTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            int index = -1;
+            if (this.rectanglesTreeView.SelectedNode != null)
+                index = e.Node.Index;
+            if (index >= 0)
+            {
+                viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);
+            }
+            else
+                viewRectangle(null, null);  
         }
 
     }
