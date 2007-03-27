@@ -9,11 +9,14 @@ namespace Taio
     {
         private Point leftTop;
         private Point rightDown;
-        private int sideA;
-        private int sideB;
+        //private int sideA;
+        //private int sideB;
         private List<Rectangle> containedRectangles;
         private Rectangle parentRectangle;
         private Color color;
+        private int number;
+        private static int counter = 1;
+
 
         #region Constructors
         /// <summary>
@@ -31,11 +34,13 @@ namespace Taio
             this.leftTop = new Point(leftTop.X, leftTop.Y);
             this.rightDown = new Point(leftTop.X + sideA, leftTop.Y + sideB);
 
-            this.sideA = rightDown.X - leftTop.X;
-            this.sideB = rightDown.Y - leftTop.Y;
+            //this.sideA = rightDown.X - leftTop.X;
+            //this.sideB = rightDown.Y - leftTop.Y;
 
             this.containedRectangles = new List<Rectangle>();
             this.parentRectangle = parentRectangle;
+
+            this.number = counter++;
         }
 
         /// <summary>
@@ -74,11 +79,13 @@ namespace Taio
             this.leftTop = new Point(leftTop.X, leftTop.Y);
             this.rightDown = new Point(rightDown.X, rightDown.Y);
 
-            this.sideA = rightDown.X - leftTop.X;
-            this.sideB = rightDown.Y - leftTop.Y;
+            //this.sideA = rightDown.X - leftTop.X;
+            //this.sideB = rightDown.Y - leftTop.Y;
 
             this.containedRectangles = new List<Rectangle>();
             this.parentRectangle = parentRectangle;
+
+            this.number = counter++;
         }
 
         /// <summary>
@@ -230,8 +237,8 @@ namespace Taio
                 throw new ArgumentException("Incorrect right-down coordinates");
 
             this.rightDown = rightDown;
-            this.sideA = this.rightDown.X - this.leftTop.X;
-            this.sideB = this.rightDown.Y - this.leftTop.Y;
+            //this.sideA = this.rightDown.X - this.leftTop.X;
+            //this.sideB = this.rightDown.Y - this.leftTop.Y;
 
             return this;
         }
@@ -251,8 +258,8 @@ namespace Taio
             int rdy = this.leftTop.Y + sideB;
             this.rightDown = new Point(rdx, rdy);
 
-            this.sideA = sideA;
-            this.sideB = sideB;
+            //this.sideA = sideA;
+            //this.sideB = sideB;
 
             return this;
         }
@@ -263,7 +270,7 @@ namespace Taio
         /// <returns>Rotated rectangle</returns>
         public Rectangle Rotate()
         {
-            Resize(new Point(this.leftTop.X + this.sideB, this.leftTop.Y + this.sideA));
+            Resize(new Point(this.leftTop.X + this.SideB, this.leftTop.Y + this.SideA));
             return this;
         }
 
@@ -322,8 +329,7 @@ namespace Taio
         /// </summary>
         public int SideA
         {
-            //set { sideA = value; }
-            get { return sideA; }
+            get { return this.rightDown.X - this.leftTop.X; ; }
         }
 
         /// <summary>
@@ -331,8 +337,7 @@ namespace Taio
         /// </summary>
         public int SideB
         {
-            //set { sideB = value; }
-            get { return sideB; }
+            get { return this.rightDown.Y - this.leftTop.Y; ; }
         }
 
         /// <summary>
@@ -342,10 +347,10 @@ namespace Taio
         {
             get
             {
-                if (sideA >= sideB)
-                    return sideA;
+                if (SideA >= SideB)
+                    return SideA;
                 else
-                    return sideB;
+                    return SideB;
             }
         }
 
@@ -356,10 +361,10 @@ namespace Taio
         {
             get
             {
-                if (sideA >= sideB)
-                    return sideB;
+                if (SideA >= SideB)
+                    return SideB;
                 else
-                    return sideA;
+                    return SideA;
             }
         }
 
@@ -368,7 +373,7 @@ namespace Taio
         /// </summary>
         public int Area
         {
-            get { return sideA * sideB; }
+            get { return SideA * SideB; }
         }
 
         /// <summary>
@@ -395,12 +400,21 @@ namespace Taio
             get { return color; }
             set { color = value; }
         }
+
+        /// <summary>
+        /// Rectangle's number
+        /// </summary>
+        public int Number
+        {
+            get { return number; }
+        }
+	
         #endregion
 
 
         public override String ToString()
         {
-            return this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
+            return /*"#"+this.number + ": "+ */ this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
         }
 
         /// <summary>
