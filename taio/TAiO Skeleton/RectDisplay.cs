@@ -51,6 +51,10 @@ namespace Kontrolka_do_TAiO
         private int maxScale = 256;
         private int indexOfRectangleToDisplay;
 
+        public delegate void RectangleClickHandler(int rectId);
+        public event RectangleClickHandler RectangleClicked;
+
+
         public RectDisplay()
         {
             InitializeComponent();
@@ -102,7 +106,7 @@ namespace Kontrolka_do_TAiO
                     textToDisplay = "(0,0) - (" + realValue.X + "," + realValue.Y + ")";
                 else if (rectangle != null)
                     textToDisplay = TrySetComplexRectangleInfo(realMousePosition.X,
-                        realMousePosition.Y);                        
+                        realMousePosition.Y);
             }
             rectInfo.Text = textToDisplay;            
         }
@@ -180,18 +184,7 @@ namespace Kontrolka_do_TAiO
         {
             bool validMousePos = DisplayMousePosition(e.X, e.Y);
             if (validMousePos && e.Button == MouseButtons.Left && canDraw)
-            {
                 this.realValue = realMousePosition;
-                                                
-                //if (this.node != null && rectangle != null)
-                //{
-                    //rectanglePom.SideA = realValue.X;
-                    //rectanglePom.SideB = realValue.Y;
-               //     rectangle.Resize(realValue);
-                   // this.node.Text = this.node.Index + 1 + " prostok¹t [" + rectangle.SideA
-                    //                    + ", " + rectangle.SideB + ", " + rectangle.Area + "]";
-               // }        
-            }
             TrySetRectangleInfo();
             this.Refresh();           
         }
@@ -376,6 +369,7 @@ namespace Kontrolka_do_TAiO
             if (rectangle != null)
             {
                 Taio.Rectangle rect = extractedRectangles[indexOfRectangleToDisplay];
+                RectangleClicked(rect.Number);
                 extractedRectangles.RemoveAt(indexOfRectangleToDisplay);
                 extractedRectangles.Add(rect);
             }

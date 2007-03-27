@@ -212,5 +212,21 @@ namespace Taio
             }
         }
 
+        private void rectangleViewer_RectangleClicked(int rectId)
+        {
+            if (rectId >= 0)
+            {
+                if (rectId < this.rectanglesTreeView.Nodes.Count)
+                {
+                    int i = 0;
+                    for (i = 0; i < this.rectangles.Count; ++i)
+                        if (rectangles[i].Number == rectId)
+                            break;
+                    if(i < this.rectangles.Count)
+                        this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[i];
+                }
+            }
+        }
+
     }
 }
