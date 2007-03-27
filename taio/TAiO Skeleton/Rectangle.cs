@@ -9,12 +9,11 @@ namespace Taio
     {
         private Point leftTop;
         private Point rightDown;
-        //private int sideA;
-        //private int sideB;
         private List<Rectangle> containedRectangles;
         private Rectangle parentRectangle;
         private Color color;
         private int number;
+
         private static int counter = 1;
 
 
@@ -33,9 +32,6 @@ namespace Taio
 
             this.leftTop = new Point(leftTop.X, leftTop.Y);
             this.rightDown = new Point(leftTop.X + sideA, leftTop.Y + sideB);
-
-            //this.sideA = rightDown.X - leftTop.X;
-            //this.sideB = rightDown.Y - leftTop.Y;
 
             this.containedRectangles = new List<Rectangle>();
             this.parentRectangle = parentRectangle;
@@ -78,9 +74,6 @@ namespace Taio
 
             this.leftTop = new Point(leftTop.X, leftTop.Y);
             this.rightDown = new Point(rightDown.X, rightDown.Y);
-
-            //this.sideA = rightDown.X - leftTop.X;
-            //this.sideB = rightDown.Y - leftTop.Y;
 
             this.containedRectangles = new List<Rectangle>();
             this.parentRectangle = parentRectangle;
@@ -237,8 +230,6 @@ namespace Taio
                 throw new ArgumentException("Incorrect right-down coordinates");
 
             this.rightDown = rightDown;
-            //this.sideA = this.rightDown.X - this.leftTop.X;
-            //this.sideB = this.rightDown.Y - this.leftTop.Y;
 
             return this;
         }
@@ -257,9 +248,6 @@ namespace Taio
             int rdx = this.leftTop.X + sideA;
             int rdy = this.leftTop.Y + sideB;
             this.rightDown = new Point(rdx, rdy);
-
-            //this.sideA = sideA;
-            //this.sideB = sideB;
 
             return this;
         }
@@ -433,57 +421,3 @@ namespace Taio
         }
     }
 }
-
-#region arch
-/*public void ChangeShorterSide(int newSide)
-        {
-            if (newSide <= 0)
-                throw new ArgumentException("Incorrect rectangle side");
-
-            if (newSide > sideA)
-            {
-                sideB = sideA;
-                sideA = newSide;
-            }
-            else
-                this.sideB = newSide;
-        }
-
-        public void ChangeLongerSide(int newSide)
-        {
-            if (newSide <= 0)
-                throw new ArgumentException("Incorrect rectangle side");
-
-            if (newSide < sideB)
-            {
-                sideA = sideB;
-                sideB = newSide;
-            }
-            else
-                sideA = newSide;
-        }
- * 
- * public Rectangle(int sideA, int sideB, Rectangle fatherRectangle)
-        {
-            if (sideA <= 0 || sideB <= 0)
-                throw new ArgumentException("Incorrect rectangle side(s)");
-
-            if (sideA >= sideB)
-            {
-                this.sideA = sideA;
-                this.sideB = sideB;
-            }
-            else
-            {
-                this.sideA = sideB;
-                this.sideB = sideA;
-            }
-
-            this.leftTop = new Point(0,0);
-            this.rightDown = new Point(sideA, sideB);
-
-            this.containedRectangles = new List<Rectangle>();
-            this.fatherRectangle = fatherRectangle;
-        }
- */
-#endregion

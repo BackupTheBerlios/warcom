@@ -25,25 +25,7 @@ namespace Taio
             Application.Run(new MainWindow());
         }
 
-        private static void ContainerTest()
-        {
-            List<Rectangle> a = new List<Rectangle>();
-            a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
-            a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
-            a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
-            a.Add(new Rectangle(new Point(4, 3), new Point(9, 4)));
-            a.Add(new Rectangle(new Point(3, 4), new Point(7, 5)));
-            a.Add(new Rectangle(new Point(2, 5), new Point(9, 6)));
-            a.Add(new Rectangle(new Point(10, 3), new Point(11, 5)));
-            a.Add(new Rectangle(new Point(6, 4), new Point(7, 5)));
-            a.Add(new Rectangle(new Point(6, 5), new Point(8, 8)));
-            a.Add(new Rectangle(new Point(3, 7), new Point(4, 8)));
-            a.Add(new Rectangle(new Point(6, 1), new Point(7, 3)));
-
-            RectangleContainer rc = new RectangleContainer();
-            rc.InsertRectangle(a[1], new Point(0,0), Rectangle.Orientation.Horizontal);
-            rc.InsertRectangle(a[2], a[2].LeftTop, Rectangle.Orientation.Vertical);
-        }
+        
 
         #region Tests
         public static void IntersectionTest()
@@ -204,6 +186,26 @@ namespace Taio
                 {X=0,Y=0}, {X=5,Y=1}; area: 5
                 {X=0,Y=0}, {X=4,Y=1}; area: 4
              */
+        }
+
+        private static void ContainerTest()
+        {
+            List<Rectangle> a = new List<Rectangle>();
+            a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
+            a.Add(new Rectangle(new Point(4, 3), new Point(9, 4)));
+            a.Add(new Rectangle(new Point(3, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(2, 5), new Point(9, 6)));
+            a.Add(new Rectangle(new Point(10, 3), new Point(11, 5)));
+            a.Add(new Rectangle(new Point(6, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(6, 5), new Point(8, 8)));
+            a.Add(new Rectangle(new Point(3, 7), new Point(4, 8)));
+            a.Add(new Rectangle(new Point(6, 1), new Point(7, 3)));
+
+            RectangleContainer rc = new RectangleContainer();
+            rc.InsertRectangle(a[1], new Point(0, 0), Rectangle.Orientation.Horizontal);
+            rc.InsertRectangle(a[2], a[2].LeftTop, Rectangle.Orientation.Vertical);
         }
         #endregion
     }

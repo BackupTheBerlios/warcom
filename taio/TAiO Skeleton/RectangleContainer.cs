@@ -138,27 +138,20 @@ namespace Taio
                         r.RightDown.Y == maxCorrectRect.RightDown.Y &&
                         r.LeftTop.X <= maxCorrectRect.RightDown.X)
                         UpdateMaxRectangles(r);
-                    
+
                         // naklejamy na prostokat
                     else if (maxCorrectRect.Covers(r))
                         r.SetParentRectangle(maxCorrectRect);
-                    
+
+                        // zaklejamy ca³y prostok¹t - to równie g³upi przypadek jak poprzedni, ale skoro ktoœ tak chce...
+                    else if (r.Covers(maxCorrectRect))
+                        UpdateMaxRectangles(r);
+
                         // calosc przestaje byc poprawnym prostokatem
                     else
                     {
                         isCorrectRectangle = false;
-
-                        //TODO - jednak tego nie robic - zakladamy, ze maxCorrect to ten, ktory budujemy od poczatku ukladu 
-                        //sprawdzic czy dodany prost. nie ma kontaktu z maxCorrect, jesli nie spr. czy nie jest
-                        //od niego wiekszy - jesli tak, nowy staje sie maxCorrect
-
                         AddNewEmptyFields(r);
-                        
-                        // to sie nie moze tutaj zdarzyc chyba bo dopiero teraz pojawiaja sie emptyFields
-                        //UpdateEmptyFields(r);
-                        //if (emptyFields.Count == 0)
-                        //    UpdateMaxCorrectAfterFillingAllEmpties();
-
                         UpdateMaxPossibleRectangle(r);
                     }
                 }// gdy calosc nie jest prawidlowym prostokatem
