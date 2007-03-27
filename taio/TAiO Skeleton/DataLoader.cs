@@ -37,10 +37,15 @@ namespace Taio
                             return;
                         }
                     }
+                    else
+                    {
+                        this.DeleteOldSolutions(sfd.FileName, solutions);
+                        this.AppendSolutions(sfd.FileName, solutions);
+                        return;
+                    }
                 }
                 this.AppendSolutions(sfd.FileName, solutions, rectangles);
             }
-
         }
 
         public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles)
@@ -50,15 +55,17 @@ namespace Taio
             ofd.Title = "Wybierz plik zawieraj¹cy prostok¹ty";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                rectangles.Clear();
+                solutions.Clear();
                 this.LoadSolutions(ofd.FileName, ref solutions, ref  rectangles);
             }
         }
 
         private void LoadSolutions(string fileName, ref List<Solution> solutions, ref  List<Rectangle> rectangles)
         {
+            String str = null;
             using (TextReader rd = new StreamReader(fileName))
             {
-                String str = null;
                 string wzorzec = "##\r\n(?<info>(.|\r|\n)*?)##\r\n(?<input>([0-9]*,[0-9]*\r\n)*?)" +
                     "##(\r\n)?(#(?<result>(.{0,4}\r\n([0-9]*,[0-9]*,[0-9]*,[0-9]*(\r\n)?)*)?))*";
                 Regex wyr = new Regex(wzorzec, RegexOptions.IgnoreCase);
@@ -66,7 +73,7 @@ namespace Taio
                 {
                     try
                     {
-                        str = str.Trim();
+                        str = str.Replace(" ", "");
                         Match elem = wyr.Match(str);
                         if (elem.Success)
                         {
@@ -75,8 +82,7 @@ namespace Taio
                             string input = elem.Groups["input"].Value;
                             rectangles = this.ReadInput(input);
                             solutions = this.ReadResult(result);
-                            if (!this.CheckCorrect(solutions, rectangles))
-                                solutions.Clear();
+                            this.CheckCorrect(ref solutions, rectangles);
                         }
                         else
                         {
@@ -91,6 +97,50 @@ namespace Taio
             }
         }
 
+        private void DeleteOldSolutions(string filename, List<Solution> solutions)
+        {
+            if (solutions.Count == 0)
+                return;
+            StringBuilder strbld = new StringBuilder();
+            for (int i = 1; i < solutions.Count; ++i)
+                strbld.Append("(#" + solutions[i].Tag + ")|");
+            strbld.Append("(#" + solutions[0].Tag + ")");
+            Regex wyr = new Regex(strbld.ToString(), RegexOptions.IgnoreCase);
+            strbld = new StringBuilder();
+            string str;
+            using (TextReader rd = new StreamReader(filename))
+            {
+                int counter = 0;
+                bool del = false;
+                while ((str = rd.ReadLine()) != null)
+                {
+                    if (str.StartsWith("##"))
+                        counter++;
+                    if (counter == 3)
+                    {
+                        if(str.StartsWith("#"))
+                            del = false;
+                        Match elem = wyr.Match(str);
+                        if (elem.Success)
+                            del = true;
+                        if (!del)
+                            strbld.AppendLine(str);
+                    }
+                    else
+                        strbld.AppendLine(str);
+                }
+            }
+            this.WriteString(filename, strbld.ToString());
+        }
+
+        private void WriteString(string filename, string data)
+        {
+            using (TextWriter wr = new StreamWriter(filename))
+            {
+                wr.Write(data);
+            }
+        }
+
         private List<Rectangle> ReadInput(string input)
         {
             List<Rectangle> rectangles = new List<Rectangle>();
@@ -102,7 +152,7 @@ namespace Taio
                     string str;
                     while ((str = rd.ReadLine()) != null)
                     {
-                        str = str.Trim();
+                        str = str.Replace(" ", "");
                         int noOfComa = str.IndexOf(',');
                         int sideA = Int32.Parse(str.Substring(0, noOfComa));
                         int sideB = Int32.Parse(str.Substring(noOfComa + 1, str.Length - noOfComa - 1));
@@ -142,6 +192,8 @@ namespace Taio
                         for (int i = 0; i < x1.Count; ++i)
                             rects.Add(new Rectangle(new System.Drawing.Point(Int32.Parse(x1[i].Value), Int32.Parse(y1[i].Value)),
                                                     new System.Drawing.Point(Int32.Parse(x2[i].Value), Int32.Parse(y2[i].Value))));
+                        
+                        //TODO tutaj nie dzia³a kontener tak jak nale¿y
                         RectangleContainer rc = new RectangleContainer();
                         rc.InsertRectangles(rects);
                         if (!rc.IsCorrectRectangle)
@@ -158,9 +210,36 @@ namespace Taio
             return solutions;
         }
 
+        private void AppendRectangle(Rectangle rect, TextWriter wr)
+        {
+
+        }
+
         private void AppendSolutions(string fileName, List<Solution> solutions, List<Rectangle> rectangles)
         {
-            //TODO zapisz do pliku
+            using (TextWriter wr = new StreamWriter(fileName))
+            {
+                wr.WriteLine("##");
+                wr.WriteLine("Plik stworzony przez grupê Aproksumuj¹cych z Wilkami:)))");
+                wr.WriteLine("##");
+                for (int i = 0; i < rectangles.Count; ++i)
+                    wr.WriteLine(rectangles[i].SideA + "," + rectangles[i].SideB);
+                wr.WriteLine("##");
+            }
+            this.AppendSolutions(fileName, solutions);
+        }
+
+        private void AppendSolutions(string fileName, List<Solution> solutions)
+        {
+            using (TextWriter wr = new StreamWriter(fileName, true))
+            {
+                for (int i = 0; i < solutions.Count; ++i)
+                {
+                    Solution s = solutions[i];
+                    wr.WriteLine("#" + s.Tag);
+                    this.AppendRectangle(s.Rectangle, wr);
+                }
+            }
         }
 
         private bool CheckData(List<Rectangle> r1, List<Rectangle> r2)
@@ -183,15 +262,19 @@ namespace Taio
             return flag;
         }
 
-        private bool CheckCorrect(List<Solution> solutions, List<Rectangle> rectangles)
+        private bool CheckCorrect(ref List<Solution> solutions, List<Rectangle> rectangles)
         {
-            bool[] flags = new bool[rectangles.Count];
+            bool flag = true;
             for (int i = 0; i < solutions.Count; ++i)
             {
+                bool[] flags = new bool[rectangles.Count];
                 if (!this.CheckCorrect(solutions[i].Rectangle, rectangles, ref flags))
-                    return false;
+                {
+                    flag = false;
+                    solutions[i].Correct = false;
+                }
             }
-            return true;
+            return flag;
         }
 
         private bool CheckCorrect(Rectangle rect, List<Rectangle> rectangles, ref bool[] flags)

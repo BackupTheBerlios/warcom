@@ -8,12 +8,20 @@ namespace Taio
     {
         private Rectangle rectangle;
         private string tag;
+        private bool correct;
+
+        public bool Correct
+        {
+            get { return correct; }
+            set { correct = value; }
+        }
 
         public Solution()
         {
+            correct = true;
         }
 
-        public Solution(string tag, Rectangle rectangle)
+        public Solution(string tag, Rectangle rectangle) : this()
         {
             this.tag = tag;
             this.rectangle = rectangle;
