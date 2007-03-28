@@ -202,9 +202,44 @@ namespace SONStock
                 {
                     correct[j] = values[i + j + entryLayerSize];
                 }
+                this.Normalize( ref val, ref correct);
                 elmanNet.Learn(val, correct);
             }
             return elmanNet;
+        }
+
+        public void Normalize(ref double[] val, ref double[] exit)
+        {
+            if (val.Length == 0)
+                return;
+            double[] values = new double[val.Length];
+            double max = val[0], min = val[0];
+            for (int i = 0; i < val.Length; ++i)
+            {
+                max = max >= val[i] ? max : val[i];
+                min = min <= val[i] ? min : val[i];
+            }
+            for (int i = 0; i < exit.Length; ++i)
+            {
+                max = max >= exit[i] ? max : exit[i];
+                min = min <= exit[i] ? min : exit[i];
+            }
+            double diff = max - min;
+            diff = diff == 0 ? 0.01 : diff;
+            for (int i = 0; i < val.Length; ++i)
+            {
+                val[i] = 0.1 + 0.8 * ((val[i] - min) / diff);
+            }
+            for (int i = 0; i < exit.Length; ++i)
+            {
+                exit[i] = 0.1 + 0.8 * ((exit[i] - min) / diff);
+            }
+        }
+
+        public void Normalize(ref double[] val)
+        {
+            double[] tmp = new double[0];
+            this.Normalize(ref val, ref tmp);
         }
     }
 }

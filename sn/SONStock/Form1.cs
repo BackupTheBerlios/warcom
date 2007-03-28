@@ -22,7 +22,7 @@ namespace SONStock
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //NetworkTest();
+            NetworkTest();
         }
 
         private void NetworkTest()
@@ -31,7 +31,9 @@ namespace SONStock
             double[] learn = new double[] { 1, 2, 3, 4, 5 };
             double[] correct = new double[] { 6 };
             double[] test = new double[] { 7, 8, 9, 10, 11 };
+            this.data.Normalize(ref learn, ref correct);
             elmanNet.Learn(learn, correct);
+            this.data.Normalize(ref test);
             double[] exit = elmanNet.ComputeExitValues(test);
             this.exitValuesMatrixPreview.BuildControl(exit);
         }
@@ -120,7 +122,7 @@ namespace SONStock
                 for (int i = 0; i < entryValues.Length; i++)
                     entryValues[i] = values[values.Length - elmanNet.NumberOfEntryNeurons + i];
 
-
+                this.data.Normalize(ref entryValues);
                 double[] exit = elmanNet.ComputeExitValues(entryValues);
                 this.exitValuesMatrixPreview.BuildControl(exit);
             }
