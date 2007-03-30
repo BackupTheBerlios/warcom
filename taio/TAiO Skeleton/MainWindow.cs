@@ -6,6 +6,9 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
+using Taio.Algorithms;
+using System.Diagnostics;
 
 namespace Taio
 {
@@ -15,9 +18,14 @@ namespace Taio
         private List<Rectangle> rectangles;
         private List<Solution> solutions = new List<Solution>();
         private DataLoader dataLoader = new DataLoader();
+        private IAlgorithm algorithm;
+        private BackgroundWorker bw;
         
         public MainWindow()
         {
+            bw = new BackgroundWorker();
+            bw.DoWork += new DoWorkEventHandler(threadStart);
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(threadCompleted);
             rectangles = new List<Rectangle>();
             InitializeComponent();
             //testDrawingComplexRects();
@@ -26,6 +34,19 @@ namespace Taio
         private void MainWindow_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void threadCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Debug.WriteLine("W¹tek zakoñczony");
+            this.algorithm = null;
+        }
+
+        private void threadStart(object sender, DoWorkEventArgs e)
+        {
+            Debug.WriteLine("W¹tek rozpoczêty");
+            if (this.algorithm != null)
+                this.algorithm.ComputeMaximumRectangle(this.rectangles);
         }
 
         #region Menu
@@ -66,15 +87,20 @@ namespace Taio
 
         private void randomRectanglesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //@TODO
-            //pobraæ od u¿ytkownika ile ma losowaæ prostok¹tów i najwiêkszy bok
-            this.rectangles = this.dataLoader.RandomRectangles(10, 20);
-            this.solutions.Clear();
+            ArgumentDialog ad = new ArgumentDialog();
+            if (ad.ShowDialog() == DialogResult.OK)
+            {
+                this.rectangles = this.dataLoader.RandomRectangles(ad.Count,ad.Max);
+                this.solutions.Clear();
+            }
         }
 
         private void preciseSolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.algorithm = new Algorithm0();
+            bw.RunWorkerAsync();
+            //Thread.Sleep(500);
+            //Debug.WriteLine("Dobra w¹tek chyba ju¿ dzia³a, a ja siê budze po drzemce");
         }
 
         private void algorithm1SolutionToolStripMenuItem_Click(object sender, EventArgs e)
