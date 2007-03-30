@@ -12,6 +12,9 @@ namespace Taio.Algorithms
         {
         }
 
+        public void StopThread() { }
+        public Rectangle GetRectangle() { return new Rectangle(1, 1); }
+
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rects)
         {
             int maxArea = ComputeMaximumArea(rects);

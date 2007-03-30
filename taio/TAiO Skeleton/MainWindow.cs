@@ -24,7 +24,7 @@ namespace Taio
         public MainWindow()
         {
             bw = new BackgroundWorker();
-            bw.DoWork += new DoWorkEventHandler(threadStart);
+            bw.DoWork += new DoWorkEventHandler(startThread);
             bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(threadCompleted);
             rectangles = new List<Rectangle>();
             InitializeComponent();
@@ -42,7 +42,7 @@ namespace Taio
             this.algorithm = null;
         }
 
-        private void threadStart(object sender, DoWorkEventArgs e)
+        private void startThread(object sender, DoWorkEventArgs e)
         {
             Debug.WriteLine("W¹tek rozpoczêty");
             if (this.algorithm != null)
