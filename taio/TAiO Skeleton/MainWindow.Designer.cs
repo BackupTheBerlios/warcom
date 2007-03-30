@@ -29,6 +29,8 @@ namespace Taio
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Prostok¹ty");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Rozwi¹zania");
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.rectanglesTreeView = new System.Windows.Forms.TreeView();
             this.rectanglesContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -91,10 +93,19 @@ namespace Taio
             this.rectanglesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rectanglesTreeView.Location = new System.Drawing.Point(0, 0);
             this.rectanglesTreeView.Name = "rectanglesTreeView";
+            treeNode1.Name = "Rectangles";
+            treeNode1.Text = "Prostok¹ty";
+            treeNode1.ToolTipText = "Lista prostok¹tów";
+            treeNode2.Name = "Solutions";
+            treeNode2.Text = "Rozwi¹zania";
+            treeNode2.ToolTipText = "Lista rozwi¹zañ";
+            this.rectanglesTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2});
             this.rectanglesTreeView.Size = new System.Drawing.Size(255, 414);
             this.rectanglesTreeView.TabIndex = 0;
-            this.toolTip.SetToolTip(this.rectanglesTreeView, "toolTip");
-            this.rectanglesTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rectanglesTreeView_NodeMouseClick);
+            this.toolTip.SetToolTip(this.rectanglesTreeView, "Lista prostok¹tów");
+            this.rectanglesTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.rectanglesTreeView_AfterSelect);
             // 
             // rectanglesContextMenuStrip
             // 
@@ -115,7 +126,7 @@ namespace Taio
             // 
             this.removeRectangleToolStripMenuItem.Name = "removeRectangleToolStripMenuItem";
             this.removeRectangleToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
-            this.removeRectangleToolStripMenuItem.Text = "Usuñ prostok¹t";
+            this.removeRectangleToolStripMenuItem.Text = "Usuñ prostok¹t/rozwi¹zanie";
             this.removeRectangleToolStripMenuItem.Click += new System.EventHandler(this.removeRectangleToolStripMenuItem_Click);
             // 
             // splitContainer2

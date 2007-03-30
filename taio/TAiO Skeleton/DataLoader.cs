@@ -48,13 +48,16 @@ namespace Taio
             }
         }
 
-        public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles)
+        // zmienna clearLists mówi czy listy zosta³y wyczyszczone
+        public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles, out bool clearLists)
         {
+            clearLists = false;
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Pliki TAiO (*.tao)|*.tao";
             ofd.Title = "Wybierz plik zawieraj¹cy prostok¹ty";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
+                clearLists = true;
                 rectangles.Clear();
                 solutions.Clear();
                 this.LoadSolutions(ofd.FileName, ref solutions, ref  rectangles);
