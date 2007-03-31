@@ -8,7 +8,7 @@ namespace Taio.Algorithms
     {
         private int maximumSideA = 0;
         private int maximumSideB = 0;
-        private string tag = "WZ1";
+        private string tag = "AW1";
 
         public Algorithm1()
         {

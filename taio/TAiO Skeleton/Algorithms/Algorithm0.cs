@@ -8,7 +8,7 @@ namespace Taio.Algorithms
 {
     class Algorithm0 : IAlgorithm
     {
-        private string tag = "WZ0";
+        private string tag = "AW0";
         private Rectangle rect;
         private bool stop;
 

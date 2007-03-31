@@ -12,8 +12,11 @@ namespace Taio
 {
     class DataLoader
     {
+        private StringBuilder log = new StringBuilder();
+
         public void SaveData(List<Solution> solutions, List<Rectangle> rectangles)
         {
+            this.log = new StringBuilder();
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Pliki TAiO (*.tao)|*.tao";
             sfd.Title = "Wybierz plik do zapisu danych";
@@ -33,6 +36,7 @@ namespace Taio
                         }
                         else
                         {
+                            this.log.AppendLine("Plik istnieje, ale z innymi danymi, a u¿ytkownik go nie chcia³ nadpisaæ");
                             MessageBox.Show("W takim razie nie robiê nic:)");
                             return;
                         }
@@ -51,6 +55,7 @@ namespace Taio
         // zmienna clearLists mówi czy listy zosta³y wyczyszczone
         public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles, out bool clearLists)
         {
+            this.log = new StringBuilder();
             clearLists = false;
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Pliki TAiO (*.tao)|*.tao";
@@ -89,11 +94,13 @@ namespace Taio
                         }
                         else
                         {
+                            this.log.AppendLine("B³ad w danych w pliku - z³y format");
                             MessageBox.Show("B³¹d w danych w pliku - z³y format");
                         }
                     }
                     catch (Exception ex)
                     {
+                        this.log.AppendLine("B³¹d w danych w pliku");
                         Debug.WriteLine("B³¹d: " + ex.Message + "\n\n" + ex.StackTrace);
                     }
                 }
@@ -165,6 +172,7 @@ namespace Taio
                 }
                 catch (Exception ex)
                 {
+                    this.log.AppendLine("B³¹d przy wczytywaniu {0} prostok¹ta", counter.ToString());
                     Debug.WriteLine("B³¹d przy wczytywaniu {0} prostok¹ta", counter.ToString());
                     throw ex;
                 }
@@ -200,12 +208,16 @@ namespace Taio
                         RectangleContainer rc = new RectangleContainer();
                         rc.InsertRectangles(rects);
                         if (!rc.IsCorrectRectangle)
+                        {
+                            this.log.AppendLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
                             Debug.WriteLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
+                        }
                         else
                             solutions.Add(new Solution(tag, rc.MaxCorrectRect));
                     }
                     catch (Exception ex)
                     {
+                        this.log.AppendLine("B³¹d w tagu " + tag);
                         Debug.WriteLine("B³¹d w tagu " + tag + " : " + ex.Message + "\n\n" + ex.StackTrace);
                     }
                 }
@@ -318,6 +330,11 @@ namespace Taio
             for (int i = 0; i < count; ++i)
                 rectangles.Add(new Rectangle(random.Next() % maxSide + 1, random.Next() % maxSide + 1));
             return rectangles;
+        }
+
+        public string GetLog
+        {
+            get { return this.log == null ? "" : this.log.ToString(); }
         }
     }
 }
