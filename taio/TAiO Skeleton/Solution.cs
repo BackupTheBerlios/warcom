@@ -7,7 +7,7 @@ namespace Taio
     class Solution
     {
         private Rectangle rectangle;
-        private string tag;
+        private string tag ="";
         private bool correct;
 
         public bool Correct

@@ -41,7 +41,15 @@ namespace Taio
         private void threadCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             Debug.WriteLine("W¹tek zakoñczony");
+            Solution s = new Solution(this.algorithm.GetTag(), this.algorithm.GetRectangle());
+            for (int i = 0; i < this.solutions.Count; ++i)
+            {
+                if (this.solutions[i].Tag == s.Tag)
+                    this.solutions.RemoveAt(i);
+            }
+            this.solutions.Add(s);
             this.algorithm = null;
+            this.EnableMenu(true);
         }
 
         private void startThread(object sender, DoWorkEventArgs e)
@@ -49,6 +57,20 @@ namespace Taio
             Debug.WriteLine("W¹tek rozpoczêty");
             if (this.algorithm != null)
                 this.algorithm.ComputeMaximumRectangle(this.rectangles);
+        }
+
+        private void EnableMenu(bool flag)
+        {
+            this.openFileToolStripMenuItem.Enabled = flag;
+            this.preciseSolutionToolStripMenuItem.Enabled = flag;
+            this.randomRectanglesToolStripMenuItem.Enabled = flag;
+            this.saveFileToolStripMenuItem.Enabled = flag;
+            this.saveSolutionFileToolStripMenuItem.Enabled = flag;
+            this.newFileToolStripMenuItem.Enabled = flag;
+            this.newRectanglesToolStripMenuItem.Enabled = flag;
+            this.algorithm1SolutionToolStripMenuItem.Enabled = flag;
+            this.algorithm2SolutionToolStripMenuItem.Enabled = flag;
+            this.algorithm3SolutionToolStripMenuItem.Enabled = flag;
         }
 
         #region Menu
@@ -87,6 +109,23 @@ namespace Taio
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (this.algorithm != null)
+            {
+                if (MessageBox.Show("Czy napewno chcesz przerwaæ dzia³anie programu?",
+                    "Zakoñczenie", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    try
+                    {
+                        this.algorithm.StopThread();
+                        Thread.Sleep(500);
+                        if (this.bw.IsBusy)
+                            Debug.WriteLine("No to coœ siê nie zamkn¹³ jeszcze");
+                    }
+                    catch (Exception) { }
+                }
+                else
+                    return;
+            }
             Application.Exit();
         }
 
@@ -111,10 +150,11 @@ namespace Taio
 
         private void preciseSolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.EnableMenu(false);
             this.algorithm = new Algorithm0();
             bw.RunWorkerAsync();
-            //Thread.Sleep(500);
-            //Debug.WriteLine("Dobra w¹tek chyba ju¿ dzia³a, a ja siê budze po drzemce");
+            Thread.Sleep(500);
+            Debug.WriteLine("Dobra w¹tek chyba ju¿ dzia³a, a ja siê budze po drzemce");
         }
 
         private void algorithm1SolutionToolStripMenuItem_Click(object sender, EventArgs e)
