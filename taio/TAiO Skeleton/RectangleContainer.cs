@@ -82,6 +82,7 @@ namespace Taio
         }
         #endregion
 
+        #region Insert methods
         /// <summary>
         /// Insert rectangles from rects to the container
         /// </summary>
@@ -97,6 +98,42 @@ namespace Taio
                     Rectangle.Orientation.Horizontal : Rectangle.Orientation.Vertical;
                 this.InsertRectangle(r, r.LeftTop, o);
             }
+        }
+
+
+        /// <summary>
+        /// Insert rectangle using its properties to place it in container
+        /// </summary>
+        /// <param name="r">Rectangle to insert</param>
+        public void InsertRectangle(Rectangle r)
+        {
+            InsertRectangle(r, r.LeftTop);
+        }
+        
+        /// <summary>
+        /// Insert rectangle to the container
+        /// </summary>
+        /// <param name="r">Rectangle to insert</param>
+        /// <param name="o">Inserted rectangle orientation</param>
+        public void InsertRectangle(Rectangle r, Rectangle.Orientation o)
+        {
+            InsertRectangle(r, new Point(0, 0), o);
+        }
+
+        /// <summary>
+        /// Insert rectangle to the container
+        /// </summary>
+        /// <param name="r">Rectangle to insert</param>
+        /// <param name="rLeftTop">Inserted rectangle left-top point</param>
+        public void InsertRectangle(Rectangle r, Point rLeftTop)
+        {
+            Rectangle.Orientation o;
+            if (r.SideA >= r.SideB)
+                o = Rectangle.Orientation.Horizontal;
+            else
+                o = Rectangle.Orientation.Vertical;
+
+            InsertRectangle(r, rLeftTop, o);
         }
 
         /// <summary>
@@ -166,9 +203,10 @@ namespace Taio
                         UpdateMaxCorrectAfterFillingAllEmpties();
                     UpdateMaxPossibleRectangle(r);
                 }
-            }   
+            }
         }
 
+        #region Auxiliary functions for Insert methods
         /// <summary>
         /// Check InsertRectangle function parameters
         /// </summary>
@@ -317,16 +355,8 @@ namespace Taio
                 }
             }
         }
-
-        /// <summary>
-        /// Insert rectangle to the container
-        /// </summary>
-        /// <param name="r">Rectangle to be add</param>
-        /// <param name="o">Added rectangle orientation</param>
-        public void InsertRectangle(Rectangle r, Rectangle.Orientation o)
-        {
-            InsertRectangle(r, new Point(0, 0), o);
-        }
+        #endregion
+        #endregion
     }
 }
 
