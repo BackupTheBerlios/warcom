@@ -8,10 +8,14 @@ namespace Taio.Algorithms
     {
         private int maximumSideA = 0;
         private int maximumSideB = 0;
+        private string tag = "WZ1";
+
         public Algorithm1()
         {
         }
 
+         public string GetTag()
+        { return tag;  }
         public void StopThread() { }
         public Rectangle GetRectangle() { return new Rectangle(1, 1); }
 
