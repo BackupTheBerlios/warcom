@@ -14,7 +14,7 @@ namespace Taio.Algorithms
 
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rectangles)
         {
-            for (int i = 0; i < 100; ++i)
+            for (int i = 0; i < 100 && !stop; ++i)
             {
                 Debug.WriteLine(i.ToString());
                 Thread.Sleep(100);

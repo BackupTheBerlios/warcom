@@ -52,7 +52,6 @@ namespace Taio
             }
         }
 
-        // zmienna clearLists mówi czy listy zosta³y wyczyszczone
         public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles, out bool clearLists)
         {
             this.log = new StringBuilder();
@@ -90,7 +89,11 @@ namespace Taio
                             string input = elem.Groups["input"].Value;
                             rectangles = this.ReadInput(input);
                             solutions = this.ReadResult(result);
-                            this.CheckCorrect(ref solutions, rectangles);
+                            if (!this.CheckCorrect(ref solutions, rectangles))
+                            {
+                                this.log.AppendLine("Wczytane rozwi¹zania nie s¹ poprawne");
+                                Debug.WriteLine("Wczytane rozwi¹zania nie s¹ poprawne");
+                            }
                         }
                         else
                         {
@@ -172,8 +175,6 @@ namespace Taio
                 }
                 catch (Exception ex)
                 {
-                    // to siê nie kompilowa³o - overlord_1984
-                    // this.log.AppendLine("B³¹d przy wczytywaniu {0} prostok¹ta", counter.ToString());
                     this.log.AppendLine("B³¹d przy wczytywaniu " + counter + " prostok¹ta");
                     Debug.WriteLine("B³¹d przy wczytywaniu {0} prostok¹ta", counter.ToString());
                     throw ex;
@@ -211,8 +212,6 @@ namespace Taio
                         rc.InsertRectangles(rects);
                         if (!rc.IsCorrectRectangle)
                         {
-                            // to siê nie kompilowa³o - overlord_1984
-                            // this.log.AppendLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
                             this.log.AppendLine("Powsta³ nie prostok¹t dla tagu: " + tag);
                             Debug.WriteLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
                         }
@@ -307,7 +306,7 @@ namespace Taio
         {
             if (rect == null)
                 return true;
-            if (rect.ContainedRectangles != null)
+            if (rect.ContainedRectangles != null && rect.ContainedRectangles.Count>0)
             {
                 for (int i = 0; i < rect.ContainedRectangles.Count; ++i)
                     if (!this.CheckCorrect(rect.ContainedRectangles[i], rectangles, ref flags))
@@ -323,8 +322,9 @@ namespace Taio
                         flags[i] = true;
                         return true;
                     }
+                return false;
             }
-            return false;
+            return true;
         }
 
         public List<Rectangle> RandomRectangles(int count, int maxSide)
