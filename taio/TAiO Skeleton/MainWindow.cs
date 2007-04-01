@@ -32,6 +32,7 @@ namespace Taio
             InitializeComponent();
 
             //testDrawingComplexRects();
+            //testAlgorihm1();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -417,6 +418,22 @@ namespace Taio
              rectangleViewer.Rectangle = t3;
              rectangleViewer.Refresh();
          }
+
+        private void testAlgorihm1()
+        {
+            Rectangle r1 = new Rectangle(50, 40);
+            Rectangle r2 = new Rectangle(30, 20);
+            Rectangle r3 = new Rectangle(20, 10);
+            List<Rectangle> rr = new List<Rectangle>();
+            rr.Add(r1);
+            rr.Add(r2);
+            rr.Add(r3);
+            //powinno dac wynik 50,50
+            Algorithm1 al = new Algorithm1();
+            Rectangle res = al.ComputeMaximumRectangle(rr);
+            System.Console.WriteLine(res.SideA + " " + res.SideB);
+        }
+
         #endregion
 
         

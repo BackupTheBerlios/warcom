@@ -27,12 +27,11 @@ namespace Taio.Algorithms
         { 
             return tag; 
         }
-        
-        
+      
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rects)
         {
             int maxArea = ComputeMaximumArea(rects);
-            Rectangle returnRectangle = null;
+            bool onlySideChange = false;
             SetMaximumSides(maxArea);
             List<Rectangle> correctRects = RemoveTooBigRectangles(rects);
             ConcatenateRectangles(rects);
@@ -62,14 +61,28 @@ namespace Taio.Algorithms
                     int offset = 0, startVal = startRect.SideB;
                     foreach (Rectangle r in tempRectsList)
                     {
-                        //TODO wywalic orientacje
-                        rc.InsertRectangle(r, new Point(offset, startVal + minHeight), Rectangle.Orientation.Horizontal);
-
+                        if (offset + r.SideA > startRect.SideA)
+                            offset = startRect.SideA - r.SideA;
+                        rc.InsertRectangle(r, new Point(offset, startVal + minHeight - r.SideB));
+                        offset += r.SideA;
+                    }
+                    tempRectsList.Clear();
+                    if (IsShapeConditionValid(rc.MaxCorrectRect.SideA, rc.MaxCorrectRect.SideB))
+                    {
+                        change = true;
+                        onlySideChange = false;
+                        startRect = rc.MaxCorrectRect;
                     }
                 }
+                if (!change && !onlySideChange)
+                {
+                    change = true;
+                    onlySideChange = true;
+                    currentSide = (currentSide == startRect.LongerSide)?startRect.ShorterSide:startRect.LongerSide;
+                }        
             }
-            rectangle = returnRectangle;
-            return returnRectangle;
+            rectangle = startRect;
+            return startRect;
         }
 
         private int FindMinHeight(List<Rectangle> rects)
@@ -203,7 +216,9 @@ namespace Taio.Algorithms
                                 rects.Remove(rects[j]);
                                 change = true;
                             }
+                        ++j;
                     }
+                    ++i;
                 }
             }
         }
