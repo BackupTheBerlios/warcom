@@ -223,7 +223,8 @@ namespace Taio
 
         private void stopAlgorithm_Click(object sender, EventArgs e)
         {
-
+            if (this.algorithm != null)
+                this.algorithm.StopThread();
         }
         #endregion
 
