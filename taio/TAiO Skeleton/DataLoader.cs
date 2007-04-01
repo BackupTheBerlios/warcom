@@ -172,7 +172,9 @@ namespace Taio
                 }
                 catch (Exception ex)
                 {
-                    this.log.AppendLine("B³¹d przy wczytywaniu {0} prostok¹ta", counter.ToString());
+                    // to siê nie kompilowa³o - overlord_1984
+                    // this.log.AppendLine("B³¹d przy wczytywaniu {0} prostok¹ta", counter.ToString());
+                    this.log.AppendLine("B³¹d przy wczytywaniu " + counter + " prostok¹ta");
                     Debug.WriteLine("B³¹d przy wczytywaniu {0} prostok¹ta", counter.ToString());
                     throw ex;
                 }
@@ -209,7 +211,9 @@ namespace Taio
                         rc.InsertRectangles(rects);
                         if (!rc.IsCorrectRectangle)
                         {
-                            this.log.AppendLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
+                            // to siê nie kompilowa³o - overlord_1984
+                            // this.log.AppendLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
+                            this.log.AppendLine("Powsta³ nie prostok¹t dla tagu: " + tag);
                             Debug.WriteLine("Powsta³ nie prostok¹t dla tagu: {0}", tag);
                         }
                         else

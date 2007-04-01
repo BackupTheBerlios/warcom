@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Threading;
 using Taio.Algorithms;
 using System.Diagnostics;
+using System.IO;
 
 namespace Taio
 {
@@ -179,7 +180,20 @@ namespace Taio
 
         private void programHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // szuka w bin/Debug
+            FileInfo fileInfo = new FileInfo("Resources/help.pdf");
 
+            if (fileInfo.Exists)
+                System.Diagnostics.Process.Start("Resources/help.pdf");
+            else
+            {
+                // szuka w Resources w Taio Skeleton a nie w bin/Debug
+                fileInfo = new FileInfo("../../Resources/help.pdf");
+                if (fileInfo.Exists)
+                    System.Diagnostics.Process.Start("../../Resources/help.pdf");
+                else
+                    MessageBox.Show("Brak pliku pomocy help.pdf w katalogu Resources", "Informacja", MessageBoxButtons.OK);
+            }
         }
         #endregion
 
@@ -197,6 +211,18 @@ namespace Taio
         private void removeRectangleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             removeRectangleFromTreeView();
+        }
+        #endregion
+
+        #region Przyciski
+        private void startAlgorithm_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void stopAlgorithm_Click(object sender, EventArgs e)
+        {
+
         }
         #endregion
 
@@ -392,5 +418,7 @@ namespace Taio
              rectangleViewer.Refresh();
          }
         #endregion
+
+        
      }
 }

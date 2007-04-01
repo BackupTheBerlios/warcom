@@ -29,9 +29,11 @@ namespace Taio
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Prostok¹ty");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Rozwi¹zania");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Prostok¹ty");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Rozwi¹zania");
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.stopAlgorithm = new System.Windows.Forms.Button();
+            this.startAlgorithm = new System.Windows.Forms.Button();
             this.rectanglesTreeView = new System.Windows.Forms.TreeView();
             this.rectanglesContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,7 +59,6 @@ namespace Taio
             this.algorithm2SolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.algorithm3SolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.authorsHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.programHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -87,21 +88,43 @@ namespace Taio
             this.splitContainer1.SplitterDistance = 255;
             this.splitContainer1.TabIndex = 1;
             // 
+            // stopAlgorithm
+            // 
+            this.stopAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.stopAlgorithm.Location = new System.Drawing.Point(423, 16);
+            this.stopAlgorithm.Name = "stopAlgorithm";
+            this.stopAlgorithm.Size = new System.Drawing.Size(75, 23);
+            this.stopAlgorithm.TabIndex = 2;
+            this.stopAlgorithm.Text = "Stop";
+            this.stopAlgorithm.UseVisualStyleBackColor = true;
+            this.stopAlgorithm.Click += new System.EventHandler(this.stopAlgorithm_Click);
+            // 
+            // startAlgorithm
+            // 
+            this.startAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.startAlgorithm.Location = new System.Drawing.Point(349, 16);
+            this.startAlgorithm.Name = "startAlgorithm";
+            this.startAlgorithm.Size = new System.Drawing.Size(68, 23);
+            this.startAlgorithm.TabIndex = 1;
+            this.startAlgorithm.Text = "Start";
+            this.startAlgorithm.UseVisualStyleBackColor = true;
+            this.startAlgorithm.Click += new System.EventHandler(this.startAlgorithm_Click);
+            // 
             // rectanglesTreeView
             // 
             this.rectanglesTreeView.ContextMenuStrip = this.rectanglesContextMenuStrip;
             this.rectanglesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rectanglesTreeView.Location = new System.Drawing.Point(0, 0);
             this.rectanglesTreeView.Name = "rectanglesTreeView";
-            treeNode1.Name = "Rectangles";
-            treeNode1.Text = "Prostok¹ty";
-            treeNode1.ToolTipText = "Lista prostok¹tów";
-            treeNode2.Name = "Solutions";
-            treeNode2.Text = "Rozwi¹zania";
-            treeNode2.ToolTipText = "Lista rozwi¹zañ";
+            treeNode3.Name = "Rectangles";
+            treeNode3.Text = "Prostok¹ty";
+            treeNode3.ToolTipText = "Lista prostok¹tów";
+            treeNode4.Name = "Solutions";
+            treeNode4.Text = "Rozwi¹zania";
+            treeNode4.ToolTipText = "Lista rozwi¹zañ";
             this.rectanglesTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
+            treeNode3,
+            treeNode4});
             this.rectanglesTreeView.Size = new System.Drawing.Size(255, 414);
             this.rectanglesTreeView.TabIndex = 0;
             this.toolTip.SetToolTip(this.rectanglesTreeView, "Lista prostok¹tów");
@@ -113,19 +136,19 @@ namespace Taio
             this.addRectangleToolStripMenuItem,
             this.removeRectangleToolStripMenuItem});
             this.rectanglesContextMenuStrip.Name = "rectanglesContextMenuStrip";
-            this.rectanglesContextMenuStrip.Size = new System.Drawing.Size(163, 48);
+            this.rectanglesContextMenuStrip.Size = new System.Drawing.Size(219, 48);
             // 
             // addRectangleToolStripMenuItem
             // 
             this.addRectangleToolStripMenuItem.Name = "addRectangleToolStripMenuItem";
-            this.addRectangleToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.addRectangleToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.addRectangleToolStripMenuItem.Text = "Dodaj prostok¹t";
             this.addRectangleToolStripMenuItem.Click += new System.EventHandler(this.addRectangleToolStripMenuItem_Click);
             // 
             // removeRectangleToolStripMenuItem
             // 
             this.removeRectangleToolStripMenuItem.Name = "removeRectangleToolStripMenuItem";
-            this.removeRectangleToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.removeRectangleToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.removeRectangleToolStripMenuItem.Text = "Usuñ prostok¹t/rozwi¹zanie";
             this.removeRectangleToolStripMenuItem.Click += new System.EventHandler(this.removeRectangleToolStripMenuItem_Click);
             // 
@@ -142,6 +165,8 @@ namespace Taio
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.startAlgorithm);
+            this.splitContainer2.Panel2.Controls.Add(this.stopAlgorithm);
             this.splitContainer2.Panel2.Controls.Add(this.acceptChangebutton);
             this.splitContainer2.Panel2.Controls.Add(this.addRectbutton);
             this.splitContainer2.Size = new System.Drawing.Size(510, 414);
@@ -304,24 +329,16 @@ namespace Taio
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.authorsHelpToolStripMenuItem,
             this.programHelpToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.helpToolStripMenuItem.Text = "Pomoc";
             // 
-            // authorsHelpToolStripMenuItem
-            // 
-            this.authorsHelpToolStripMenuItem.Name = "authorsHelpToolStripMenuItem";
-            this.authorsHelpToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.authorsHelpToolStripMenuItem.Text = "Autorzy";
-            this.authorsHelpToolStripMenuItem.Click += new System.EventHandler(this.authorsHelpToolStripMenuItem_Click);
-            // 
             // programHelpToolStripMenuItem
             // 
             this.programHelpToolStripMenuItem.Name = "programHelpToolStripMenuItem";
-            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
-            this.programHelpToolStripMenuItem.Text = "O programie";
+            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.programHelpToolStripMenuItem.Text = "Plik pomocy";
             this.programHelpToolStripMenuItem.Click += new System.EventHandler(this.programHelpToolStripMenuItem_Click);
             // 
             // menuStrip1
@@ -392,7 +409,8 @@ namespace Taio
         private System.Windows.Forms.ToolStripMenuItem algorithm2SolutionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem algorithm3SolutionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem authorsHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem programHelpToolStripMenuItem;
+        private System.Windows.Forms.Button stopAlgorithm;
+        private System.Windows.Forms.Button startAlgorithm;
     }
 }
