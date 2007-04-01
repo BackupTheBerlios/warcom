@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Drawing;
 
 namespace Taio.Algorithms
 {
@@ -8,20 +9,30 @@ namespace Taio.Algorithms
     {
         private int maximumSideA = 0;
         private int maximumSideB = 0;
+        private bool running = true;
+        private Rectangle rectangle;
         private string tag = "AW1";
-
-        public Algorithm1()
+        
+        public void StopThread() 
         {
+            running = false;
+        }
+        
+        public Rectangle GetRectangle() 
+        { 
+            return rectangle;
         }
 
-         public string GetTag()
-        { return tag;  }
-        public void StopThread() { }
-        public Rectangle GetRectangle() { return new Rectangle(1, 1); }
-
+        public string GetTag()
+        { 
+            return tag; 
+        }
+        
+        
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rects)
         {
             int maxArea = ComputeMaximumArea(rects);
+            Rectangle returnRectangle = null;
             SetMaximumSides(maxArea);
             List<Rectangle> correctRects = RemoveTooBigRectangles(rects);
             ConcatenateRectangles(rects);
@@ -29,7 +40,7 @@ namespace Taio.Algorithms
             bool change = true;
             int currentSide = startRect.LongerSide;
             List<Rectangle> tempRectsList = new List<Rectangle>();
-            while (change && rects.Count > 0)
+            while (change && rects.Count > 0 && running)
             {
                 change = false;
                 int currentSum = 0;
@@ -46,12 +57,30 @@ namespace Taio.Algorithms
                         tempRectsList.Add(tmp);
                     }
                     RectangleContainer rc = new RectangleContainer();
-                    //rc.InsertRectangle(
+                    rc.InsertRectangle(startRect);
+                    int minHeight = FindMinHeight(tempRectsList);
+                    int offset = 0, startVal = startRect.SideB;
+                    foreach (Rectangle r in tempRectsList)
+                    {
+                        //TODO wywalic orientacje
+                        rc.InsertRectangle(r, new Point(offset, startVal + minHeight), Rectangle.Orientation.Horizontal);
+
+                    }
                 }
             }
-            return null;
+            rectangle = returnRectangle;
+            return returnRectangle;
         }
 
+        private int FindMinHeight(List<Rectangle> rects)
+        {
+            int min = Int32.MaxValue;
+            foreach (Rectangle r in rects)
+                if (r.SideB < min)
+                    min = r.SideB;
+            return min;
+        }
+        
         private Rectangle TryFindNextRect(int shorterSide, int currentSide, int maxSide, List<Rectangle> rects)
         {
             int index = -1;
