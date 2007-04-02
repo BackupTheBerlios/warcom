@@ -24,8 +24,9 @@ namespace Taio
         /// <param name="sideA">"Top/bottom" side's length</param>
         /// <param name="sideB">"Left/right" side's length</param>
         /// <param name="leftTop">Left-top rectangle's vertex</param>
+        /// <param name="number">Rectangle's number</param>
         /// <param name="parentRectangle">Rectangle which contains new rectangle</param>
-        public Rectangle(int sideA, int sideB, Point leftTop, Rectangle parentRectangle)
+        public Rectangle(int sideA, int sideB, Point leftTop, int number, Rectangle parentRectangle)
         {
             if (sideA <= 0 || sideB <= 0)
                 throw new ArgumentException("Incorrect rectangle side(s)");
@@ -34,10 +35,20 @@ namespace Taio
             this.rightDown = new Point(leftTop.X + sideA, leftTop.Y + sideB);
 
             this.containedRectangles = new List<Rectangle>();
+            this.number = number;
             this.parentRectangle = parentRectangle;
-
-            this.number = counter++;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sideA">"Top/bottom" side's length</param>
+        /// <param name="sideB">"Left/right" side's length</param>
+        /// <param name="leftTop">Left-top rectangle's vertex</param>
+        /// <param name="number">Rectangle's number</param>
+        public Rectangle(int sideA, int sideB, Point leftTop, int number)
+            : this(sideA, sideB, leftTop, number, null) { }
+        
 
         /// <summary>
         /// 
@@ -46,7 +57,7 @@ namespace Taio
         /// <param name="sideB">"Left/right" side's length</param>
         /// <param name="leftTop">LeftTop rectangle's vertex</param>
         public Rectangle(int sideA, int sideB, Point leftTop)
-            : this(sideA, sideB, leftTop, null) { }
+            : this(sideA, sideB, leftTop, counter++) { }
 
 
         /// <summary>
@@ -62,8 +73,9 @@ namespace Taio
         /// </summary>
         /// <param name="leftTop">Left-top rectangle's vertex</param>
         /// <param name="rightDown">Right-down rectangle's vertex</param>
+        /// <param name="number">Rectangle's number</param>
         /// <param name="parentRectangle">Rectangle which contains new rectangle</param>
-        public Rectangle(Point leftTop, Point rightDown, Rectangle parentRectangle)
+        public Rectangle(Point leftTop, Point rightDown, int number, Rectangle parentRectangle)
         {
             if (leftTop.X < 0 || leftTop.Y < 0)
                 throw new ArgumentException("Incorrect rectangle left-top coordinates");
@@ -78,7 +90,7 @@ namespace Taio
             this.containedRectangles = new List<Rectangle>();
             this.parentRectangle = parentRectangle;
 
-            this.number = counter++;
+            this.number = number;
         }
 
         /// <summary>
@@ -86,8 +98,17 @@ namespace Taio
         /// </summary>
         /// <param name="leftTop">Left-top rectangle's vertex</param>
         /// <param name="rightDown">Right-down rectangle's vertex</param>
+        /// <param name="number">Rectangle's number</param>
+        public Rectangle(Point leftTop, Point rightDown, int number)
+            : this(leftTop, rightDown, number, null) { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="leftTop">Left-top rectangle's vertex</param>
+        /// <param name="rightDown">Right-down rectangle's vertex</param>
         public Rectangle(Point leftTop, Point rightDown)
-            : this(leftTop, rightDown, null) { }
+            : this(leftTop, rightDown, counter++) { }
         #endregion
 
         #region Geometry
