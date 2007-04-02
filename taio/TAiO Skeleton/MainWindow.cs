@@ -271,6 +271,7 @@ namespace Taio
             }
         }
 
+        // na razie zostawi³em t¹ metodê metodê
         // wyœwietlany odpowiedni prostok¹t z listy
         private void rectanglesTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -297,7 +298,31 @@ namespace Taio
                 viewRectangle(null, null);
         }
 
-
+        private void rectanglesTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            bool isSolution = false;     // zmienna mówi, z której listy ma byæ wyœwietlony prostok¹t
+            int index = -1;
+            if (e.Node != null)
+            {
+                if (e.Node.Parent != null && e.Node.Parent.Name.Equals("Rectangles"))
+                    index = e.Node.Index;
+                else if (e.Node.Parent != null && e.Node.Parent.Name.Equals("Solutions"))
+                {
+                    index = e.Node.Index;
+                    isSolution = true;
+                }
+            }
+            if (index >= 0)
+            {
+                if (isSolution && solutions[index].Correct)
+                    viewRectangle(solutions[index].Rectangle, this.rectanglesTreeView.SelectedNode);
+                else
+                    viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);
+            }
+            else
+                viewRectangle(null, null);
+        }
+        
         // aktualizacja indeksów prostok¹tów na liœcie, po usuniêciu prostok¹ta
         private void indexChange(int indexOfRemoved)
         {
@@ -435,8 +460,6 @@ namespace Taio
             System.Console.WriteLine(res.SideA + " " + res.SideB);
         }
 
-        #endregion
-
-        
+        #endregion       
      }
 }
