@@ -320,6 +320,7 @@ namespace Taio
                         (rect.SideB == rectangles[i].SideA && rect.SideA == rectangles[i].SideB)))
                     {
                         flags[i] = true;
+                        rect.Number = rectangles[i].Number;
                         return true;
                     }
                 return false;
