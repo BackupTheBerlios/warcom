@@ -12,7 +12,7 @@ namespace Taio.Algorithms
         private bool running = true;
         private Rectangle rectangle;
         private string tag = "AW1";
-        
+                
         public void StopThread() 
         {
             running = false;
@@ -34,16 +34,16 @@ namespace Taio.Algorithms
             bool onlySideChange = false;
             SetMaximumSides(maxArea);
             List<Rectangle> correctRects = RemoveTooBigRectangles(rects);
-            ConcatenateRectangles(rects);
-            Rectangle startRect = FindRectangleWithMaxArea(rects);
+            ConcatenateRectangles(correctRects);
+            Rectangle startRect = FindRectangleWithMaxArea(correctRects);
             bool change = true;
             int currentSide = startRect.LongerSide;
             List<Rectangle> tempRectsList = new List<Rectangle>();
-            while (change && rects.Count > 0 && running)
+            while (change && correctRects.Count > 0 && running)
             {
                 change = false;
                 int currentSum = 0;
-                Rectangle tempRect = TryFindRectangleToThenNextStep(currentSide, rects);
+                Rectangle tempRect = TryFindRectangleToThenNextStep(currentSide, correctRects);
                 currentSum += tempRect.LongerSide;
                 if (tempRect != null)
                 {
@@ -51,7 +51,7 @@ namespace Taio.Algorithms
                     while (currentSum < currentSide)
                     {
                         //TODO finish it
-                        Rectangle tmp = TryFindNextRect(tempRect.ShorterSide, currentSum, currentSide, rects);
+                        Rectangle tmp = TryFindNextRect(tempRect.ShorterSide, currentSum, currentSide, correctRects);
                         currentSum += tmp.SideA;
                         tempRectsList.Add(tmp);
                     }
@@ -184,7 +184,11 @@ namespace Taio.Algorithms
             List<Rectangle> correctRects = new List<Rectangle>();
             foreach (Rectangle rect in rects)
                 if (rect.LongerSide <= maximumSideA)
-                    correctRects.Add(rect);
+                {
+                    Rectangle t = new Rectangle(rect.SideA, rect.SideB);
+                    t.Number = rect.Number;
+                    correctRects.Add(t);
+                }
             return correctRects;
         }
 

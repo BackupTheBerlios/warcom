@@ -140,7 +140,6 @@ namespace Kontrolka_do_TAiO
             // zoomIn
             // 
             this.zoomIn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.zoomIn.Enabled = false;
             this.zoomIn.FlatAppearance.BorderSize = 0;
             this.zoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.zoomIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));

@@ -26,7 +26,7 @@ namespace Kontrolka_do_TAiO
         //maximum x and y coordinate to display, when scale = 1
         private int maxX, maxY;
         //scale
-        private int scale = 1;
+        private double scale = 1;
         //information whether user can create new rectangle
         private bool canDraw = true;
         //pen used to draw axis
@@ -173,10 +173,10 @@ namespace Kontrolka_do_TAiO
             graph.FillPolygon(axisPen.Brush, axisEndX);
             graph.FillPolygon(axisPen.Brush, axisEndY);
             //podpisy osi
-            graph.DrawString("(0,0)", axisTextFont, axisTextBrush, new Point(zeroPoint.X - 5, zeroPoint.Y));
-            graph.DrawString("(" + maxX * scale + ",0)", axisTextFont, axisTextBrush, 
+            graph.DrawString("(0 ; 0)", axisTextFont, axisTextBrush, new Point(zeroPoint.X - 5, zeroPoint.Y));
+            graph.DrawString("(" + maxX * scale + " ; 0)", axisTextFont, axisTextBrush, 
                 new Point(xStopPoint.X - 45, xStopPoint.Y));
-            graph.DrawString("(0," + maxY * scale + ")", axisTextFont, axisTextBrush, 
+            graph.DrawString("(0 ; " + maxY * scale + ")", axisTextFont, axisTextBrush, 
                 new Point(yStopPoint.X + 5, yStopPoint.Y));
         }
 
@@ -215,8 +215,8 @@ namespace Kontrolka_do_TAiO
                 y = maxY;
                 validPosition = false;
             }
-            x *= scale;
-            y*=scale;
+            x =(int)(x * scale);
+            y =(int)(y * scale);
             if (validPosition)
                 realMousePosition = new Point(x, y);
             else
@@ -347,26 +347,12 @@ namespace Kontrolka_do_TAiO
 
         private void zoomOut_Click(object sender, EventArgs e)
         {
-            if (scale < maxScale)
-            {
-                scale *= 2;
-                if (scale == maxScale)
-                    this.zoomOut.Enabled = false;
-                this.zoomIn.Enabled = true;
-                this.Refresh();
-            }
+            ZoomOut();
         }
 
         private void zoomIn_Click(object sender, EventArgs e)
         {
-            if (scale > 1)
-            {
-                scale /= 2;
-                if (scale == 1)
-                    this.zoomIn.Enabled = false;
-                this.zoomOut.Enabled = true;
-                this.Refresh();
-            }
+            ZoomIn();
         }
 
         private void displayArea_MouseClick(object sender, MouseEventArgs e)
@@ -378,6 +364,30 @@ namespace Kontrolka_do_TAiO
                 extractedRectangles.RemoveAt(indexOfRectangleToDisplay);
                 extractedRectangles.Add(rect);
             }
-        }        
+        }
+
+        public void ZoomIn()
+        {
+            if (scale >= 0.125)
+            {
+                scale /= 2;
+                if (scale == 0.125)
+                    this.zoomIn.Enabled = false;
+                this.zoomOut.Enabled = true;
+                this.Refresh();
+            }
+        }
+
+        public void ZoomOut()
+        {
+            if (scale < maxScale)
+            {
+                scale *= 2;
+                if (scale == maxScale)
+                    this.zoomOut.Enabled = false;
+                this.zoomIn.Enabled = true;
+                this.Refresh();
+            }
+        }
     }
 }
