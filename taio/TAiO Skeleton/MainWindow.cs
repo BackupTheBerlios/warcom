@@ -161,7 +161,9 @@ namespace Taio
 
         private void algorithm1SolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.EnableMenu(false);
+            this.algorithm = new Algorithm1();
+            bw.RunWorkerAsync();
         }
 
         private void algorithm2SolutionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -450,10 +452,14 @@ namespace Taio
             Rectangle r1 = new Rectangle(50, 40);
             Rectangle r2 = new Rectangle(30, 20);
             Rectangle r3 = new Rectangle(20, 10);
+            Rectangle r4 = new Rectangle(50, 10);
+            Rectangle r5 = new Rectangle(51, 1);
             List<Rectangle> rr = new List<Rectangle>();
             rr.Add(r1);
             rr.Add(r2);
             rr.Add(r3);
+            rr.Add(r4);
+            rr.Add(r5);
             //powinno dac wynik 50,50
             Algorithm1 al = new Algorithm1();
             Rectangle res = al.ComputeMaximumRectangle(rr);

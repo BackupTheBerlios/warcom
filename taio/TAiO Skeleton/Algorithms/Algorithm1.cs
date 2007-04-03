@@ -42,37 +42,28 @@ namespace Taio.Algorithms
             while (change && correctRects.Count > 0 && running)
             {
                 change = false;
-                int currentSum = 0;
                 Rectangle tempRect = TryFindRectangleToThenNextStep(currentSide, correctRects);
-                currentSum += tempRect.LongerSide;
                 if (tempRect != null)
                 {
+                    int currentSum = tempRect.LongerSide;
                     tempRectsList.Add(tempRect);
-                    while (currentSum < currentSide)
+                    bool foundLine = TryFillLine(currentSum, currentSide, tempRect, correctRects, tempRectsList);
+                    if (foundLine)
                     {
-                        //TODO finish it
-                        Rectangle tmp = TryFindNextRect(tempRect.ShorterSide, currentSum, currentSide, correctRects);
-                        currentSum += tmp.SideA;
-                        tempRectsList.Add(tmp);
-                    }
-                    RectangleContainer rc = new RectangleContainer();
-                    rc.InsertRectangle(startRect);
-                    int minHeight = FindMinHeight(tempRectsList);
-                    int offset = 0, startVal = startRect.SideB;
-                    foreach (Rectangle r in tempRectsList)
-                    {
-                        if (offset + r.SideA > startRect.SideA)
-                            offset = startRect.SideA - r.SideA;
-                        rc.InsertRectangle(r, new Point(offset, startVal + minHeight - r.SideB));
-                        offset += r.SideA;
+                        Rectangle maxCorrect = AddFoundRectanglesToStartRect(tempRectsList, startRect);
+                        if (IsShapeConditionValid(maxCorrect.SideA, maxCorrect.SideB))
+                        {
+                            change = true;
+                            onlySideChange = false;
+                            startRect = maxCorrect;                            
+                        }
+                        else
+                        {
+                            foreach (Rectangle r in tempRectsList)
+                                correctRects.Add(r);
+                        }
                     }
                     tempRectsList.Clear();
-                    if (IsShapeConditionValid(rc.MaxCorrectRect.SideA, rc.MaxCorrectRect.SideB))
-                    {
-                        change = true;
-                        onlySideChange = false;
-                        startRect = rc.MaxCorrectRect;
-                    }
                 }
                 if (!change && !onlySideChange)
                 {
@@ -83,6 +74,40 @@ namespace Taio.Algorithms
             }
             rectangle = startRect;
             return startRect;
+        }
+
+        private bool TryFillLine(int currentSum, int currentSide, Rectangle tempRect,
+            List<Rectangle> correctRects, List<Rectangle> tempRectsList)
+        {
+            bool foundLine = true;
+            while (currentSum < currentSide)
+            {
+                Rectangle tmp = TryFindNextRect(tempRect.ShorterSide, currentSum, currentSide, correctRects);
+                if (tmp == null)
+                {
+                    foundLine = false;
+                    break;
+                }
+                currentSum += tmp.SideA;
+                tempRectsList.Add(tmp);
+            }
+            return foundLine;
+        }
+
+        private Rectangle AddFoundRectanglesToStartRect(List<Rectangle> foundRects, Rectangle startRect)
+        {
+            RectangleContainer rc = new RectangleContainer();
+            rc.InsertRectangle(startRect);
+            int minHeight = FindMinHeight(foundRects);
+            int offset = 0, startVal = startRect.SideB;
+            foreach (Rectangle r in foundRects)
+            {
+                if (offset + r.SideA > startRect.SideA)
+                    offset = startRect.SideA - r.SideA;
+                rc.InsertRectangle(r, new Point(offset, startVal + minHeight - r.SideB));
+                offset += r.SideA;
+            }
+            return rc.MaxCorrectRect;
         }
 
         private int FindMinHeight(List<Rectangle> rects)
