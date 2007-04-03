@@ -13,12 +13,10 @@ namespace Taio
         {
             //RotateTest();
             //MoveTest();
-
-            //MainWindow mainWindow = new MainWindow();
-            //Application.Run(mainWindow);
             //ContainerTest();
             //IntersectionTest();
             //SubtractTest();
+            //SortingTest();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -70,6 +68,57 @@ namespace Taio
                 bool isCorrect = answerString.Equals(correct[i]);
                 Console.WriteLine(answerString + ": " + isCorrect);
             }
+        }
+
+        public static void SortingTest()
+        {
+            List<Rectangle> a = new List<Rectangle>();
+            a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
+            a.Add(new Rectangle(new Point(4, 3), new Point(9, 4)));
+            a.Add(new Rectangle(new Point(3, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(2, 5), new Point(9, 6)));
+            a.Add(new Rectangle(new Point(10, 3), new Point(11, 5)));
+            a.Add(new Rectangle(new Point(6, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(6, 5), new Point(8, 8)));
+            a.Add(new Rectangle(new Point(3, 7), new Point(4, 8)));
+            a.Add(new Rectangle(new Point(6, 1), new Point(7, 3)));
+
+            Rectangle.RectangleComparer comparer = Rectangle.GetComparer();
+            
+            a.Sort();
+            Console.WriteLine("default");
+            foreach(Rectangle r in a)
+                Console.WriteLine(r);
+            Console.WriteLine();
+
+            comparer.Comparison = Rectangle.RectangleComparer.ComparisonType.Area;
+            a.Sort(comparer);
+            Console.WriteLine("area");
+            foreach (Rectangle r in a)
+                Console.WriteLine(r);
+            Console.WriteLine();
+
+            comparer.Comparison = Rectangle.RectangleComparer.ComparisonType.LongerSide;
+            a.Sort(comparer);
+            Console.WriteLine("longer side");
+            foreach (Rectangle r in a)
+                Console.WriteLine(r);
+            Console.WriteLine();
+
+            comparer.Comparison = Rectangle.RectangleComparer.ComparisonType.Number;
+            a.Sort(comparer);
+            Console.WriteLine("number");
+            foreach (Rectangle r in a)
+                Console.WriteLine(r);
+            Console.WriteLine();
+
+            /*Rectangle re = a[0];
+            Console.WriteLine(a.Contains(re));
+            a.Remove(re);
+            re = new Rectangle(new Point(0, 0), new Point(5, 5), 1);
+            Console.WriteLine(a.Contains(re));*/
         }
 
         public static void SubtractTest()

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Taio
 {
-    class Rectangle
+    class Rectangle : IComparable<Rectangle>
     {
         private Point leftTop;
         private Point rightDown;
@@ -422,9 +422,73 @@ namespace Taio
         #endregion
 
 
+        public int CompareTo(Rectangle rhs)
+        {
+            return this.number.CompareTo(rhs.number);
+        }
+
+        public int CompareTo(Rectangle rhs, RectangleComparer.ComparisonType compType)
+        {
+            switch (compType)
+            {
+                case RectangleComparer.ComparisonType.Area:
+                    return this.Area.CompareTo(rhs.Area);
+                case RectangleComparer.ComparisonType.LongerSide:
+                    return this.LongerSide.CompareTo(rhs.LongerSide);
+                case RectangleComparer.ComparisonType.Number:
+                    return this.Number.CompareTo(rhs.Number);
+            }
+            return 0;
+        }
+
+        public static RectangleComparer GetComparer()
+        {
+            return new RectangleComparer();
+        }
+
+        public class RectangleComparer : IComparer<Rectangle>
+        {
+            private Rectangle.RectangleComparer.ComparisonType comparison;
+
+            public enum ComparisonType
+            {
+                Area,
+                LongerSide,
+                Number
+            };
+
+            public int GetHashCode(Rectangle r)
+            {
+                return r.GetHashCode();
+            }
+
+            public int Compare(Rectangle lhs, Rectangle rhs)
+            {
+                return lhs.CompareTo(rhs, this.comparison);
+            }
+
+            public bool Equals(Rectangle lhs, Rectangle rhs)
+            {
+                return this.Compare(lhs, rhs) == 0;
+            }
+
+            public Rectangle.RectangleComparer.ComparisonType Comparison
+            {
+                get
+                {
+                    return comparison;
+                }
+
+                set
+                {
+                    comparison = value;
+                }
+            }
+        }
+
         public override String ToString()
         {
-            return /*"#"+this.number + ": "+ */ this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
+            return "#"+this.number + ": "+  this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
         }
 
         /// <summary>
@@ -441,5 +505,7 @@ namespace Taio
             /// </summary>
             Vertical
         }
+
+        
     }
 }
