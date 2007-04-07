@@ -234,9 +234,9 @@ namespace SONStock
                 //modyfikacja wag miêdy warstwami ukryt¹ a wyjœciow¹
                 ModifyHiddenExitWeights();
                 //modyfikacja wag miêdy warstwami wejœciow¹ a ukryt¹
-                //temp = ModifyEntryHiddenAndContextHiddenWeights(startVals);
-                //for (int i = 0; i < temp.Length; i++)
-                  //  startVals[i] = temp[i];
+                temp = ModifyEntryHiddenAndContextHiddenWeights(startVals);
+                for (int i = 0; i < temp.Length; i++)
+                    startVals[i] = temp[i];
             }
         }
 

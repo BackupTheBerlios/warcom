@@ -33,6 +33,10 @@ namespace SONStock
             double[] test = new double[] { 7, 8, 9, 10, 11 };
             this.data.Normalize(ref learn, ref correct);
             elmanNet.Learn(learn, correct);
+            learn = new double[] { 6, 7, 8, 9, 10 };
+            correct = new double[] { 11 };
+            this.data.Normalize(ref learn, ref correct);
+            elmanNet.Learn(learn, correct);
             this.data.Normalize(ref test);
             double[] exit = elmanNet.ComputeExitValues(test);
             this.exitValuesMatrixPreview.BuildControl(exit);
