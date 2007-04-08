@@ -30,7 +30,8 @@ namespace SONStock
             elmanNet = new ElmansNetwork(5, 2, 1);
             double[] learn = new double[] { 1, 2, 3, 4, 5 };
             double[] correct = new double[] { 6 };
-            double[] test = new double[] { 7, 8, 9, 10, 11 };
+            //double[] test = new double[] { 7, 7, 7, 7, 7 };
+            double[] test = new double[] { 1, 2, 3, 4, 5 };
             this.data.Normalize(ref learn, ref correct);
             elmanNet.Learn(learn, correct);
             learn = new double[] { 6, 7, 8, 9, 10 };
