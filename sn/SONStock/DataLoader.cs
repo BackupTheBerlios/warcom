@@ -192,7 +192,8 @@ namespace SONStock
             double[] val = new double[entryLayerSize];
             double[] correct = new double[exitLayerSize];
 
-            for (i = 0; i < values.Length - entryLayerSize - exitLayerSize; ++i)
+            //for (i = 0; i < values.Length - entryLayerSize - exitLayerSize; ++i)
+            for (i = 0; i < 3; ++i)
             {
                 for (int j = 0; j < entryLayerSize; ++j)
                 {
@@ -202,16 +203,20 @@ namespace SONStock
                 {
                     correct[j] = values[i + j + entryLayerSize];
                 }
-                this.Normalize( ref val, ref correct);
+                double oMin, oMax;
+                this.Normalize( ref val, ref correct, out oMin, out oMax);
                 elmanNet.Learn(val, correct);
             }
             return elmanNet;
         }
 
-        public void Normalize(ref double[] val, ref double[] exit)
+        public void Normalize(ref double[] val, ref double[] exit, out double oMin, out double oMax)
         {
             if (val.Length == 0)
+            {
+                oMin = oMax = 0;
                 return;
+            }
             double[] values = new double[val.Length];
             double max = val[0], min = val[0];
             for (int i = 0; i < val.Length; ++i)
@@ -234,12 +239,29 @@ namespace SONStock
             {
                 exit[i] = 0.1 + 0.8 * ((exit[i] - min) / diff);
             }
+            oMin = min;
+            oMax = max;
         }
 
-        public void Normalize(ref double[] val)
+        public void Normalize(ref double[] val, out double oMin, out double oMax)
         {
             double[] tmp = new double[0];
-            this.Normalize(ref val, ref tmp);
+            this.Normalize(ref val, ref tmp,out  oMin,out oMax);
+        }
+
+        public void DeNormalize(ref double[] val, double min, double max)
+        {
+            double diff = max - min;
+            if (diff == 0)
+                for (int i = 0; i < val.Length; ++i)
+                    val[i] *= val[i] * min;
+            else
+            {
+                //val = min + (val-0.1)*(max-min)/0.8
+                diff *= 1.25;
+                for (int i = 0; i < val.Length; ++i)
+                    val[i] = min + (val[i]-0.1)*diff;
+            }
         }
     }
 }

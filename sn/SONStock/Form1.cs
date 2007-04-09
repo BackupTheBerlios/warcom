@@ -32,14 +32,16 @@ namespace SONStock
             double[] correct = new double[] { 6 };
             //double[] test = new double[] { 7, 7, 7, 7, 7 };
             double[] test = new double[] { 1, 2, 3, 4, 5 };
-            this.data.Normalize(ref learn, ref correct);
+            double oMin, oMax;
+            this.data.Normalize(ref learn, ref correct, out oMin, out oMax);
             elmanNet.Learn(learn, correct);
             learn = new double[] { 6, 7, 8, 9, 10 };
             correct = new double[] { 11 };
-            this.data.Normalize(ref learn, ref correct);
+            this.data.Normalize(ref learn, ref correct, out oMin, out oMax);
             elmanNet.Learn(learn, correct);
-            this.data.Normalize(ref test);
+            this.data.Normalize(ref test, out oMin, out oMax);
             double[] exit = elmanNet.ComputeExitValues(test);
+            this.data.DeNormalize(ref exit, oMin, oMax);
             this.exitValuesMatrixPreview.BuildControl(exit);
         }
 
@@ -126,9 +128,10 @@ namespace SONStock
                 double[] entryValues = new double[elmanNet.NumberOfEntryNeurons];
                 for (int i = 0; i < entryValues.Length; i++)
                     entryValues[i] = values[values.Length - elmanNet.NumberOfEntryNeurons + i];
-
-                this.data.Normalize(ref entryValues);
+                double oMin, oMax;
+                this.data.Normalize(ref entryValues, out oMin, out oMax);
                 double[] exit = elmanNet.ComputeExitValues(entryValues);
+                this.data.DeNormalize(ref exit, oMin, oMax);
                 this.exitValuesMatrixPreview.BuildControl(exit);
             }
         }
