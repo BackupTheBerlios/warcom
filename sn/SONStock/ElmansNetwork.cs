@@ -126,12 +126,12 @@ namespace SONStock
 
         private double CountHiddenNeuronExitPrim(double inputValue)
         {
-            return -(delta * inputValue) / Math.Pow((1 + Math.Exp(delta * inputValue)), 2);
+            return -(delta * Math.Exp(delta * inputValue)) / Math.Pow((1 + Math.Exp(delta * inputValue)), 2);
         }
 
         private double CountExitNeuronExitPrim(double inputValue)
         {
-            return -(delta * inputValue) / Math.Pow((1 + Math.Exp(delta * inputValue)), 2);
+            return -(delta * Math.Exp(delta * inputValue)) / Math.Pow((1 + Math.Exp(delta * inputValue)), 2);
         }
 
         private double CountExitNeuronExit(double inputValue)
