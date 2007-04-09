@@ -14,6 +14,8 @@ namespace Taio
     {
         private StringBuilder log = new StringBuilder();
 
+
+        #region File operation
         public void SaveData(List<Solution> solutions, List<Rectangle> rectangles)
         {
             this.log = new StringBuilder();
@@ -153,7 +155,9 @@ namespace Taio
                 wr.Write(data);
             }
         }
+        #endregion
 
+        #region read data from strings
         private List<Rectangle> ReadInput(string input)
         {
             List<Rectangle> rectangles = new List<Rectangle>();
@@ -227,7 +231,9 @@ namespace Taio
             }
             return solutions;
         }
+        #endregion
 
+        #region append data to file
         private void AppendRectangle(Rectangle rect, TextWriter wr)
         {
             if (rect.ContainedRectangles == null || rect.ContainedRectangles.Count==0)
@@ -266,7 +272,9 @@ namespace Taio
                 }
             }
         }
+        #endregion
 
+        #region is data correct?
         private bool CheckData(List<Rectangle> r1, List<Rectangle> r2)
         {
             if (r1 == null || r2 == null || r1.Count != r2.Count)
@@ -327,6 +335,7 @@ namespace Taio
             }
             return true;
         }
+        #endregion
 
         public List<Rectangle> RandomRectangles(int count, int maxSide)
         {
