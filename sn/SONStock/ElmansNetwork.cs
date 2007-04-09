@@ -21,10 +21,10 @@ namespace SONStock
         private int numberOfExitNeurons;
         private int numberOfLearningSets = 0;
         private double[] errorValues;
-        private double eps = 0.00005;
-        private double ni = 0.1;
-        private int MAX_IT = 500;
-        private double delta = 0.5;
+        private double eps = 0.005;
+        private double ni = 0.9;
+        private int MAX_IT = 50000;
+        private double delta = 0.2;
 
         public ElmansNetwork(int numberOfEntryNeurons,int numberOfHiddenNeurons, int numberOfExitNeurons)
         {
@@ -63,7 +63,8 @@ namespace SONStock
             double val = 0;
             for (int i = 0; i < numberOfEntryNeurons + 1; ++i)
                 val += entryValues[i] * entryHiddenWeights[i, hiddeNeuronIndex];
-            if (learning)
+            //if (learning)
+            if (true)
                 for (int i = 0; i < numberOfContextNeurons; ++i)
                     val += contextValues[i] * contextHiddenWeights[i, hiddeNeuronIndex];
             return val;
@@ -75,8 +76,7 @@ namespace SONStock
                 throw new Exception("Invalid neuron index");
             double val = 0;
             for (int i = 0; i < NumberOfHiddenNeurons + 1; ++i)
-                val += hiddenValues[i] * hiddenExitWeights[i, exitNeuronIndex
-                    ];
+                val += hiddenValues[i] * hiddenExitWeights[i, exitNeuronIndex];
             return val;
         }
 
@@ -144,10 +144,10 @@ namespace SONStock
             for (int i = 0; i < this.numberOfHiddenNeurons; ++i)
             {
                 double inputSignal = CountInputSignalForHiddenNeuron(i, learning);
-                if (inputSignal > 1)
-                    inputSignal = 1;
-                else if (inputSignal < 0)
-                    inputSignal = 0;
+                //if (inputSignal > 1)
+                //    inputSignal = 1;
+                //else if (inputSignal < 0)
+                //    inputSignal = 0;
                 hiddenValues[i] = CountHiddenNeuronExit(inputSignal);
             }
         }
@@ -157,10 +157,10 @@ namespace SONStock
             for (int i = 0; i < exitValues.Length; i++)
             {
                 double inputSignal = CountInputSignalForExitNeuron(i);
-                if (inputSignal > 1)
-                    inputSignal = 1;
-                else if (inputSignal < 0)
-                    inputSignal = 0;
+                //if (inputSignal > 1)
+                //    inputSignal = 1;
+                //else if (inputSignal < 0)
+                //    inputSignal = 0;
                 exitValues[i] = CountExitNeuronExit(inputSignal);
             }
         }
@@ -199,37 +199,16 @@ namespace SONStock
             double input = CountInputSignalForHiddenNeuron(j, true);
             double fprim = CountHiddenNeuronExitPrim(input);
             double sum = 0;
-            //kucze nie wiem po czym powinna byc ta suma, czy tylko po konetkstowych, czy po wejsciowych, czy
-            //po jedynych i drugich
             for (int i = 0; i < numberOfContextNeurons; i++)
                 sum += ContextHiddenWeights[i, j] * prev;
             if (k != l)
                 sum += (l < numberOfEntryNeurons) ? entryValues[l] : contextValues[l - numberOfEntryNeurons];
-            return sum * fprim;
-            
+            return sum * fprim;           
         }
 
         private double CountHiddenWeightsChange(int neuronIndex, int hiddenNeuronIndex, double[, ,] prevVals,
             double[,,] nextVals)
         {
-            /*double retVal = 0;
-            for (int i = 0; i < numberOfExitNeurons; ++i)
-            {
-                double tempGlobalSum = 0;
-                for (int j = 0; j < NumberOfHiddenNeurons; ++j)
-                {
-                    double delta = ( j == hiddenNeuronIndex ) ? 1 : 0;
-                    double tempLocalSum = (neuronIndex < numberOfEntryNeurons) ? 
-                        delta * entryValues[neuronIndex] : 
-                        delta * contextValues[neuronIndex - numberOfEntryNeurons];
-                    for (int k = 0; k < NumberOfHiddenNeurons; ++k)
-                        tempLocalSum += prevVals[k] * ContextHiddenWeights[k, j];
-                    nextVals[neuronIndex] = tempLocalSum;
-                    tempGlobalSum += tempLocalSum * hiddenExitWeights[j, i];
-                }
-                retVal += errorValues[i] * tempGlobalSum;
-            }
-            return retVal;*/
             double sum = 0;
             for (int j = 0; j < numberOfHiddenNeurons ; ++j)
             {
@@ -244,7 +223,7 @@ namespace SONStock
         private double[,,] ModifyEntryHiddenAndContextHiddenWeights(double[,,] prevVals)
         {
             double[, ,] nextVals = new double[numberOfHiddenNeurons + 1, numberOfEntryNeurons + numberOfContextNeurons, numberOfHiddenNeurons + 1];
-            for (int i = 0; i < numberOfEntryNeurons; i++)
+            for (int i = 0; i < numberOfEntryNeurons + 1; i++)
                 for (int j = 0; j < NumberOfHiddenNeurons; j++)
                     entryHiddenWeights[i, j] += CountHiddenWeightsChange(i, j, prevVals, nextVals);
             for (int i = 0; i < numberOfContextNeurons; ++i)
@@ -256,7 +235,7 @@ namespace SONStock
 
         private void ModifyHiddenExitWeights()
         {
-            for (int i = 0; i < NumberOfHiddenNeurons; i++)
+            for (int i = 0; i < NumberOfHiddenNeurons + 1; i++)
                 for (int j = 0; j < numberOfExitNeurons; j++)
                     hiddenExitWeights[i, j] += CountHiddenExitWeightsChange(i, j);
         }
@@ -273,7 +252,7 @@ namespace SONStock
             double[,,] startVals = new double[numberOfHiddenNeurons + 1,numberOfEntryNeurons + numberOfContextNeurons,numberOfHiddenNeurons + 1];
             double[,,] temp;
             int it = 0;
-            while (true && it < MAX_IT)
+            while (error > this.eps && it < this.MAX_IT)
             {
                 it++;
                 //wyliczenie wyjœcia warstwy ukrytej
@@ -285,8 +264,6 @@ namespace SONStock
                 CountExitNeuronsExits();
                 //okreœlenie wektora ró¿nicy wyjœcia wyliczonego oraz poprawnego, a tak¿e wyliczenie normy ró¿nicy
                 error = CountErrorsValues(correctExits);
-                if (error < this.eps)
-                    break;
                 //modyfikacja wag miêdy warstwami ukryt¹ a wyjœciow¹
                 ModifyHiddenExitWeights();
                 //modyfikacja wag miêdy warstwami wejœciow¹ a ukryt¹
@@ -309,7 +286,6 @@ namespace SONStock
             get { return contextHiddenWeights; }
         }
 
-
         public double[,] HiddenExitWeights
         {
             get { return hiddenExitWeights; }
@@ -326,7 +302,6 @@ namespace SONStock
             get { return numberOfLearningSets; }
         }
 
-
         public int NumberOfHiddenNeurons
         {
             get { return numberOfHiddenNeurons; }
@@ -342,7 +317,6 @@ namespace SONStock
             get { return numberOfExitNeurons; }
         }
 
-        //wspó³czynnik uczenia ??
         public double Ni
         {
             get { return ni; }
