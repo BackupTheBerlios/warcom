@@ -20,6 +20,21 @@ namespace SONStock
             get { return data; }
         }
 
+        public List<double> ListDoubleData
+        {
+            get
+            {
+                IEnumerator enumerator = data.Keys.GetEnumerator();
+                List<double> values = new List<double>();
+                while (enumerator.MoveNext())
+                {
+                    DateTime dt = (DateTime)enumerator.Current;
+                    values.Add(data[dt]);
+                }
+                return values;
+            }
+        }
+
         public void ClearData()
         {
             data.Clear();
@@ -170,19 +185,20 @@ namespace SONStock
                 return elmanNet;
             }
 
-            IEnumerator enumerator = data.Keys.GetEnumerator();
-            double[] values = new double[data.Count];
-            int i = 0;
-
             int entryLayerSize = Properties.Settings.Default.entryLayerSize;
             int exitLayerSize = Properties.Settings.Default.estimationTime;
             int hiddenLayerSize = Properties.Settings.Default.hiddenLayerSize;
 
-            while (enumerator.MoveNext())
-            {
-                DateTime dt = (DateTime)enumerator.Current;
-                values[i++] = data[dt];
-            }
+            //IEnumerator enumerator = data.Keys.GetEnumerator();
+            //double[] values = new double[data.Count];
+            //int i = 0;
+            //while (enumerator.MoveNext())
+            //{
+            //    DateTime dt = (DateTime)enumerator.Current;
+            //    values[i++] = data[dt];
+            //}
+            int i;
+            double[] values = this.ListDoubleData.ToArray();
 
             if (elmanNet == null ||
                 elmanNet.NumberOfEntryNeurons != entryLayerSize ||
@@ -192,8 +208,7 @@ namespace SONStock
             double[] val = new double[entryLayerSize];
             double[] correct = new double[exitLayerSize];
 
-            //for (i = 0; i < values.Length - entryLayerSize - exitLayerSize; ++i)
-            for (i = 0; i < 3; ++i)
+            for (i = 0; i < values.Length - entryLayerSize - exitLayerSize; ++i)
             {
                 for (int j = 0; j < entryLayerSize; ++j)
                 {

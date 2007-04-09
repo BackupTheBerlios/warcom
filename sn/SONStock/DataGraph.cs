@@ -12,6 +12,7 @@ namespace SONStock
     {
         //maximum x and y coordinate to display, when scale = 1
         private int maxX, maxY;
+        private double minY = double.PositiveInfinity;
         
         private int xUnit, yUnit;
         private int xValuesCounter = 15;
@@ -59,6 +60,14 @@ namespace SONStock
             this.AddData(new double[] { 523, 149, 155, 46, 56, 904, 40, 431, 742, 350, 501 });
         }
 
+        public void ClearData()
+        {
+            this.dataBrushes.Clear();
+            this.data.Clear();
+            this.minY = double.PositiveInfinity;
+            this.xValuesCounter = 1;
+        }
+
         public void AddData(double[] dataArray)
         {
             if (dataArray == null)
@@ -69,6 +78,11 @@ namespace SONStock
             int r = random.Next(255), g = random.Next(255), b = random.Next(255);
             Color c = Color.FromArgb(r, g, b);
             dataBrushes.Add(new SolidBrush(c));
+            this.ComputeScale();
+            for (int i = 0; i < dataArray.Length; ++i)
+                if (this.minY > dataArray[i])
+                    this.minY = dataArray[i];
+            this.xValuesCounter = this.xValuesCounter > dataArray.Length ? this.xValuesCounter : dataArray.Length;
         }
 
         private void ComputeScale()
@@ -176,6 +190,7 @@ namespace SONStock
         //converts real coordinates to image coordinates
         public int ConvertRealValueToImagePosition(double yVal)
         {
+            yVal -= (minY == double.PositiveInfinity ? 0 : minY);
             double imgY;
             imgY = this.Height - yVal / scale - 4 * yBorder;
             return (int)imgY;
