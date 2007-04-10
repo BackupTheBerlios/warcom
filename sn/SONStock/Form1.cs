@@ -98,7 +98,10 @@ namespace SONStock
             if (this.data.Count > 0)
                 this.addDataToExistingToolStripMenuItem.Enabled = true;
             if (elmanNet != null && data != null && data.Count >= elmanNet.NumberOfEntryNeurons)
+            {
                 this.performEstimationToolStripMenuItem.Enabled = true;
+                this.UpdateDataGraph();
+            }
         }
 
         private void loadDataFromManyFilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -129,16 +132,22 @@ namespace SONStock
                 double[] entryValues = new double[elmanNet.NumberOfEntryNeurons];
                 for (int i = 0; i < entryValues.Length; i++)
                     entryValues[i] = values[values.Length - elmanNet.NumberOfEntryNeurons + i];
+                
                 double oMin, oMax;
                 this.data.Normalize(ref entryValues, out oMin, out oMax);
+                
                 double[] exit = elmanNet.ComputeExitValues(entryValues);
                 this.data.DeNormalize(ref exit, oMin, oMax);
                 this.exitValuesMatrixPreview.BuildControl(exit);
-                this.dataGraph1.ClearData();
-                List<double> v = this.data.ListDoubleData;
-                v.AddRange(exit);
-                this.dataGraph1.AddData(v.ToArray());
-                this.dataGraph1.Invalidate();
+                
+                //this.dataGraph1.ClearData();
+                //List<double> v = this.data.ListDoubleData;
+                //v.AddRange(exit);
+                
+                //this.dataGraph1.AddDataSeries(v.ToArray());
+
+                this.exitValuesMatrixPreview.Visible = true;
+                this.dataGraph1.Refresh();
             }
         }
 
@@ -146,6 +155,17 @@ namespace SONStock
         {
             data.ClearData();
             this.performEstimationToolStripMenuItem.Enabled = false;
+        }
+
+        private void UpdateDataGraph()
+        {
+            double[] dataArray = this.data.ListDoubleData.ToArray();
+            if (dataArray != null)
+            {
+                this.dataGraph1.AddDataSeries(dataArray);
+                this.dataGraph1.Refresh();
+            }
+
         }
         #endregion
 

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace SONStock
 {
-    [Serializable()]
+    [Serializable]
     class ElmansNetwork
     {
         private double[] entryValues;

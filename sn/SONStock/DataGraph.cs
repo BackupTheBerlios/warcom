@@ -12,10 +12,17 @@ namespace SONStock
     {
         //maximum x and y coordinate to display, when scale = 1
         private int maxX, maxY;
-        private double minY = double.PositiveInfinity;
+        private double minYVal = double.PositiveInfinity;
+        //private double maxYVal = double.NegativeInfinity;
         
         private int xUnit, yUnit;
         private int xValuesCounter = 15;
+
+        public int XValuesCounter
+        {
+            get { return xValuesCounter; }
+            set { xValuesCounter = value; }
+        }
         //private double[] data= new double[]{123, 139, 15, 434, 645, 432, 340, 731, 342, 450, 801};
         private List<double[]> data = new List<double[]>();
 
@@ -25,7 +32,7 @@ namespace SONStock
         private Pen axisPen = new Pen(Brushes.Black, 2);
         //brush used to draw text under axis
         private Brush axisTextBrush = Brushes.Black;
-        private List<Brush> dataBrushes = new List<Brush>();
+        private List<SolidBrush> dataBrushes = new List<SolidBrush>();
         //font used to draw axis text
         private Font axisTextFont;
         private Font valuesTextFont;
@@ -55,35 +62,46 @@ namespace SONStock
             axisTextFont = new Font("Arial", 8);
             valuesTextFont = new Font("Arial", 7, FontStyle.Italic);
 
-            this.AddData(new double[] { 123, 139, 15, 434, 645, 432, 340, 731, 342, 450, 801 });
-            Console.WriteLine("afdonifd");
-            this.AddData(new double[] { 523, 149, 155, 46, 56, 904, 40, 431, 742, 350, 501 });
+            //this.AddDataSeries(new double[] { 123, 139, 0, 15, 434, 645, 432, 340, 731, 342, 450, 801 });
+            //this.AddDataSeries(new double[] { 523, 149, 155, 46, 56, 904, 40, 431, 742, 350, 501 });
         }
 
         public void ClearData()
         {
             this.dataBrushes.Clear();
             this.data.Clear();
-            this.minY = double.PositiveInfinity;
+            this.minYVal = double.PositiveInfinity;
             this.xValuesCounter = 1;
         }
 
-        public void AddData(double[] dataArray)
+        public void AddDataSeries(double[] dataArray)
         {
             if (dataArray == null)
                 throw new ArgumentNullException();
-
+            
+            if (dataArray.Length > this.xValuesCounter)
+            {
+                Array.Copy(dataArray, dataArray.Length - xValuesCounter, dataArray, 0, xValuesCounter);
+            }
             data.Add(dataArray);
 
             int r = random.Next(255), g = random.Next(255), b = random.Next(255);
             Color c = Color.FromArgb(r, g, b);
             dataBrushes.Add(new SolidBrush(c));
+            int ind = this.dataSeriesComboBox.Items.Add("Seria " + data.Count);
+            this.dataSeriesComboBox.SelectedIndex = ind;
             this.ComputeScale();
-            for (int i = 0; i < dataArray.Length; ++i)
-                if (this.minY > dataArray[i])
-                    this.minY = dataArray[i];
-            this.xValuesCounter = this.xValuesCounter > dataArray.Length ? this.xValuesCounter : dataArray.Length;
+            
+            //this.xValuesCounter = this.xValuesCounter > dataArray.Length ? this.xValuesCounter : dataArray.Length;
         }
+
+        /*public void AppendDataSeries(int seriesIndex)
+        {
+            if (seriesIndex < 0 || seriesIndex > this.data.Count)
+                throw new IndexOutOfRangeException();
+
+            double[] appSeries = 
+        }*/
 
         private void ComputeScale()
         {
@@ -99,12 +117,22 @@ namespace SONStock
                 if (dataList != null && dataList.Length > 0)
                 {
                     for (int i = 0; i < dataList.Length; i++)
+                    {
                         if (dataList[i] > m)
                             m = dataList[i];
+
+                        if (dataList[i] < minYVal)
+                            minYVal = dataList[i];
+                    }
                 }
             }
 
-            scale = (int)Math.Ceiling(m / maxY);
+            scale = (int)Math.Ceiling((m - minYVal) / maxY);
+            if (scale >= maxScale)
+            {
+                scale = maxScale;
+                this.zoomOut.Enabled = false;
+            }      
         }
 
         private void displayArea_Paint(object sender, PaintEventArgs e)
@@ -151,8 +179,17 @@ namespace SONStock
                 graph.DrawString(" " + i, axisTextFont, axisTextBrush,
                   new Point(zeroPoint.X - 5 + i * xUnit, zeroPoint.Y));
 
-            graph.DrawString(" " + maxY * scale, axisTextFont, axisTextBrush,
+            //wartoœæ maksymalna
+            int maxYLabel = (int)maxY * scale;
+            if (!Double.IsPositiveInfinity(minYVal) && scale != 1)
+                maxYLabel += (int)minYVal;
+            graph.DrawString(" " + maxYLabel, axisTextFont, axisTextBrush,
                 new Point(yStopPoint.X + 5, yStopPoint.Y));
+
+            //wartoœæ minimalna
+            if (minYVal != Double.PositiveInfinity)
+                graph.DrawString(" " + minYVal, axisTextFont, axisTextBrush,
+                    new Point(yStopPoint.X + 5, zeroPoint.Y - 15));
         }
 
         public void PaintDataList(Graphics graph, Point zeroPoint, int dataListIndex)
@@ -190,7 +227,7 @@ namespace SONStock
         //converts real coordinates to image coordinates
         public int ConvertRealValueToImagePosition(double yVal)
         {
-            yVal -= (minY == double.PositiveInfinity ? 0 : minY);
+            yVal -= (minYVal == double.PositiveInfinity ? 0 : minYVal);
             double imgY;
             imgY = this.Height - yVal / scale - 4 * yBorder;
             return (int)imgY;
@@ -220,6 +257,42 @@ namespace SONStock
                 this.zoomOut.Enabled = true;
                 this.Refresh();
             }
+        }
+
+        private void dataSeriesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int sel = dataSeriesComboBox.SelectedIndex;
+            if (sel != -1 && sel < dataBrushes.Count)
+                colorLabel.BackColor = dataBrushes[sel].Color;
+            else
+                colorLabel.BackColor = this.BackColor;
+        }
+
+        private void changeColor_Click(object sender, EventArgs e)
+        {
+            int brushIndex = dataSeriesComboBox.SelectedIndex;
+            if (brushIndex == -1)
+                return;
+            if (this.colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                dataBrushes[brushIndex] = new SolidBrush(colorDialog.Color);
+                colorLabel.BackColor = colorDialog.Color;
+                this.Refresh();
+            }
+        }
+
+        private void clearContentButton_Click(object sender, EventArgs e)
+        {
+            this.data.Clear();
+            this.minYVal = Double.PositiveInfinity;
+            this.dataBrushes.Clear();
+            this.colorLabel.BackColor = this.BackColor;
+
+            this.dataSeriesComboBox.SelectedIndex = -1;
+            this.dataSeriesComboBox.Text = "Seria";
+            this.dataSeriesComboBox.Items.Clear();
+            
+            this.Refresh();
         }
     }
 }

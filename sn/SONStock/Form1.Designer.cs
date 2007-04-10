@@ -183,20 +183,24 @@ namespace SONStock
             // 
             // dataGraph1
             // 
+            this.dataGraph1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.dataGraph1.Location = new System.Drawing.Point(12, 38);
             this.dataGraph1.Name = "dataGraph1";
             this.dataGraph1.Size = new System.Drawing.Size(673, 236);
             this.dataGraph1.TabIndex = 6;
+            this.dataGraph1.XValuesCounter = 15;
             // 
             // exitValuesMatrixPreview
             // 
             this.exitValuesMatrixPreview.BackColor = System.Drawing.SystemColors.Control;
+            this.exitValuesMatrixPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.exitValuesMatrixPreview.CellWidth = 100;
             this.exitValuesMatrixPreview.Location = new System.Drawing.Point(268, 280);
             this.exitValuesMatrixPreview.Name = "exitValuesMatrixPreview";
             this.exitValuesMatrixPreview.Size = new System.Drawing.Size(292, 146);
             this.exitValuesMatrixPreview.TabIndex = 5;
-            this.exitValuesMatrixPreview.Title = "";
+            this.exitValuesMatrixPreview.Title = "Przewidywane wartoœci";
+            this.exitValuesMatrixPreview.Visible = false;
             // 
             // Form1
             // 

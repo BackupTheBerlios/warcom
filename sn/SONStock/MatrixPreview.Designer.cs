@@ -55,9 +55,10 @@ namespace SONStock
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Controls.Add(this.titleLabel);
             this.Name = "MatrixPreview";
-            this.Size = new System.Drawing.Size(221, 203);
+            this.Size = new System.Drawing.Size(217, 199);
             this.ResumeLayout(false);
             this.PerformLayout();
 
