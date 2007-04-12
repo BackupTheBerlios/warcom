@@ -143,7 +143,7 @@ namespace SONStock
                 this.dataGraph1.ClearData();
                 List<double> v = this.data.ListDoubleData;
                 v.AddRange(exit);
-                this.dataGraph1.XValuesCounter = v.Count;
+                this.dataGraph1.XValuesCounter = 15;
                 this.dataGraph1.AddDataSeries(v.ToArray());
 
                 this.exitValuesMatrixPreview.Visible = true;
