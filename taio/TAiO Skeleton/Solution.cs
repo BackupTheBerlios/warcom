@@ -9,6 +9,13 @@ namespace Taio
         private Rectangle rectangle;
         private string tag ="";
         private bool correct;
+        private string info;
+
+        public string Info
+        {
+            get { return info; }
+            set { info = value; }
+        }
 
         public bool Correct
         {

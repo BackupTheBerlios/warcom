@@ -96,6 +96,8 @@ namespace Taio
                                 this.log.AppendLine("Wczytane rozwi¹zania nie s¹ poprawne");
                                 Debug.WriteLine("Wczytane rozwi¹zania nie s¹ poprawne");
                             }
+                            foreach (Solution s in solutions)
+                                s.Info = info;
                         }
                         else
                         {
@@ -251,7 +253,10 @@ namespace Taio
             using (TextWriter wr = new StreamWriter(fileName))
             {
                 wr.WriteLine("##");
-                wr.WriteLine("Plik stworzony przez grupê Aproksumuj¹cych z Wilkami:)))");
+                if (solutions != null && solutions.Count > 0 && solutions[0].Info != null)
+                    wr.WriteLine(solutions[0].Info);
+                else
+                    wr.WriteLine("Plik stworzony przez grupê Aproksumuj¹cych z Wilkami:)))");
                 wr.WriteLine("##");
                 for (int i = 0; i < rectangles.Count; ++i)
                     wr.WriteLine(rectangles[i].SideA + "," + rectangles[i].SideB);
