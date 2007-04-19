@@ -368,10 +368,10 @@ namespace Kontrolka_do_TAiO
 
         public void ZoomIn()
         {
-            if (scale >= 0.125)
+            if (scale >= 0.125 / 4)
             {
                 scale /= 2;
-                if (scale == 0.125)
+                if (scale == 0.125 / 4)
                     this.zoomIn.Enabled = false;
                 this.zoomOut.Enabled = true;
                 this.Refresh();

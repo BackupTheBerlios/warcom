@@ -47,6 +47,7 @@ namespace Taio.Algorithms
                 {
                     int currentSum = tempRect.LongerSide;
                     tempRectsList.Add(tempRect);
+                    //todo polaczyc funckje TryFillLine i AddFoundRectanglesToStartRect w jedna
                     bool foundLine = TryFillLine(currentSum, currentSide, tempRect, correctRects, tempRectsList);
                     if (foundLine)
                     {
@@ -99,12 +100,15 @@ namespace Taio.Algorithms
             RectangleContainer rc = new RectangleContainer();
             rc.InsertRectangle(startRect);
             int minHeight = FindMinHeight(foundRects);
-            int offset = 0, startVal = startRect.SideB;
+            int offset = 0, startVal = startRect.ShorterSide;
             foreach (Rectangle r in foundRects)
             {
-                if (offset + r.SideA > startRect.SideA)
-                    offset = startRect.SideA - r.SideA;
-                rc.InsertRectangle(r, new Point(offset, startVal + minHeight - r.SideB));
+                if ((offset + r.SideA) > startRect.LongerSide)
+                    offset = startRect.LongerSide - r.SideA;
+                if(startRect.LongerSide == startRect.SideA)
+                    rc.InsertRectangle(r, new Point(offset, startVal + minHeight - r.SideB));
+                else
+                    rc.InsertRectangle(r, new Point(startVal + minHeight - r.SideB, offset));
                 offset += r.SideA;
             }
             return rc.MaxCorrectRect;
