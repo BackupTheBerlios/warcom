@@ -33,6 +33,7 @@ namespace Taio
 
             //testDrawingComplexRects();
             //testAlgorihm1();
+            //testAlgorithm2();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -468,21 +469,26 @@ namespace Taio
 
         private void testAlgorithm2()
         {
-            Rectangle r1 = new Rectangle(50, 40);
-            Rectangle r2 = new Rectangle(30, 20);
-            Rectangle r3 = new Rectangle(20, 10);
-            Rectangle r4 = new Rectangle(50, 10);
-            Rectangle r5 = new Rectangle(51, 1);
+            Rectangle[] rects = new Rectangle[]{
+                new Rectangle(19, 44),
+                new Rectangle(20, 12),
+                new Rectangle(15, 42),
+                new Rectangle(16, 4),
+                new Rectangle(35, 44),
+                new Rectangle(23, 3),
+                new Rectangle(24, 18),
+                new Rectangle(8, 46),
+                new Rectangle(38, 9),
+                new Rectangle(13, 11)
+            };
+
             List<Rectangle> rr = new List<Rectangle>();
-            rr.Add(r1);
-            rr.Add(r2);
-            rr.Add(r3);
-            rr.Add(r4);
-            rr.Add(r5);
+            rr.AddRange(rects);
+
 
             foreach (Rectangle r in rr)
                 addRectangleToTreeView(r);
-            //powinno dac wynik 50,50
+            
             Algorithm2 al = new Algorithm2();
             Rectangle res = al.ComputeMaximumRectangle(rr);
             addSolution(new Solution(al.GetTag(), res));

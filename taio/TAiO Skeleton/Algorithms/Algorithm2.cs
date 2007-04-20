@@ -57,6 +57,8 @@ namespace Taio.Algorithms
                 Rectangle n = rects.GetLongestRect(w.LongerSide);
                 if (n == null)
                     break;
+                if (!n.RectangleOrientation.Equals(w.RectangleOrientation))
+                    n.Rotate();
                 n.Move(new Point(w.RightDown.X, 0));
                 container.InsertRectangle(n);
 
@@ -69,10 +71,10 @@ namespace Taio.Algorithms
 
                 }*/
 
+                List<Rectangle> cover = new List<Rectangle>();
                 foreach(Rectangle empty in container.EmptyFields)
                 {
                     Rectangle t = rects.GetSmallestCovering(empty.SideA, empty.SideB);
-                    List<Rectangle> cover = new List<Rectangle>();
                     if (t != null)
                     {
                         //TODO: tu sprawdzac jeszcze czy nie wyjdzie poza
@@ -81,13 +83,14 @@ namespace Taio.Algorithms
                         t.Move(new Point(empty.RightDown.X - t.SideA, empty.RightDown.Y - t.SideB));
                         cover.Add(t);
                     }
-                    foreach(Rectangle r in cover)
-                        container.InsertRectangle(r);
                 }
+                foreach (Rectangle r in cover)
+                    container.InsertRectangle(r);
             }
 
-            if (container.IsCorrectRectangle)
-                resultRectangle = container.MaxCorrectRect;
+            //if (container.IsCorrectRectangle)
+            
+            resultRectangle = container.MaxCorrectRect;
             rectangle = resultRectangle;
 
             return resultRectangle;
