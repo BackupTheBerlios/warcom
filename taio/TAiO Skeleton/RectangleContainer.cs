@@ -42,7 +42,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// The largest correct rectangle consisting of rectangles in container
+        /// The largest correct rectangle which consists of rectangles in container
         /// </summary>
         public Rectangle MaxCorrectRect
         {

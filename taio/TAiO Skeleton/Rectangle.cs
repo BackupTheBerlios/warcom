@@ -418,7 +418,17 @@ namespace Taio
             get { return number; }
             set { number = value; }
         }
-	
+
+        public Orientation RectangleOrientation
+        {
+            get
+            {
+                if (SideA >= SideB)
+                    return Orientation.Horizontal;
+                else
+                    return Orientation.Vertical;
+            }
+        }
         #endregion
 
 

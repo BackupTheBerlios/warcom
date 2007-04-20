@@ -466,6 +466,28 @@ namespace Taio
             System.Console.WriteLine(res.SideA + " " + res.SideB);
         }
 
+        private void testAlgorithm2()
+        {
+            Rectangle r1 = new Rectangle(50, 40);
+            Rectangle r2 = new Rectangle(30, 20);
+            Rectangle r3 = new Rectangle(20, 10);
+            Rectangle r4 = new Rectangle(50, 10);
+            Rectangle r5 = new Rectangle(51, 1);
+            List<Rectangle> rr = new List<Rectangle>();
+            rr.Add(r1);
+            rr.Add(r2);
+            rr.Add(r3);
+            rr.Add(r4);
+            rr.Add(r5);
+
+            foreach (Rectangle r in rr)
+                addRectangleToTreeView(r);
+            //powinno dac wynik 50,50
+            Algorithm2 al = new Algorithm2();
+            Rectangle res = al.ComputeMaximumRectangle(rr);
+            addSolution(new Solution(al.GetTag(), res));
+        }
+
         #endregion       
      }
 }

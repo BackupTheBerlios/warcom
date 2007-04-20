@@ -11,13 +11,7 @@ namespace Taio
         [STAThread]
         static void Main(string[] args)
         {
-            //RotateTest();
-            //MoveTest();
-            //ContainerTest();
-            //IntersectionTest();
-            //SubtractTest();
-            //SortingTest();
-
+            Tests();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
@@ -26,7 +20,19 @@ namespace Taio
         
 
         #region Tests
-        public static void IntersectionTest()
+
+        private static void Tests()
+        {
+            //RotateTest();
+            //MoveTest();
+            //ContainerTest();
+            //IntersectionTest();
+            //SubtractTest();
+            //SortingTest();
+            //RectanglesListTest();
+        }
+
+        private static void IntersectionTest()
         {
             Rectangle testRect = new Rectangle(new Point(4,3), new Point(7,6));
 
@@ -70,7 +76,7 @@ namespace Taio
             }
         }
 
-        public static void SortingTest()
+        private static void SortingTest()
         {
             List<Rectangle> a = new List<Rectangle>();
             a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
@@ -121,7 +127,7 @@ namespace Taio
             Console.WriteLine(a.Contains(re));*/
         }
 
-        public static void SubtractTest()
+        private static void SubtractTest()
         {
             Rectangle testRect = new Rectangle(new Point(4, 3), new Point(7, 6));
 
@@ -184,7 +190,7 @@ namespace Taio
              */
         }
 
-        public static void RotateTest()
+        private static void RotateTest()
         {
             List<Rectangle> a = new List<Rectangle>();
             a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
@@ -210,7 +216,7 @@ namespace Taio
              */
         }
 
-        public static void MoveTest()
+        private static void MoveTest()
         {
             List<Rectangle> a = new List<Rectangle>();
             a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
@@ -263,6 +269,57 @@ namespace Taio
             rc.InsertRectangle(r1, Rectangle.Orientation.Horizontal);
             rc.InsertRectangle(r2, new Point(2, 0), Rectangle.Orientation.Vertical);
             rc.InsertRectangle(r3, new Point(0, 2), Rectangle.Orientation.Horizontal);
+        }
+
+        private static void RectanglesListTest()
+        {
+            List<Rectangle> a = new List<Rectangle>();
+            a.Add(new Rectangle(new Point(1, 1), new Point(3, 3)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 6)));
+            a.Add(new Rectangle(new Point(5, 2), new Point(6, 7)));
+            a.Add(new Rectangle(new Point(4, 3), new Point(9, 4)));
+            a.Add(new Rectangle(new Point(3, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(2, 5), new Point(9, 6)));
+            a.Add(new Rectangle(new Point(10, 3), new Point(11, 5)));
+            a.Add(new Rectangle(new Point(6, 4), new Point(7, 5)));
+            a.Add(new Rectangle(new Point(6, 5), new Point(8, 8)));
+            a.Add(new Rectangle(new Point(3, 7), new Point(4, 8)));
+            a.Add(new Rectangle(new Point(6, 1), new Point(7, 3)));
+
+            Rectangle.RectangleComparer comparer = Rectangle.GetComparer();
+            comparer.Comparison = Rectangle.RectangleComparer.ComparisonType.Area;
+            a.Sort(comparer);
+            Console.WriteLine("area");
+            foreach (Rectangle r in a)
+                Console.WriteLine(r);
+            Console.WriteLine();
+
+            
+
+            comparer.Comparison = Rectangle.RectangleComparer.ComparisonType.LongerSide;
+            a.Sort(comparer);
+            Console.WriteLine("longer side");
+            foreach (Rectangle r in a)
+                Console.WriteLine(r);
+            Console.WriteLine();
+
+            foreach(Rectangle r in a)
+                Console.WriteLine(r);
+            RectanglesList rl = new RectanglesList(a);
+            
+            Console.WriteLine("peek smallest covering 2x1: " + rl.PeekSmallestCovering(2,1));
+
+            Console.WriteLine("peek largest: " + rl.PeekLargestRect());
+            Console.WriteLine("peek smallest: " + rl.PeekSmallestRect());
+            Console.WriteLine("peek longest: " + rl.PeekLongestRect());
+            Console.WriteLine("peek limited longest (max=20): " + rl.PeekLongestRect(20));
+            Console.WriteLine("peek limited longest (max=2): " + rl.PeekLongestRect(2));
+
+            Console.WriteLine("get largest: " + rl.GetLargestRect());
+            Console.WriteLine("peek largest: " + rl.PeekLargestRect());
+
+            for(int i=0; i<7; i++)
+                Console.WriteLine("get longest: " + rl.GetLongestRect());
         }
         #endregion
     }
