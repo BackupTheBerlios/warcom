@@ -35,7 +35,6 @@ namespace SONStock
             if (useTechnicalAnalysis)
                 realNumberOfEntryNeurons += 2;
             this.useTechnicalAnalysis = useTechnicalAnalysis;
-            this.useTechnicalAnalysis = true;
             entryValues = new double[realNumberOfEntryNeurons];
             contextValues = new double[numberOfHiddenNeurons];
             hiddenValues = new double[numberOfHiddenNeurons + 1];
@@ -285,7 +284,8 @@ namespace SONStock
         {
             if (entryValues.Length != this.entryValues.Length -1 ||
                 correctExits.Length != this.exitValues.Length)
-                throw new Exception("Z³y rozmiar danych wejœciowych lub danych wyjœiowych");
+                throw new Exception("Z³y rozmiar danych wejœciowych lub danych wyjœciowych");
+            
             if (useTechnicalAnalysis)
             {
                 this.entryValues[entryValues.Length - 3] = CountSimpleAverage(entryValues);

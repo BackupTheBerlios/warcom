@@ -199,11 +199,12 @@ namespace SONStock
             //}
             int i;
             double[] values = this.ListDoubleData.ToArray();
+            bool useTechnicalAnalysis = Properties.Settings.Default.useTechnicalAnalysis;
 
             if (elmanNet == null ||
                 elmanNet.NumberOfEntryNeurons != entryLayerSize ||
                 elmanNet.NumberOfExitNeurons != exitLayerSize)
-                elmanNet = new ElmansNetwork(entryLayerSize, hiddenLayerSize, exitLayerSize, false);
+                elmanNet = new ElmansNetwork(entryLayerSize, hiddenLayerSize, exitLayerSize, useTechnicalAnalysis);
 
             double[] val = new double[entryLayerSize];
             double[] correct = new double[exitLayerSize];

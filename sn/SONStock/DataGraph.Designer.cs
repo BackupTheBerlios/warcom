@@ -30,14 +30,15 @@ namespace SONStock
         {
             this.displayArea = new System.Windows.Forms.PictureBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.clearContentButton = new System.Windows.Forms.Button();
+            this.zoomLabel = new System.Windows.Forms.Label();
+            this.colorLabel = new System.Windows.Forms.Label();
             this.changeColor = new System.Windows.Forms.Button();
             this.dataSeriesComboBox = new System.Windows.Forms.ComboBox();
             this.zoomOut = new System.Windows.Forms.Button();
             this.zoomIn = new System.Windows.Forms.Button();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.colorLabel = new System.Windows.Forms.Label();
-            this.clearContentButton = new System.Windows.Forms.Button();
-            this.zoomLabel = new System.Windows.Forms.Label();
+            this.valuesLabellingCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.displayArea)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -66,6 +67,7 @@ namespace SONStock
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.valuesLabellingCheckBox);
             this.splitContainer1.Panel2.Controls.Add(this.clearContentButton);
             this.splitContainer1.Panel2.Controls.Add(this.zoomLabel);
             this.splitContainer1.Panel2.Controls.Add(this.colorLabel);
@@ -76,6 +78,32 @@ namespace SONStock
             this.splitContainer1.Size = new System.Drawing.Size(649, 240);
             this.splitContainer1.SplitterDistance = 532;
             this.splitContainer1.TabIndex = 3;
+            // 
+            // clearContentButton
+            // 
+            this.clearContentButton.Location = new System.Drawing.Point(19, 202);
+            this.clearContentButton.Name = "clearContentButton";
+            this.clearContentButton.Size = new System.Drawing.Size(75, 23);
+            this.clearContentButton.TabIndex = 5;
+            this.clearContentButton.Text = "Wyczyœæ";
+            this.clearContentButton.UseVisualStyleBackColor = true;
+            this.clearContentButton.Click += new System.EventHandler(this.clearContentButton_Click);
+            // 
+            // zoomLabel
+            // 
+            this.zoomLabel.Location = new System.Drawing.Point(19, 9);
+            this.zoomLabel.Name = "zoomLabel";
+            this.zoomLabel.Size = new System.Drawing.Size(75, 16);
+            this.zoomLabel.TabIndex = 4;
+            this.zoomLabel.Text = "Zoom";
+            this.zoomLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // colorLabel
+            // 
+            this.colorLabel.Location = new System.Drawing.Point(19, 108);
+            this.colorLabel.Name = "colorLabel";
+            this.colorLabel.Size = new System.Drawing.Size(75, 23);
+            this.colorLabel.TabIndex = 4;
             // 
             // changeColor
             // 
@@ -118,31 +146,18 @@ namespace SONStock
             this.zoomIn.UseVisualStyleBackColor = true;
             this.zoomIn.Click += new System.EventHandler(this.zoomIn_Click);
             // 
-            // colorLabel
+            // valuesLabellingCheckBox
             // 
-            this.colorLabel.Location = new System.Drawing.Point(19, 108);
-            this.colorLabel.Name = "colorLabel";
-            this.colorLabel.Size = new System.Drawing.Size(75, 23);
-            this.colorLabel.TabIndex = 4;
-            // 
-            // clearContentButton
-            // 
-            this.clearContentButton.Location = new System.Drawing.Point(19, 202);
-            this.clearContentButton.Name = "clearContentButton";
-            this.clearContentButton.Size = new System.Drawing.Size(75, 23);
-            this.clearContentButton.TabIndex = 5;
-            this.clearContentButton.Text = "Wyczyœæ";
-            this.clearContentButton.UseVisualStyleBackColor = true;
-            this.clearContentButton.Click += new System.EventHandler(this.clearContentButton_Click);
-            // 
-            // zoomLabel
-            // 
-            this.zoomLabel.Location = new System.Drawing.Point(19, 9);
-            this.zoomLabel.Name = "zoomLabel";
-            this.zoomLabel.Size = new System.Drawing.Size(75, 16);
-            this.zoomLabel.TabIndex = 4;
-            this.zoomLabel.Text = "Zoom";
-            this.zoomLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.valuesLabellingCheckBox.AutoSize = true;
+            this.valuesLabellingCheckBox.Checked = true;
+            this.valuesLabellingCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.valuesLabellingCheckBox.Location = new System.Drawing.Point(8, 88);
+            this.valuesLabellingCheckBox.Name = "valuesLabellingCheckBox";
+            this.valuesLabellingCheckBox.Size = new System.Drawing.Size(93, 17);
+            this.valuesLabellingCheckBox.TabIndex = 6;
+            this.valuesLabellingCheckBox.Text = "Etykietuj dane";
+            this.valuesLabellingCheckBox.UseVisualStyleBackColor = true;
+            this.valuesLabellingCheckBox.CheckedChanged += new System.EventHandler(this.valuesLabellingCheckBox_CheckedChanged);
             // 
             // DataGraph
             // 
@@ -155,6 +170,7 @@ namespace SONStock
             ((System.ComponentModel.ISupportInitialize)(this.displayArea)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -172,6 +188,7 @@ namespace SONStock
         private System.Windows.Forms.Label colorLabel;
         private System.Windows.Forms.Button clearContentButton;
         private System.Windows.Forms.Label zoomLabel;
+        private System.Windows.Forms.CheckBox valuesLabellingCheckBox;
 
     }
 }

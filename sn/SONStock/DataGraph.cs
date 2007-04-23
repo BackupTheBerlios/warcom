@@ -219,7 +219,9 @@ namespace SONStock
 
                 p = new Point(zeroPoint.X + i * xUnit, ConvertRealValueToImagePosition(dataList[i]));
                 graph.DrawLine(pen, prev, p);
-                graph.DrawString(dataList[i].ToString(), valuesTextFont, brush, new Point(p.X + 1, p.Y + 2));
+
+                if(this.valuesLabellingCheckBox.Checked)
+                    graph.DrawString(dataList[i].ToString(), valuesTextFont, brush, new Point(p.X + 1, p.Y + 2));
             }
         }
 
@@ -292,6 +294,11 @@ namespace SONStock
             this.dataSeriesComboBox.Text = "Seria";
             this.dataSeriesComboBox.Items.Clear();
             
+            this.Refresh();
+        }
+
+        private void valuesLabellingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
             this.Refresh();
         }
     }

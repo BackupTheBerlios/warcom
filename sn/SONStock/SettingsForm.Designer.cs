@@ -42,6 +42,8 @@ namespace SONStock
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.hiddenLayerNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.useTechnicalAnalysisCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.estTimeNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.entryLayerNumericUpDown)).BeginInit();
@@ -50,7 +52,7 @@ namespace SONStock
             // 
             // butOK
             // 
-            this.butOK.Location = new System.Drawing.Point(103, 176);
+            this.butOK.Location = new System.Drawing.Point(103, 202);
             this.butOK.Name = "butOK";
             this.butOK.Size = new System.Drawing.Size(75, 23);
             this.butOK.TabIndex = 0;
@@ -61,7 +63,7 @@ namespace SONStock
             // butCancel
             // 
             this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.butCancel.Location = new System.Drawing.Point(208, 176);
+            this.butCancel.Location = new System.Drawing.Point(208, 202);
             this.butCancel.Name = "butCancel";
             this.butCancel.Size = new System.Drawing.Size(75, 23);
             this.butCancel.TabIndex = 1;
@@ -109,7 +111,7 @@ namespace SONStock
             this.estMethodComboBox.Name = "estMethodComboBox";
             this.estMethodComboBox.Size = new System.Drawing.Size(141, 21);
             this.estMethodComboBox.TabIndex = 5;
-            this.estMethodComboBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.estMethodComboBox.SelectedIndexChanged += new System.EventHandler(this.estMethodComboBox_SelectedIndexChanged);
             // 
             // estTimeNumericUpDown
             // 
@@ -208,19 +210,39 @@ namespace SONStock
             0,
             0});
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label6.Location = new System.Drawing.Point(12, 170);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(117, 16);
+            this.label6.TabIndex = 4;
+            this.label6.Text = "Analizy techniczna";
+            // 
+            // useTechnicalAnalysisCheckBox
+            // 
+            this.useTechnicalAnalysisCheckBox.AutoSize = true;
+            this.useTechnicalAnalysisCheckBox.Location = new System.Drawing.Point(208, 170);
+            this.useTechnicalAnalysisCheckBox.Name = "useTechnicalAnalysisCheckBox";
+            this.useTechnicalAnalysisCheckBox.Size = new System.Drawing.Size(76, 17);
+            this.useTechnicalAnalysisCheckBox.TabIndex = 8;
+            this.useTechnicalAnalysisCheckBox.Text = "W³¹czona";
+            this.useTechnicalAnalysisCheckBox.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
-            this.AcceptButton = this.butOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.butCancel;
-            this.ClientSize = new System.Drawing.Size(399, 216);
+            this.ClientSize = new System.Drawing.Size(399, 253);
             this.ControlBox = false;
+            this.Controls.Add(this.useTechnicalAnalysisCheckBox);
             this.Controls.Add(this.epsTextBox);
             this.Controls.Add(this.hiddenLayerNumericUpDown);
             this.Controls.Add(this.entryLayerNumericUpDown);
             this.Controls.Add(this.estTimeNumericUpDown);
             this.Controls.Add(this.estMethodComboBox);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label5);
@@ -256,5 +278,7 @@ namespace SONStock
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.NumericUpDown hiddenLayerNumericUpDown;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox useTechnicalAnalysisCheckBox;
+        private System.Windows.Forms.Label label6;
     }
 }

@@ -82,5 +82,17 @@ namespace SONStock.Properties {
                 this["entryLayerSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool useTechnicalAnalysis {
+            get {
+                return ((bool)(this["useTechnicalAnalysis"]));
+            }
+            set {
+                this["useTechnicalAnalysis"] = value;
+            }
+        }
     }
 }

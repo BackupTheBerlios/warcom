@@ -27,7 +27,7 @@ namespace SONStock
 
         private void NetworkTest()
         {
-            elmanNet = new ElmansNetwork(5, 2, 1, false);
+            elmanNet = new ElmansNetwork(5, 2, 1, Properties.Settings.Default.useTechnicalAnalysis);
             double[] learn = new double[] { 1, 2, 3, 4, 5 };
             double[] correct = new double[] { 6 };
             //double[] test = new double[] { 7, 7, 7, 7, 7 };

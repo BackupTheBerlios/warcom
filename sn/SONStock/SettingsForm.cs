@@ -35,6 +35,7 @@ namespace SONStock
                 Properties.Settings.Default.hiddenLayerSize = (int)this.hiddenLayerNumericUpDown.Value;
                 Properties.Settings.Default.entryLayerSize = (int)this.entryLayerNumericUpDown.Value;
                 Properties.Settings.Default.estimationMethod = this.estMethodComboBox.SelectedIndex;
+                Properties.Settings.Default.useTechnicalAnalysis = this.useTechnicalAnalysisCheckBox.Checked;
                 Properties.Settings.Default.Save();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
@@ -64,10 +65,11 @@ namespace SONStock
             this.estTimeNumericUpDown.Value = estimationTime;
             this.entryLayerNumericUpDown.Value = Properties.Settings.Default.entryLayerSize;
             this.hiddenLayerNumericUpDown.Value = Properties.Settings.Default.hiddenLayerSize;
+            this.useTechnicalAnalysisCheckBox.Checked = Properties.Settings.Default.useTechnicalAnalysis;
  
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void estMethodComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
