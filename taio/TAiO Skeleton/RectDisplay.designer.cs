@@ -34,13 +34,17 @@ namespace Kontrolka_do_TAiO
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.displayArea = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.rectInfo = new System.Windows.Forms.Label();
             this.zoomIn = new System.Windows.Forms.Button();
             this.zoomOut = new System.Windows.Forms.Button();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.rectInfo = new System.Windows.Forms.ListView();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.displayArea)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label2
@@ -51,7 +55,7 @@ namespace Kontrolka_do_TAiO
             this.label2.BackColor = System.Drawing.Color.Blue;
             this.label2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(0, 46);
+            this.label2.Location = new System.Drawing.Point(0, 43);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(135, 16);
             this.label2.TabIndex = 12;
@@ -63,7 +67,7 @@ namespace Kontrolka_do_TAiO
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Blue;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(0, 102);
+            this.label1.Location = new System.Drawing.Point(0, 99);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(136, 16);
             this.label1.TabIndex = 11;
@@ -73,7 +77,7 @@ namespace Kontrolka_do_TAiO
             // 
             this.mousePosition.AutoSize = true;
             this.mousePosition.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.mousePosition.Location = new System.Drawing.Point(3, 75);
+            this.mousePosition.Location = new System.Drawing.Point(3, 72);
             this.mousePosition.Name = "mousePosition";
             this.mousePosition.Size = new System.Drawing.Size(69, 13);
             this.mousePosition.TabIndex = 10;
@@ -94,15 +98,9 @@ namespace Kontrolka_do_TAiO
             // 
             // splitContainer.Panel2
             // 
-            this.splitContainer.Panel2.Controls.Add(this.label3);
-            this.splitContainer.Panel2.Controls.Add(this.rectInfo);
-            this.splitContainer.Panel2.Controls.Add(this.zoomIn);
-            this.splitContainer.Panel2.Controls.Add(this.label2);
-            this.splitContainer.Panel2.Controls.Add(this.zoomOut);
-            this.splitContainer.Panel2.Controls.Add(this.mousePosition);
-            this.splitContainer.Panel2.Controls.Add(this.label1);
-            this.splitContainer.Size = new System.Drawing.Size(442, 300);
-            this.splitContainer.SplitterDistance = 300;
+            this.splitContainer.Panel2.Controls.Add(this.splitContainer1);
+            this.splitContainer.Size = new System.Drawing.Size(486, 345);
+            this.splitContainer.SplitterDistance = 344;
             this.splitContainer.TabIndex = 13;
             // 
             // displayArea
@@ -111,7 +109,7 @@ namespace Kontrolka_do_TAiO
             this.displayArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.displayArea.Location = new System.Drawing.Point(0, 0);
             this.displayArea.Name = "displayArea";
-            this.displayArea.Size = new System.Drawing.Size(296, 296);
+            this.displayArea.Size = new System.Drawing.Size(340, 341);
             this.displayArea.TabIndex = 0;
             this.displayArea.TabStop = false;
             this.displayArea.MouseMove += new System.Windows.Forms.MouseEventHandler(this.displayArea_MouseMove);
@@ -123,19 +121,11 @@ namespace Kontrolka_do_TAiO
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Blue;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(-2, 118);
+            this.label3.Location = new System.Drawing.Point(0, 115);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(143, 16);
             this.label3.TabIndex = 14;
             this.label3.Text = "o prostokatach:       ";
-            // 
-            // rectInfo
-            // 
-            this.rectInfo.AutoSize = true;
-            this.rectInfo.Location = new System.Drawing.Point(3, 146);
-            this.rectInfo.Name = "rectInfo";
-            this.rectInfo.Size = new System.Drawing.Size(0, 13);
-            this.rectInfo.TabIndex = 13;
             // 
             // zoomIn
             // 
@@ -144,7 +134,7 @@ namespace Kontrolka_do_TAiO
             this.zoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.zoomIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.zoomIn.Image = global::Taio.Properties.Resources.arrow_up_32;
-            this.zoomIn.Location = new System.Drawing.Point(3, 3);
+            this.zoomIn.Location = new System.Drawing.Point(0, 0);
             this.zoomIn.Name = "zoomIn";
             this.zoomIn.Size = new System.Drawing.Size(40, 40);
             this.zoomIn.TabIndex = 9;
@@ -159,12 +149,49 @@ namespace Kontrolka_do_TAiO
             this.zoomOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.zoomOut.Image = global::Taio.Properties.Resources.arrow_down_32;
             this.zoomOut.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.zoomOut.Location = new System.Drawing.Point(49, 3);
+            this.zoomOut.Location = new System.Drawing.Point(49, 0);
             this.zoomOut.Name = "zoomOut";
             this.zoomOut.Size = new System.Drawing.Size(40, 40);
             this.zoomOut.TabIndex = 8;
             this.zoomOut.UseVisualStyleBackColor = true;
             this.zoomOut.Click += new System.EventHandler(this.zoomOut_Click);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.IsSplitterFixed = true;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.zoomIn);
+            this.splitContainer1.Panel1.Controls.Add(this.label3);
+            this.splitContainer1.Panel1.Controls.Add(this.zoomOut);
+            this.splitContainer1.Panel1.Controls.Add(this.label2);
+            this.splitContainer1.Panel1.Controls.Add(this.label1);
+            this.splitContainer1.Panel1.Controls.Add(this.mousePosition);
+            this.splitContainer1.Panel1MinSize = 135;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.rectInfo);
+            this.splitContainer1.Size = new System.Drawing.Size(134, 341);
+            this.splitContainer1.SplitterDistance = 135;
+            this.splitContainer1.TabIndex = 15;
+            // 
+            // rectInfo
+            // 
+            this.rectInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rectInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rectInfo.Location = new System.Drawing.Point(0, 0);
+            this.rectInfo.Name = "rectInfo";
+            this.rectInfo.Size = new System.Drawing.Size(134, 202);
+            this.rectInfo.TabIndex = 0;
+            this.rectInfo.UseCompatibleStateImageBehavior = false;
+            this.rectInfo.View = System.Windows.Forms.View.List;
             // 
             // RectDisplay
             // 
@@ -173,12 +200,15 @@ namespace Kontrolka_do_TAiO
             this.Controls.Add(this.splitContainer);
             this.MinimumSize = new System.Drawing.Size(50, 50);
             this.Name = "RectDisplay";
-            this.Size = new System.Drawing.Size(442, 300);
+            this.Size = new System.Drawing.Size(486, 345);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
-            this.splitContainer.Panel2.PerformLayout();
             this.splitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.displayArea)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -192,7 +222,8 @@ namespace Kontrolka_do_TAiO
         private System.Windows.Forms.Button zoomOut;
         private System.Windows.Forms.Label mousePosition;
         private System.Windows.Forms.SplitContainer splitContainer;
-        private System.Windows.Forms.Label rectInfo;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ListView rectInfo;
     }
 }

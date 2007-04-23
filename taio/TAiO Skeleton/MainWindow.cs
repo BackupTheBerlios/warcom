@@ -15,13 +15,13 @@ namespace Taio
 {
     public partial class MainWindow : Form
     {
-        
-        private List<Rectangle> rectangles;     
+
+        private List<Rectangle> rectangles;
         private List<Solution> solutions = new List<Solution>();
         private DataLoader dataLoader = new DataLoader();
         private IAlgorithm algorithm;
         private BackgroundWorker bw;
-        
+
         public MainWindow()
         {
             bw = new BackgroundWorker();
@@ -43,14 +43,35 @@ namespace Taio
 
         private void threadCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            int index = -1;
+
             Debug.WriteLine("W¹tek zakoñczony");
+            if (this.algorithm.GetRectangle() == null)
+            {
+                this.algorithm = null;
+                this.EnableMenu(true);
+                return;
+            }
+
             Solution s = new Solution(this.algorithm.GetTag(), this.algorithm.GetRectangle());
             for (int i = 0; i < this.solutions.Count; ++i)
             {
                 if (this.solutions[i].Tag == s.Tag)
-                    this.solutions.RemoveAt(i);
+                {
+                    index = i;
+                    this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[1].Nodes[i];
+                    removeRectangleFromTreeView();
+                }
             }
-            this.solutions.Add(s);
+
+            if (index == -1)
+                index = this.solutions.Count;
+
+            addSolution(s);
+            this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[1].Nodes[index];
+            TreeNodeMouseClickEventArgs eventArg = new TreeNodeMouseClickEventArgs(this.rectanglesTreeView.SelectedNode,
+                MouseButtons.Left, 1, 0, 0);
+            rectanglesTreeView_NodeMouseClick(this, eventArg);
             this.algorithm = null;
             this.EnableMenu(true);
         }
@@ -79,12 +100,12 @@ namespace Taio
         #region Menu
         private void newFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.rectangleViewer.Clear();
         }
 
         private void DrawToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -142,7 +163,7 @@ namespace Taio
             ArgumentDialog ad = new ArgumentDialog();
             if (ad.ShowDialog() == DialogResult.OK)
             {
-                this.rectangles = this.dataLoader.RandomRectangles(ad.Count,ad.Max);
+                this.rectangles = this.dataLoader.RandomRectangles(ad.Count, ad.Max);
                 this.solutions.Clear();
                 this.rectanglesTreeView.Nodes[0].Nodes.Clear();
                 this.rectanglesTreeView.Nodes[1].Nodes.Clear();
@@ -156,8 +177,6 @@ namespace Taio
             this.EnableMenu(false);
             this.algorithm = new Algorithm0();
             bw.RunWorkerAsync();
-            Thread.Sleep(500);
-            Debug.WriteLine("Dobra w¹tek chyba ju¿ dzia³a, a ja siê budze po drzemce");
         }
 
         private void algorithm1SolutionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -169,12 +188,16 @@ namespace Taio
 
         private void algorithm2SolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.EnableMenu(false);
+            this.algorithm = new Algorithm2();
+            bw.RunWorkerAsync();
         }
 
         private void algorithm3SolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.EnableMenu(false);
+            this.algorithm = new Algorithm3();
+            bw.RunWorkerAsync();
         }
 
         private void authorsHelpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -239,7 +262,7 @@ namespace Taio
             int count = rectangles.Count;
             node.Text = count + " prostok¹t [" + rect.SideA +
                             ", " + rect.SideB + ", " + rect.Area + "]";
-           
+
             // dodawanie do listy prostok¹tów 
             this.rectanglesTreeView.Nodes[0].Nodes.Add(node);
 
@@ -292,7 +315,7 @@ namespace Taio
             }
             if (index >= 0)
             {
-                if (isSolution&& solutions[index].Correct)
+                if (isSolution && solutions[index].Correct)
                     viewRectangle(solutions[index].Rectangle, this.rectanglesTreeView.SelectedNode);
                 else
                     viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);
@@ -325,7 +348,7 @@ namespace Taio
             else
                 viewRectangle(null, null);
         }
-        
+
         // aktualizacja indeksów prostok¹tów na liœcie, po usuniêciu prostok¹ta
         private void indexChange(int indexOfRemoved)
         {
@@ -345,17 +368,14 @@ namespace Taio
         {
             if (rectId >= 0)
             {
-                if (rectId <= this.rectanglesTreeView.Nodes[0].Nodes.Count)
+                int i = 0;
+                for (i = 0; i < this.rectangles.Count; ++i)
+                    if (rectangles[i].Number == rectId)
+                        break;
+                if (i < this.rectangles.Count)
                 {
-                    int i = 0;
-                    for (i = 0; i < this.rectangles.Count; ++i)
-                        if (rectangles[i].Number == rectId)
-                            break;
-                    if (i < this.rectangles.Count)
-                    {
-                        this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[0].Nodes[i];
-                        this.rectanglesTreeView.Refresh();
-                    }
+                    this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[0].Nodes[i];
+                    this.rectanglesTreeView.Refresh();
                 }
             }
         }
@@ -375,28 +395,40 @@ namespace Taio
             }
         }
 
-        #endregion        
+        #endregion
 
         #region Lista rozwi¹zañ
         // dodawane rozwi¹zanie do listy rozwi¹zañ 
         private void addSolution(Solution newSolution)
         {
-            if(newSolution != null)
+            if (newSolution != null)
             {
                 solutions.Add(newSolution);
                 TreeNode node = new TreeNode();
-                node.Text = newSolution.Tag;
-                this.rectanglesTreeView.Nodes[1].Nodes.Add(node);                 
+                Rectangle nsolRect = newSolution.Rectangle;
+                String descr = "";
+                if (nsolRect != null)
+                    descr = " (" + nsolRect.SideA + ", " + nsolRect.SideB + ", " + nsolRect.Area + ")";
+                node.Text = newSolution.Tag + descr;
+                this.rectanglesTreeView.Nodes[1].Nodes.Add(node);
             }
-        }     
-  
+        }
+
+
         // dodawanie rozwi¹zañ tylko do widoku na kontrolce
         private void addSolutionsOnlyToView()
         {
             for (IEnumerator it = this.solutions.GetEnumerator(); it.MoveNext(); )
             {
                 TreeNode node = new TreeNode();
-                node.Text = ((Solution)it.Current).Tag;
+                Solution s = (Solution)it.Current;
+                if (s == null)
+                    continue;
+                Rectangle sRect = s.Rectangle;
+                String descr = "";
+                if (sRect != null)
+                    descr = " (" + sRect.SideA + ", " + sRect.SideB + ", " + sRect.Area + ")";
+                node.Text = s.Tag + descr;
                 this.rectanglesTreeView.Nodes[1].Nodes.Add(node);
             }
         }
@@ -429,47 +461,28 @@ namespace Taio
             }
         }
 
-        #endregion                   
+        #endregion
 
         #region Testy
         private void testDrawingComplexRects()
         {
-             Rectangle t1 = new Rectangle(100, 200);
-             Rectangle t2 = new Rectangle(100, 200);
-             RectangleContainer rc = new RectangleContainer();
-             rc.InsertRectangle(t1, Rectangle.Orientation.Vertical);
-             rc.InsertRectangle(t2, new Point(90, 0), Rectangle.Orientation.Vertical);
-             Rectangle t3 = rc.MaxCorrectRect;
-             rectangles.Add(t1);
-             addRectangleToTreeView(t1);
-             rectangles.Add(t2);
-             addRectangleToTreeView(t2);
-             rectangleViewer.Rectangle = t3;
-             rectangleViewer.Refresh();
-         }
-
-        private void testAlgorihm1()
-        {
-            Rectangle r1 = new Rectangle(50, 40);
-            Rectangle r2 = new Rectangle(30, 20);
-            Rectangle r3 = new Rectangle(20, 10);
-            Rectangle r4 = new Rectangle(50, 10);
-            Rectangle r5 = new Rectangle(51, 1);
-            List<Rectangle> rr = new List<Rectangle>();
-            rr.Add(r1);
-            rr.Add(r2);
-            rr.Add(r3);
-            rr.Add(r4);
-            rr.Add(r5);
-            //powinno dac wynik 50,50
-            Algorithm1 al = new Algorithm1();
-            Rectangle res = al.ComputeMaximumRectangle(rr);
-            System.Console.WriteLine(res.SideA + " " + res.SideB);
+            Rectangle t1 = new Rectangle(100, 200);
+            Rectangle t2 = new Rectangle(100, 200);
+            RectangleContainer rc = new RectangleContainer();
+            rc.InsertRectangle(t1, Rectangle.Orientation.Vertical);
+            rc.InsertRectangle(t2, new Point(90, 0), Rectangle.Orientation.Vertical);
+            Rectangle t3 = rc.MaxCorrectRect;
+            rectangles.Add(t1);
+            addRectangleToTreeView(t1);
+            rectangles.Add(t2);
+            addRectangleToTreeView(t2);
+            rectangleViewer.Rectangle = t3;
+            rectangleViewer.Refresh();
         }
 
         private void testAlgorithm2()
         {
-            Rectangle[] rects = new Rectangle[]{
+            Rectangle[] rects1 = new Rectangle[]{
                 new Rectangle(19, 44),
                 new Rectangle(20, 12),
                 new Rectangle(15, 42),
@@ -482,18 +495,35 @@ namespace Taio
                 new Rectangle(13, 11)
             };
 
-            List<Rectangle> rr = new List<Rectangle>();
-            rr.AddRange(rects);
+            Rectangle[] rects2 = new Rectangle[]{
+                new Rectangle(50, 40),
+                new Rectangle(30, 20),
+                new Rectangle(20, 10),
+                new Rectangle(50, 10),
+                new Rectangle(51, 1)
+            };
 
+            Rectangle[] rects = rects1;
+            rectangles.AddRange(rects);
 
-            foreach (Rectangle r in rr)
-                addRectangleToTreeView(r);
-            
             Algorithm2 al = new Algorithm2();
-            Rectangle res = al.ComputeMaximumRectangle(rr);
+            Rectangle res = al.ComputeMaximumRectangle(rectangles);
+            foreach (Rectangle r in res.ContainedRectangles)
+                addRectangleToTreeView(r);
             addSolution(new Solution(al.GetTag(), res));
+        } 
+
+        private void testAlgorihm1()
+        {
+            Rectangle r1 = new Rectangle(10, 12);
+            List<Rectangle> rr = new List<Rectangle>();
+            rr.Add(r1);
+
+            Algorithm1 al = new Algorithm1();
+            Rectangle res = al.ComputeMaximumRectangle(rr);
+            System.Console.WriteLine(res.SideA + " " + res.SideB);
         }
 
-        #endregion       
-     }
+        #endregion
+    }
 }

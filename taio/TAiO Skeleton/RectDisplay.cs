@@ -16,17 +16,18 @@ namespace Kontrolka_do_TAiO
     public partial class RectDisplay : UserControl
     {
         //upper right corner of rectangle - used only when creating one
-        private Point realValue = Point.Empty;
+        private DoublePoint realValue = new DoublePoint();
         //mouse position in real coordinate
-        private Point realMousePosition = Point.Empty;
+        private DoublePoint realMousePosition = new DoublePoint();
         //rectangle to display
         private Taio.Rectangle rectangle;
-       //list of extracted rectangles from complex rectangle
+        //list of extracted rectangles from complex rectangle
         private List<Taio.Rectangle> extractedRectangles;
         //maximum x and y coordinate to display, when scale = 1
         private int maxX, maxY;
         //scale
-        private double scale = 1;
+        private double scale = 0.25;
+        private double minScale = 0.125 / 4;
         //information whether user can create new rectangle
         private bool canDraw = true;
         //pen used to draw axis
@@ -34,7 +35,7 @@ namespace Kontrolka_do_TAiO
         //brush used to draw text under axis
         private Brush axisTextBrush = Brushes.Black;
         //font used to draw axis text
-        private Font axisTextFont; 
+        private Font axisTextFont;
         //whole control background color
         private Color backgroundColor = Color.White;
         //distance from axis to border of a whole control
@@ -50,6 +51,7 @@ namespace Kontrolka_do_TAiO
         //maximum possible scale
         private int maxScale = 256;
         private int indexOfRectangleToDisplay;
+        private int alfa = 175;
 
         public delegate void RectangleClickHandler(int rectId);
         public event RectangleClickHandler RectangleClicked;
@@ -64,7 +66,6 @@ namespace Kontrolka_do_TAiO
             this.mousePosition.BackColor = backgroundColor;
             this.splitContainer.Panel1.BackColor = backgroundColor;
             this.splitContainer.Panel2.BackColor = backgroundColor;
-            this.rectInfo.BackColor = backgroundColor;
             axisTextFont = new Font("Arial", 8);
         }
 
@@ -85,63 +86,64 @@ namespace Kontrolka_do_TAiO
         {
             if (rectangle != null)
                 DrawComplexRectangle(graph);
-            else
+            else if (!realValue.IsEmpty)
             {
-                Point endPoint = ConvertRealPostionToImagePosition(realValue);
-                graph.FillRectangle(Brushes.Red, xDrawingStartValue, endPoint.Y, endPoint.X - xDrawingStartValue,
-                    yDrawingStartValue - endPoint.Y);
-                graph.DrawRectangle(new Pen(GetColorInversion(Color.Red), 2), xDrawingStartValue, endPoint.Y, endPoint.X - xDrawingStartValue,
-                    yDrawingStartValue - endPoint.Y);
+                DoublePoint endPoint = ConvertRealPostionToImagePosition(realValue);
+                Color color = Color.FromArgb(alfa, 123, 231, 132);
+                graph.FillRectangle(new SolidBrush(color), xDrawingStartValue, (int)endPoint.Y,
+                    (int)endPoint.X - xDrawingStartValue, yDrawingStartValue - (int)endPoint.Y);
+                graph.DrawRectangle(new Pen(GetColorInversion(color), 2), xDrawingStartValue,
+                    (int)endPoint.Y, (int)endPoint.X - xDrawingStartValue,
+                    yDrawingStartValue - (int)endPoint.Y);
             }
         }
 
         //tries to get information about rectangle which is pointed by mouse pointer
         private void TrySetRectangleInfo()
         {
-            string textToDisplay = "";
-            if (realMousePosition != Point.Empty)
+            rectInfo.Items.Clear();
+            if (!realMousePosition.IsEmpty)
             {
-                if (realMousePosition.X >= 0 && realMousePosition.X <= realValue.X &&
-                    realMousePosition.Y >= 0 && realMousePosition.Y <= realValue.Y)
-                    textToDisplay = "(0,0) - (" + realValue.X + "," + realValue.Y + ")";
+                if (realMousePosition.X >= 0 && realMousePosition.X <= (int)realValue.X &&
+                    realMousePosition.Y >= 0 && realMousePosition.Y <= (int)realValue.Y)
+                    rectInfo.Items.Add("(0,0) - (" + (int)realValue.X + "," + (int)realValue.Y + ")");
                 else if (rectangle != null)
-                    textToDisplay = TrySetComplexRectangleInfo(realMousePosition.X,
+                    TrySetComplexRectangleInfo(realMousePosition.X,
                         realMousePosition.Y);
             }
-            rectInfo.Text = textToDisplay;            
         }
 
         //tries to get information about rectangle from complex rectangle which is pointed by mouse pointer
-        private String TrySetComplexRectangleInfo(int rX, int rY)
+        private void TrySetComplexRectangleInfo(float rX, float rY)
         {
-            String textToDisplay = "";
             for (int i = 0; i < extractedRectangles.Count; ++i)
             {
                 Taio.Rectangle rectangle = extractedRectangles[i];
                 if (rectangle.ContainedRectangles.Count == 0 && rectangle.LeftTop.X <= rX
-                    && rectangle.RightDown.X >= rX && rectangle.LeftTop.Y <= rY && rectangle.RightDown.Y >= rY)
+                    && rectangle.RightDown.X >= rX && rectangle.LeftTop.Y <= rY &&
+                    rectangle.RightDown.Y >= rY)
                 {
-                    textToDisplay += "(" + rectangle.LeftTop.X + "," + rectangle.LeftTop.Y + ") - (" +
-                        rectangle.RightDown.X + "," + rectangle.RightDown.Y + ")\n";
+                    rectInfo.Items.Add("(" + rectangle.LeftTop.X + "," + rectangle.LeftTop.Y + ") - (" +
+                        rectangle.RightDown.X + "," + rectangle.RightDown.Y + ")");
                     indexOfRectangleToDisplay = i;
                 }
             }
-            
-            return textToDisplay;
         }
 
         //draw complex rectangle
         private void DrawComplexRectangle(Graphics graph)
         {
-            for(int i=0;i<extractedRectangles.Count;++i)
+            for (int i = 0; i < extractedRectangles.Count; ++i)
             {
                 Taio.Rectangle rectangle = extractedRectangles[i];
-                Point leftTop = ConvertRealPostionToImagePosition(rectangle.LeftTop);
-                Point rightDown = ConvertRealPostionToImagePosition(rectangle.RightDown);
-                graph.FillRectangle(new SolidBrush(rectangle.Color), leftTop.X, rightDown.Y ,
-                    rightDown.X - leftTop.X, leftTop.Y - rightDown.Y);
+                DoublePoint leftTop = ConvertRealPostionToImagePosition(rectangle.LeftTop);
+                DoublePoint rightDown = ConvertRealPostionToImagePosition(rectangle.RightDown);
+                graph.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                graph.FillRectangle(new SolidBrush(rectangle.Color), (int)leftTop.X, (int)rightDown.Y,
+                    (int)rightDown.X - (int)leftTop.X, (int)leftTop.Y - (int)rightDown.Y);
                 graph.DrawRectangle(new Pen(new SolidBrush(GetColorInversion(rectangle.Color)), 2),
-                    leftTop.X, rightDown.Y, rightDown.X - leftTop.X, leftTop.Y - rightDown.Y);
+                    (int)leftTop.X, (int)rightDown.Y, (int)rightDown.X - (int)leftTop.X,
+                    (int)leftTop.Y - (int)rightDown.Y);
             }
         }
 
@@ -150,7 +152,7 @@ namespace Kontrolka_do_TAiO
             return Color.FromArgb(255 - color.R, 255 - color.G, 255 - color.B);
         }
 
-     //draw axis
+        //draw axis
         private void PaintAxis(Graphics graph)
         {
             //osie
@@ -165,8 +167,8 @@ namespace Kontrolka_do_TAiO
             Point[] axisEndX = new Point[3];
             Point[] axisEndY = new Point[3];
             axisEndX[0] = xStopPoint;
-            axisEndX[1] = new Point(xStopPoint.X - 5, xStopPoint.Y-5);
-            axisEndX[2] = new Point(xStopPoint.X - 5, xStopPoint.Y+5);
+            axisEndX[1] = new Point(xStopPoint.X - 5, xStopPoint.Y - 5);
+            axisEndX[2] = new Point(xStopPoint.X - 5, xStopPoint.Y + 5);
             axisEndY[0] = yStopPoint;
             axisEndY[1] = new Point(yStopPoint.X - 5, yStopPoint.Y + 5);
             axisEndY[2] = new Point(yStopPoint.X + 5, yStopPoint.Y + 5);
@@ -174,9 +176,9 @@ namespace Kontrolka_do_TAiO
             graph.FillPolygon(axisPen.Brush, axisEndY);
             //podpisy osi
             graph.DrawString("(0 ; 0)", axisTextFont, axisTextBrush, new Point(zeroPoint.X - 5, zeroPoint.Y));
-            graph.DrawString("(" + maxX * scale + " ; 0)", axisTextFont, axisTextBrush, 
+            graph.DrawString("(" + (int)(maxX * scale) + " ; 0)", axisTextFont, axisTextBrush,
                 new Point(xStopPoint.X - 45, xStopPoint.Y));
-            graph.DrawString("(0 ; " + maxY * scale + ")", axisTextFont, axisTextBrush, 
+            graph.DrawString("(0 ; " + (int)(maxY * scale) + ")", axisTextFont, axisTextBrush,
                 new Point(yStopPoint.X + 5, yStopPoint.Y));
         }
 
@@ -186,15 +188,15 @@ namespace Kontrolka_do_TAiO
             if (validMousePos && e.Button == MouseButtons.Left && canDraw)
                 this.realValue = realMousePosition;
             TrySetRectangleInfo();
-            this.Refresh();           
+            this.Refresh();
         }
 
         //display mouse coordinates in real coordinates, and check whether this coordinates are above axis
         private bool DisplayMousePosition(int mX, int mY)
         {
             bool validPosition = true;
-            int x = mX - xBorder;
-            int y = this.displayArea.Height - mY - 3 * yBorder;
+            float x = mX - xBorder;
+            float y = this.displayArea.Height - mY - 3 * yBorder;
             if (x < xDrawingStartValue - xBorder)
             {
                 x = 0;
@@ -215,82 +217,83 @@ namespace Kontrolka_do_TAiO
                 y = maxY;
                 validPosition = false;
             }
-            x =(int)(x * scale);
-            y =(int)(y * scale);
+            x = (float)(x * scale);
+            y = (float)(y * scale);
             if (validPosition)
-                realMousePosition = new Point(x, y);
+                realMousePosition = new DoublePoint(x, y);
             else
-                realMousePosition = Point.Empty;
-            this.mousePosition.Text = "(X, Y) = (" + x + ", " + y + ")";
+                realMousePosition = new DoublePoint();
+            this.mousePosition.Text = "(X, Y) = (" + (int)x + ", " + (int)y + ")";
             return validPosition;
         }
 
         //converts real coordinates to image coordinates
-        public Point ConvertRealPostionToImagePosition(Point realPos)
+        public DoublePoint ConvertRealPostionToImagePosition(DoublePoint realPos)
         {
-            double imgX, imgY;
-            imgX = realPos.X / scale + xBorder;
-            imgY = this.Height - realPos.Y / scale - 4 * yBorder;
-            return new Point((int)imgX, (int)imgY);
+            float imgX, imgY;
+            imgX = (float)((int)realPos.X / scale + xBorder);
+            imgY = (float)(this.Height - (int)realPos.Y / scale - 4 * yBorder);
+            return new DoublePoint(imgX, imgY);
         }
 
         #region Accessors
-        [Description("Background color of the whole control"), Category("Appearance")] 
+        [Description("Background color of the whole control"), Category("Appearance")]
         public Color BackgroundColor
         {
             get { return backgroundColor; }
             set { backgroundColor = value; }
         }
 
-        [Description("Font used to display text under axis"), Category("Appearance")] 
+        [Description("Font used to display text under axis"), Category("Appearance")]
         public Font AxisTextFont
         {
             get { return axisTextFont; }
             set { axisTextFont = value; }
         }
 
-        [Description("Brush used to display text"), Category("Appearance")] 
+        [Description("Brush used to display text"), Category("Appearance")]
         public Brush AxisTextBrush
         {
             get { return axisTextBrush; }
             set { axisTextBrush = value; }
         }
 
-        [Description("Distance from a border of a control"), Category("Appearance")] 
+        [Description("Distance from a border of a control"), Category("Appearance")]
         public int YBorder
         {
             get { return yBorder; }
             set { yBorder = value; }
         }
 
-        [Description("Information whether user can draw own rectangle"), Category("General")] 
+        [Description("Information whether user can draw own rectangle"), Category("General")]
         public bool CanDraw
         {
             get { return canDraw; }
             set { canDraw = value; }
         }
 
-        [Description("Distance from a border of a control"), Category("Appearance")] 
+        [Description("Distance from a border of a control"), Category("Appearance")]
         public int XBorder
         {
             get { return xBorder; }
             set { xBorder = value; }
         }
 
-        [Description("Pen used to draw axis"), Category("Appearance")] 
+        [Description("Pen used to draw axis"), Category("Appearance")]
         public Pen AxisPen
         {
             get { return axisPen; }
             set { axisPen = value; }
         }
 
-        [Description("Rectangle created by a user, or rectangle which should be draw on a control"), Category("General")] 
+        [Description("Rectangle created by a user, or rectangle which should be draw on a control"),
+        Category("General")]
         internal Taio.Rectangle Rectangle
         {
             get
             {
-                int sideA = realValue.X;
-                int sideB = realValue.Y;
+                int sideA = (int)realValue.X;
+                int sideB = (int)realValue.Y;
                 if (sideA == 0 || sideB == 0)
                     return null;
                 return new Taio.Rectangle(sideA, sideB);
@@ -303,16 +306,24 @@ namespace Kontrolka_do_TAiO
                     extractedRectangles = new List<Taio.Rectangle>();
                     ExtractRectangles(value);
                     SetColors();
+                    int max = (this.maxX < this.maxY) ? maxX : maxY;
+                    if (value.LongerSide > max * scale)
+                        while (value.LongerSide > max * scale && scale <=maxScale)
+                            scale *= 2;
+                    if (value.LongerSide < max * scale / 2)
+                        while (value.LongerSide < max * scale / 2 && scale >= minScale)
+                            scale /= 2;
                     if (value.ContainedRectangles.Count == 0)
                     {
-                        realValue = new Point(value.RightDown.X, value.RightDown.Y);
+                        realValue = new DoublePoint(value.RightDown.X, value.RightDown.Y);
+                        canDraw = true;
                     }
                     else
                     {
                         rectangle = value;
                         canDraw = false;
                     }
-                }                
+                }
             }
         }
         #endregion
@@ -326,10 +337,9 @@ namespace Kontrolka_do_TAiO
             int current = rand.Next(MYSTERIOUS_VALUE);
             for (int i = 0; i < extractedRectangles.Count; ++i, current = (current + step) % (MYSTERIOUS_VALUE))
             {
-                extractedRectangles[i].Color = Color.FromArgb((current >> 16) % 256, 
+                extractedRectangles[i].Color = Color.FromArgb(alfa, (current >> 16) % 256,
                     (current >> 8) % 256, current % 256);
             }
-
         }
 
         private void ExtractRectangles(Taio.Rectangle rectangle)
@@ -357,7 +367,7 @@ namespace Kontrolka_do_TAiO
 
         private void displayArea_MouseClick(object sender, MouseEventArgs e)
         {
-            if (rectangle != null)
+            if (rectangle != null && this.rectInfo.Items.Count > 0)
             {
                 Taio.Rectangle rect = extractedRectangles[indexOfRectangleToDisplay];
                 RectangleClicked(rect.Number);
@@ -366,12 +376,19 @@ namespace Kontrolka_do_TAiO
             }
         }
 
+        public void Clear()
+        {
+            this.rectangle = null;
+            this.realValue = new DoublePoint();
+            this.Refresh();
+        }
+
         public void ZoomIn()
         {
-            if (scale >= 0.125 / 4)
+            if (scale >= minScale)
             {
                 scale /= 2;
-                if (scale == 0.125 / 4)
+                if (scale == minScale)
                     this.zoomIn.Enabled = false;
                 this.zoomOut.Enabled = true;
                 this.Refresh();
@@ -387,6 +404,43 @@ namespace Kontrolka_do_TAiO
                     this.zoomOut.Enabled = false;
                 this.zoomIn.Enabled = true;
                 this.Refresh();
+            }
+        }
+
+        public class DoublePoint
+        {
+            float x, y;
+            bool isEmpty;
+
+            public bool IsEmpty
+            {
+                get { return isEmpty; }
+            }
+
+            public DoublePoint()
+            {
+                isEmpty = true;
+            }
+
+            public DoublePoint(float x, float y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+
+            public float Y
+            {
+                get { return y; }
+            }
+
+            public float X
+            {
+                get { return x; }
+            }
+
+            public static implicit operator DoublePoint(Point f)
+            {
+                return new DoublePoint((float)f.X, (float)f.Y);
             }
         }
     }

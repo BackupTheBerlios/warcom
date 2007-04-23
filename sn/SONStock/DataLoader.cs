@@ -203,7 +203,7 @@ namespace SONStock
             if (elmanNet == null ||
                 elmanNet.NumberOfEntryNeurons != entryLayerSize ||
                 elmanNet.NumberOfExitNeurons != exitLayerSize)
-                elmanNet = new ElmansNetwork(entryLayerSize, hiddenLayerSize, exitLayerSize);
+                elmanNet = new ElmansNetwork(entryLayerSize, hiddenLayerSize, exitLayerSize, false);
 
             double[] val = new double[entryLayerSize];
             double[] correct = new double[exitLayerSize];

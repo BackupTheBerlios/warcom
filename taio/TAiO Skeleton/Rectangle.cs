@@ -7,8 +7,8 @@ namespace Taio
 {
     class Rectangle : IComparable<Rectangle>
     {
-        private Point leftTop;
-        private Point rightDown;
+        protected Point leftTop;
+        protected Point rightDown;
         private List<Rectangle> containedRectangles;
         private Rectangle parentRectangle;
         private Color color;
@@ -48,7 +48,7 @@ namespace Taio
         /// <param name="number">Rectangle's number</param>
         public Rectangle(int sideA, int sideB, Point leftTop, int number)
             : this(sideA, sideB, leftTop, number, null) { }
-        
+
 
         /// <summary>
         /// 
@@ -65,7 +65,7 @@ namespace Taio
         /// </summary>
         /// <param name="sideA">"Top/bottom" side's length</param>
         /// <param name="sideB">"Left/right" side's length</param>
-        public Rectangle(int sideA, int sideB) 
+        public Rectangle(int sideA, int sideB)
             : this(sideA, sideB, new Point(0, 0)) { }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Taio
                 throw new ArgumentException("Incorrect rectangle left-top coordinates");
             if (rightDown.X < 0 || rightDown.Y < 0)
                 throw new ArgumentException("Incorrect rectangle right-down coordinates");
-            if(leftTop.X >= rightDown.X || leftTop.Y >= rightDown.Y)
+            if (leftTop.X >= rightDown.X || leftTop.Y >= rightDown.Y)
                 throw new ArgumentException("Incorrect rectangle coordinates");
 
             this.leftTop = new Point(leftTop.X, leftTop.Y);
@@ -236,7 +236,7 @@ namespace Taio
                     (new Point(resLTx, resLTy), new Point(resRDx, resRDy)));
 
             return results;
-        } 
+        }
         #endregion
 
         #region Edition
@@ -261,7 +261,7 @@ namespace Taio
         /// <param name="sideA">New sideA length</param>
         /// <param name="sideB">New sideB length</param>
         /// <returns>Resized rectangle</returns>
-        public Rectangle Resize(int sideA, int sideB)
+        private Rectangle Resize(int sideA, int sideB)
         {
             if (sideA <= 0 || sideB <= 0)
                 throw new ArgumentException("Incorrect side");
@@ -279,8 +279,37 @@ namespace Taio
         /// <returns>Rotated rectangle</returns>
         public Rectangle Rotate()
         {
-            Resize(new Point(this.leftTop.X + this.SideB, this.leftTop.Y + this.SideA));
+            //Resize(new Point(this.leftTop.X + this.SideB, this.leftTop.Y + this.SideA));
+
+            Point oldLT = new Point(leftTop.X, leftTop.Y);
+            Move(new Point(0, 0));
+            Resize(new Point(rightDown.Y, rightDown.X));
+            Move(oldLT);
+
+            foreach (Rectangle r in containedRectangles)
+                r.RotateChild();
+
             return this;
+        }
+
+        private void RotateChild()
+        {
+            Point transp = new Point(rightDown.Y, leftTop.X);
+            Move(new Point(0, 0));
+            Point nLT = new Point(-RightDown.Y, LeftTop.X);
+            Point nRD = new Point(-LeftTop.Y, RightDown.X);
+
+            nLT.X += transp.X;
+            nLT.Y += transp.Y;
+
+            nRD.X += transp.X;
+            nRD.Y += transp.Y;
+
+            Move(nLT);
+            Resize(nRD);
+
+            foreach (Rectangle r in containedRectangles)
+                r.RotateChild();
         }
 
         /// <summary>
@@ -431,6 +460,7 @@ namespace Taio
         }
         #endregion
 
+        #region Comparing
 
         public int CompareTo(Rectangle rhs)
         {
@@ -496,16 +526,18 @@ namespace Taio
             }
         }
 
+        #endregion
+
         public override String ToString()
         {
-            return "#"+this.number + ": "+  this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
+            return "#" + this.number + ": " + this.LeftTop + ", " + this.RightDown + "; area: " + this.Area;
         }
 
         /// <summary>
         /// Rectangle's orientation
         /// </summary>
         public enum Orientation
-        { 
+        {
             /// <summary>
             /// Rectangle's SideA is not shorten than SideB
             /// </summary>
@@ -516,6 +548,6 @@ namespace Taio
             Vertical
         }
 
-        
+
     }
 }

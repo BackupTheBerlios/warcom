@@ -21,7 +21,7 @@ namespace Taio
         {
             this.rectangles = new List<Rectangle>();
             this.emptyFields = new List<Rectangle>();
-        } 
+        }
         #endregion
 
         #region Accessors
@@ -63,6 +63,44 @@ namespace Taio
         public bool IsCorrectRectangle
         {
             get { return isCorrectRectangle; }
+        }
+
+        public Rectangle SmallestEmptyField
+        {
+            get
+            {
+                Rectangle res = null;
+                int area = Int32.MaxValue;
+                foreach (Rectangle r in emptyFields)
+                {
+                    if (r != null)
+                        if (area > r.Area)
+                        {
+                            res = r;
+                            area = r.Area;
+                        }
+                }
+                return res;
+            }
+        }
+
+        public Rectangle LargestEmptyField
+        {
+            get
+            {
+                Rectangle res = null;
+                int area = 0;
+                foreach (Rectangle r in emptyFields)
+                {
+                    if (r != null)
+                        if (area < r.Area)
+                        {
+                            res = r;
+                            area = r.Area;
+                        }
+                }
+                return res;
+            }
         }
 
         /// <summary>
@@ -109,7 +147,7 @@ namespace Taio
         {
             InsertRectangle(r, r.LeftTop);
         }
-        
+
         /// <summary>
         /// Insert rectangle to the container
         /// </summary>
@@ -145,7 +183,7 @@ namespace Taio
         public void InsertRectangle(Rectangle r, Point rLeftTop, Rectangle.Orientation o)
         {
             InsertRectangleCheckParameters(r, rLeftTop);
-         
+
             if (o.Equals(Rectangle.Orientation.Horizontal) && r.SideA < r.SideB)
                 r.Rotate();
             else if (o.Equals(Rectangle.Orientation.Vertical) && r.SideA > r.SideB)
@@ -155,7 +193,7 @@ namespace Taio
                 FirstRectanglePreparation(r);
             else
                 r.Move(rLeftTop);
-            
+
             rectangles.Add(r);
 
             //jesli to byl pierwszy prostakat wszystko jest dobrze - nie trzeba tego robic
@@ -164,7 +202,7 @@ namespace Taio
                 // spr. czy po dodaniu wciaz prawidlowy prostokat
                 if (isCorrectRectangle)
                 {
-                        // doklejamy od dolu prostokata
+                    // doklejamy od dolu prostokata
                     if (r.LeftTop.X == maxCorrectRect.LeftTop.X &&
                         r.RightDown.X == maxCorrectRect.RightDown.X &&
                         r.LeftTop.Y <= maxCorrectRect.RightDown.Y)
@@ -242,7 +280,7 @@ namespace Taio
         {
             maxCorrectRect.Resize(insertedRectangle.RightDown);
             insertedRectangle.SetParentRectangle(maxCorrectRect);
-                        
+
             maxPossibleRect.Resize(insertedRectangle.RightDown);
         }
 
@@ -350,7 +388,7 @@ namespace Taio
                 {
                     Rectangle temp = nEmpEnum.Current;
                     List<Rectangle> tempEmpties = temp.Subtract(insertedRectangle);
-                    if (tempEmpties.Count>0)
+                    if (tempEmpties.Count > 0)
                         emptyFields.AddRange(tempEmpties);
                 }
             }

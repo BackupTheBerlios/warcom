@@ -16,7 +16,7 @@ namespace Taio
         private Rectangle.RectangleComparer rectComparer = Rectangle.GetComparer();
 
 
-        private enum GettingMethodType { Largest, Smallest, Longest, LimitedLongest, SmallestCovering };
+        private enum GettingMethodType { Largest, Smallest, Longest, LimitedLongest, SmallestCovering, SmallestNotShorterThan };
 
         public RectanglesList(List<Rectangle> rectangles)
         {
@@ -45,11 +45,14 @@ namespace Taio
             sRects.Reverse();
         }
 
+        //jak z perspektywy czasu patrzê na to, myœlê, ¿e to chyba by³ g³upi pomys³ (przez to, ¿e potem okaza³o siê, ze potrzebne s¹ metody, które przyjmuja argumenty)
         /// <summary>
         /// 
         /// </summary>
         /// <param name="gmt"></param>
-        /// <param name="gettingMethodArgument">Additional method parameter. If gmt is LimitedLongest it should be maxSideLength, if SmallestCovering - rectangle to cover. Otherwise it is unused.</param>
+        /// <param name="gettingMethodArgument">Additional method parameter.
+        /// If gmt is LimitedLongest it should be maxSideLength, if SmallestCovering - rectangle to cover, if SmallestNotShorterThan - minSideLength.
+        /// Otherwise it is unused.</param>
         /// <returns></returns>
         private Rectangle GetRectangleFromList(GettingMethodType gmt, object gettingMethodArgument)
         {
@@ -80,6 +83,13 @@ namespace Taio
                             throw new ArgumentException();
                         r = (Rectangle)gettingMethodArgument;
                         result = PeekSmallestCovering(r.SideA, r.SideB);
+                        break;
+                    case GettingMethodType.SmallestNotShorterThan:
+                        int minSideLength = 0;
+                        if (gettingMethodArgument == null || gettingMethodArgument.GetType() != minSideLength.GetType())
+                            throw new ArgumentException();
+                        minSideLength = (int)gettingMethodArgument;
+                        result = PeekSmallestNotShorterThan(minSideLength);
                         break;
                 }
 
@@ -222,6 +232,56 @@ namespace Taio
             return GetRectangleFromList(GettingMethodType.LimitedLongest, maxSideLength);
         }
 
+        /// <summary>
+        /// Returns the smallest rectangle with longer side not shorter than given value without removing it from lists.
+        /// </summary>
+        /// <param name="minSide"></param>
+        /// <returns></returns>
+        public Rectangle PeekSmallestNotShorterThan(int minSide)
+        {
+            if (minSide <= 0)
+                throw new ArgumentException();
+
+            Rectangle result = null;
+
+            List<Rectangle> temp = new List<Rectangle>();
+            foreach (Rectangle r in sRects)
+            {
+                if (r.LongerSide >= minSide)
+                        temp.Add(r);
+                else
+                    break;
+            }
+
+            if (temp.Count == 0)
+                return result;
+
+            if (temp.Count > 1)
+            {
+                rectComparer.Comparison = Rectangle.RectangleComparer.ComparisonType.Area;
+                temp.Sort(rectComparer);
+            }
+            result = temp[0];
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns the smallest rectangle with longer side not shorter than given value and removes it from lists.
+        /// </summary>
+        /// <param name="minSide"></param>
+        /// <returns></returns>
+        public Rectangle GetSmallestNotShorterThan(int minSide)
+        {
+            return GetRectangleFromList(GettingMethodType.SmallestNotShorterThan, minSide);
+        }
+
+        /// <summary>
+        /// Returns the smallest rectangle covering a rectangle with given sides without removing it from lists.
+        /// </summary>
+        /// <param name="sideA"></param>
+        /// <param name="sideB"></param>
+        /// <returns></returns>
         public Rectangle PeekSmallestCovering(int sideA, int sideB)
         {
             if (sideA <= 0 || sideB <= 0)
@@ -266,6 +326,12 @@ namespace Taio
             return result;
         }
 
+        /// <summary>
+        /// Returns the smallest rectangle covering a rectangle with given sides and removes it from lists.
+        /// </summary>
+        /// <param name="sideA"></param>
+        /// <param name="sideB"></param>
+        /// <returns></returns>
         public Rectangle GetSmallestCovering(int sideA, int sideB)
         {
             return GetRectangleFromList(GettingMethodType.SmallestCovering, new Rectangle(sideA, sideB));

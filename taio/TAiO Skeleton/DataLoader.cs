@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Taio
 {
@@ -135,7 +136,7 @@ namespace Taio
                         counter++;
                     if (counter == 3)
                     {
-                        if(str.StartsWith("#"))
+                        if (str.StartsWith("#"))
                             del = false;
                         Match elem = wyr.Match(str);
                         if (elem.Success)
@@ -210,10 +211,19 @@ namespace Taio
                         CaptureCollection y2 = elem.Groups["y2"].Captures;
                         List<Rectangle> rects = new List<Rectangle>();
                         for (int i = 0; i < x1.Count; ++i)
-                            rects.Add(new Rectangle(new System.Drawing.Point(Int32.Parse(x1[i].Value), Int32.Parse(y1[i].Value)),
-                                                    new System.Drawing.Point(Int32.Parse(x2[i].Value), Int32.Parse(y2[i].Value))));
-                        
-                        //TODO tutaj nie dzia³a kontener tak jak nale¿y
+                        {
+                            Rectangle rect = new Rectangle(new Point(Int32.Parse(x1[i].Value), Int32.Parse(y1[i].Value)),
+                                    new Point(Int32.Parse(x2[i].Value), Int32.Parse(y2[i].Value)));
+                            if (rects.Count == 0 ||
+                                    rect.LeftTop.X <= rects[0].LeftTop.X && rect.LeftTop.Y <= rects[0].LeftTop.Y)
+                                rects.Insert(0, rect);
+                            else
+                                rects.Add(rect);
+                        }
+                        if (rects.Count > 0 && (rects[0].LeftTop.X != 0 || rects[0].LeftTop.Y != 0))
+                            for (int i = rects.Count - 1; i >= 0; --i)
+                                rects[i] = rects[i].Move(new Point(rects[i].LeftTop.X - rects[0].LeftTop.X,
+                                                                rects[i].LeftTop.Y - rects[0].LeftTop.Y));
                         RectangleContainer rc = new RectangleContainer();
                         rc.InsertRectangles(rects);
                         if (!rc.IsCorrectRectangle)
@@ -238,7 +248,7 @@ namespace Taio
         #region append data to file
         private void AppendRectangle(Rectangle rect, TextWriter wr)
         {
-            if (rect.ContainedRectangles == null || rect.ContainedRectangles.Count==0)
+            if (rect.ContainedRectangles == null || rect.ContainedRectangles.Count == 0)
                 wr.WriteLine(rect.LeftTop.X + "," + rect.LeftTop.Y + "," +
                     rect.RightDown.X + "," + rect.RightDown.Y);
             else
@@ -295,6 +305,7 @@ namespace Taio
                     {
                         flags[j] = true;
                         flag = true;
+                        break;
                     }
             }
             return flag;
@@ -319,7 +330,7 @@ namespace Taio
         {
             if (rect == null)
                 return true;
-            if (rect.ContainedRectangles != null && rect.ContainedRectangles.Count>0)
+            if (rect.ContainedRectangles != null && rect.ContainedRectangles.Count > 0)
             {
                 for (int i = 0; i < rect.ContainedRectangles.Count; ++i)
                     if (!this.CheckCorrect(rect.ContainedRectangles[i], rectangles, ref flags))

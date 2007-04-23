@@ -27,21 +27,23 @@ namespace SONStock
 
         private void NetworkTest()
         {
-            elmanNet = new ElmansNetwork(5, 2, 1);
+            elmanNet = new ElmansNetwork(5, 2, 1, false);
             double[] learn = new double[] { 1, 2, 3, 4, 5 };
             double[] correct = new double[] { 6 };
             //double[] test = new double[] { 7, 7, 7, 7, 7 };
             double[] test = new double[] { 1, 2, 3, 4, 5 };
             double oMin, oMax;
             this.data.Normalize(ref learn, ref correct, out oMin, out oMax);
-            //for(int i=0;i<100;++i)
-                elmanNet.Learn(learn, correct);
+            for(int i=0;i<100;++i)
+            {   elmanNet.Learn(learn, correct);
+                }
             learn = new double[] { 6, 7, 8, 9, 10 };
             correct = new double[] { 11 };
             this.data.Normalize(ref learn, ref correct, out oMin, out oMax);
-            elmanNet.Learn(learn, correct);
+            //elmanNet.Learn(learn, correct);
             this.data.Normalize(ref test, out oMin, out oMax);
             double[] exit = elmanNet.ComputeExitValues(test);
+           // MessageBox.Show(exit[0].ToString());
             this.data.DeNormalize(ref exit, oMin, oMax);
             this.exitValuesMatrixPreview.BuildControl(exit);
         }
