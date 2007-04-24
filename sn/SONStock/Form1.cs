@@ -108,26 +108,25 @@ namespace SONStock
                 return;
             }
 
-            /*this.chooseLearningDataForm.LoadData(data.Data);
+            this.chooseLearningDataForm.LoadData(data.Data);
             if (chooseLearningDataForm.ShowDialog() == DialogResult.OK)
             {
-                DateTime initialDate = chooseLearningDataForm.InitialDate;
+                //DateTime initialDate = chooseLearningDataForm.InitialDate;
+                int initialDateIndex = chooseLearningDataForm.InitialDateIndex;
                 int learningDataSetSize = chooseLearningDataForm.LearningDataSetSize;
+                
                 List<DateTime> toRemove = new List<DateTime>();
-                bool before = true, after = false;
+                //bool before = true, after = false;
                 int counter = 0;
-                foreach (DateTime dt in data.Data)
+                foreach (DateTime dt in data.Data.Keys)
                 {
-
-                    if (dt.Equals(initialDate))
-                    {
-                        before = true;
-                        counter++;
-                        continue;
-                    }
-
+                    if (counter < initialDateIndex || counter >= initialDateIndex + learningDataSetSize)
+                        toRemove.Add(dt);
+                    counter++;
                 }
-            }*/
+
+                data.RemoveData(toRemove);
+            }
         }
 
         private void modifyNetworkToolStripMenuItem_Click(object sender, EventArgs e)
