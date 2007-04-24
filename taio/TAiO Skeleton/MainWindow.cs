@@ -10,6 +10,7 @@ using System.Threading;
 using Taio.Algorithms;
 using System.Diagnostics;
 using System.IO;
+using System.Resources;
 
 namespace Taio
 {
@@ -34,6 +35,7 @@ namespace Taio
             //testDrawingComplexRects();
             //testAlgorihm1();
             //testAlgorithm2();
+            this.ChangeColor();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -56,7 +58,7 @@ namespace Taio
             Solution s = new Solution(this.algorithm.GetTag(), this.algorithm.GetRectangle());
             for (int i = 0; i < this.solutions.Count; ++i)
             {
-                if (this.solutions[i].Tag == s.Tag)
+                if (this.solutions[i].Tag == s.Tag && i < this.rectanglesTreeView.Nodes[1].Nodes.Count)
                 {
                     index = i;
                     this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[1].Nodes[i];
@@ -83,6 +85,20 @@ namespace Taio
                 this.algorithm.ComputeMaximumRectangle(this.rectangles);
         }
 
+        private void ChangeColor()
+        {
+            this.BackColor = Properties.Settings.Default.color;
+            this.menuStrip1.BackColor = Properties.Settings.Default.color;
+            foreach (ToolStripMenuItem tsmi in this.menuStrip1.Items)
+                foreach (ToolStripItem tsi in tsmi.DropDownItems)
+                {
+                    tsi.BackColor = this.BackColor;
+                }
+            this.rectanglesContextMenuStrip.BackColor = this.BackColor;
+            this.rectangleViewer.ChangeColor();
+            this.toolStripSeparator1.BackColor = this.BackColor;
+        }
+
         private void EnableMenu(bool flag)
         {
             this.openFileToolStripMenuItem.Enabled = flag;
@@ -100,7 +116,22 @@ namespace Taio
         #region Menu
         private void newFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.rectangleViewer.Clear();
+            rectangles.Clear();
+            solutions.Clear();
+            this.rectanglesTreeView.Nodes[0].Nodes.Clear();
+            this.rectanglesTreeView.Nodes[1].Nodes.Clear();
+        }
+
+        private void colorChangeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.colorDialog1.Color = this.BackColor;
+            if (this.colorDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Properties.Settings.Default.color = this.colorDialog1.Color;
+                Properties.Settings.Default.Save();
+                this.ChangeColor();
+                this.Invalidate();
+            }
         }
 
         private void DrawToolStripMenuItem_Click(object sender, EventArgs e)
@@ -163,8 +194,21 @@ namespace Taio
             ArgumentDialog ad = new ArgumentDialog();
             if (ad.ShowDialog() == DialogResult.OK)
             {
-                this.rectangles = this.dataLoader.RandomRectangles(ad.Count, ad.Max);
+                this.rectangles = this.dataLoader.RandomRectangles(ad.Count, ad.Max, ad.Min);
                 this.solutions.Clear();
+                this.rectanglesTreeView.Nodes[0].Nodes.Clear();
+                this.rectanglesTreeView.Nodes[1].Nodes.Clear();
+                addRectanglesOnlyToView();
+                addSolutionsOnlyToView();
+            }
+        }
+
+        private void randomAddRectanglesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ArgumentDialog ad = new ArgumentDialog();
+            if (ad.ShowDialog() == DialogResult.OK)
+            {
+                this.rectangles.AddRange(this.dataLoader.RandomRectangles(ad.Count, ad.Max, ad.Min));
                 this.rectanglesTreeView.Nodes[0].Nodes.Clear();
                 this.rectanglesTreeView.Nodes[1].Nodes.Clear();
                 addRectanglesOnlyToView();
@@ -372,7 +416,7 @@ namespace Taio
                 for (i = 0; i < this.rectangles.Count; ++i)
                     if (rectangles[i].Number == rectId)
                         break;
-                if (i < this.rectangles.Count)
+                if (i < this.rectangles.Count && i < this.rectanglesTreeView.Nodes[0].Nodes.Count)
                 {
                     this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[0].Nodes[i];
                     this.rectanglesTreeView.Refresh();
@@ -525,5 +569,7 @@ namespace Taio
         }
 
         #endregion
+
+
     }
 }
