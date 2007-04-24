@@ -282,7 +282,7 @@ namespace SONStock
 
         public void Learn(double[] entryValues, double[] correctExits)
         {
-            if (entryValues.Length != this.entryValues.Length -1 ||
+            if (entryValues.Length != this.NumberOfEntryNeurons ||
                 correctExits.Length != this.exitValues.Length)
                 throw new Exception("Z³y rozmiar danych wejœciowych lub danych wyjœciowych");
             
