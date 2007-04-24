@@ -45,7 +45,6 @@ namespace Taio
             this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveSolutionFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rectanglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,7 +106,7 @@ namespace Taio
             treeNode2});
             this.rectanglesTreeView.Size = new System.Drawing.Size(255, 414);
             this.rectanglesTreeView.TabIndex = 0;
-            this.toolTip.SetToolTip(this.rectanglesTreeView, "Lista prostok¹tów");
+            this.toolTip.SetToolTip(this.rectanglesTreeView, "Lista prostok¹tów i rozwi¹zañ");
             this.rectanglesTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rectanglesTreeView_NodeMouseClick);
             // 
             // rectanglesContextMenuStrip
@@ -122,7 +121,7 @@ namespace Taio
             // 
             this.addRectangleToolStripMenuItem.Name = "addRectangleToolStripMenuItem";
             this.addRectangleToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
-            this.addRectangleToolStripMenuItem.Text = "Dodaj prostok¹t";
+            this.addRectangleToolStripMenuItem.Text = "Dodaj do listy";
             this.addRectangleToolStripMenuItem.Click += new System.EventHandler(this.addRectangleToolStripMenuItem_Click);
             // 
             // removeRectangleToolStripMenuItem
@@ -180,7 +179,7 @@ namespace Taio
             this.addRectbutton.Name = "addRectbutton";
             this.addRectbutton.Size = new System.Drawing.Size(108, 23);
             this.addRectbutton.TabIndex = 0;
-            this.addRectbutton.Text = "Dodaj prostok¹t";
+            this.addRectbutton.Text = "Dodaj do listy";
             this.addRectbutton.UseVisualStyleBackColor = true;
             this.addRectbutton.Click += new System.EventHandler(this.addRectangleToolStripMenuItem_Click);
             // 
@@ -192,7 +191,6 @@ namespace Taio
             this.newFileToolStripMenuItem,
             this.openFileToolStripMenuItem,
             this.saveFileToolStripMenuItem,
-            this.saveSolutionFileToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.fileMenuItem.Name = "fileMenuItem";
@@ -204,7 +202,7 @@ namespace Taio
             // 
             this.newFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
-            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.newFileToolStripMenuItem.Text = "Nowy";
             this.newFileToolStripMenuItem.Click += new System.EventHandler(this.newFileToolStripMenuItem_Click);
             // 
@@ -212,7 +210,7 @@ namespace Taio
             // 
             this.openFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.openFileToolStripMenuItem.Text = "Otwórz";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
@@ -220,28 +218,19 @@ namespace Taio
             // 
             this.saveFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
-            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveFileToolStripMenuItem.Text = "Zapisz";
             this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
-            // 
-            // saveSolutionFileToolStripMenuItem
-            // 
-            this.saveSolutionFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.saveSolutionFileToolStripMenuItem.Name = "saveSolutionFileToolStripMenuItem";
-            this.saveSolutionFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
-            this.saveSolutionFileToolStripMenuItem.Text = "Zapisz rozwi¹zanie";
-            this.saveSolutionFileToolStripMenuItem.Click += new System.EventHandler(this.saveSolutionFileToolStripMenuItem_Click);
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(171, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Wyjœcie";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -341,20 +330,6 @@ namespace Taio
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // randomAddRectanglesToolStripMenuItem
-            // 
-            this.randomAddRectanglesToolStripMenuItem.Name = "randomAddRectanglesToolStripMenuItem";
-            this.randomAddRectanglesToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.randomAddRectanglesToolStripMenuItem.Text = "Dodanie danych losowych";
-            this.randomAddRectanglesToolStripMenuItem.Click += new System.EventHandler(this.randomAddRectanglesToolStripMenuItem_Click);
-            // 
-            // colorChangeToolStripMenuItem
-            // 
-            this.colorChangeToolStripMenuItem.Name = "colorChangeToolStripMenuItem";
-            this.colorChangeToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.colorChangeToolStripMenuItem.Text = "Zmiana koloru";
-            this.colorChangeToolStripMenuItem.Click += new System.EventHandler(this.colorChangeToolStripMenuItem_Click);
-            // 
             // rectangleViewer
             // 
             this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
@@ -370,6 +345,21 @@ namespace Taio
             this.rectangleViewer.YBorder = 5;
             this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
             // 
+
+            // randomAddRectanglesToolStripMenuItem
+            // 
+            this.randomAddRectanglesToolStripMenuItem.Name = "randomAddRectanglesToolStripMenuItem";
+            this.randomAddRectanglesToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.randomAddRectanglesToolStripMenuItem.Text = "Dodanie danych losowych";
+            this.randomAddRectanglesToolStripMenuItem.Click += new System.EventHandler(this.randomAddRectanglesToolStripMenuItem_Click);
+            // 
+            // colorChangeToolStripMenuItem
+            // 
+            this.colorChangeToolStripMenuItem.Name = "colorChangeToolStripMenuItem";
+            this.colorChangeToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.colorChangeToolStripMenuItem.Text = "Zmiana koloru";
+            this.colorChangeToolStripMenuItem.Click += new System.EventHandler(this.colorChangeToolStripMenuItem_Click);
+            //
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -413,7 +403,6 @@ namespace Taio
         private System.Windows.Forms.ToolStripMenuItem newFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveSolutionFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rectanglesToolStripMenuItem;

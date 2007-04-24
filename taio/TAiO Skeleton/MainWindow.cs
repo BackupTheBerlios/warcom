@@ -105,7 +105,6 @@ namespace Taio
             this.preciseSolutionToolStripMenuItem.Enabled = flag;
             this.randomRectanglesToolStripMenuItem.Enabled = flag;
             this.saveFileToolStripMenuItem.Enabled = flag;
-            this.saveSolutionFileToolStripMenuItem.Enabled = flag;
             this.newFileToolStripMenuItem.Enabled = flag;
             this.newRectanglesToolStripMenuItem.Enabled = flag;
             this.algorithm1SolutionToolStripMenuItem.Enabled = flag;
@@ -116,8 +115,11 @@ namespace Taio
         #region Menu
         private void newFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rectangles.Clear();
-            solutions.Clear();
+            // czyszczone listy
+            this.rectanglesTreeView.Nodes[0].Nodes.Clear();
+            this.rectanglesTreeView.Nodes[1].Nodes.Clear();            
+            this.rectangles.Clear();
+            this.solutions.Clear();
             this.rectangleViewer.Clear();
             this.rectanglesTreeView.Nodes[0].Nodes.Clear();
             this.rectanglesTreeView.Nodes[1].Nodes.Clear();
@@ -158,11 +160,6 @@ namespace Taio
             this.dataLoader.SaveData(this.solutions, this.rectangles);
         }
 
-        private void saveSolutionFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.dataLoader.SaveData(this.solutions, this.rectangles);
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (this.algorithm != null)
@@ -187,7 +184,9 @@ namespace Taio
 
         private void newRectanglesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            this.rectanglesTreeView.SelectedNode = null;
+            viewRectangle(null, null);
+            this.rectangleViewer.Clear();
         }
 
         private void randomRectanglesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -287,11 +286,6 @@ namespace Taio
         #endregion
 
         #region Przyciski
-        private void startAlgorithm_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void stopAlgorithm_Click(object sender, EventArgs e)
         {
             if (this.algorithm != null)
@@ -310,7 +304,11 @@ namespace Taio
 
             // dodawanie do listy prostok¹tów 
             this.rectanglesTreeView.Nodes[0].Nodes.Add(node);
-
+            this.rectanglesTreeView.SelectedNode = this.rectanglesTreeView.Nodes[0].Nodes[count-1];
+            TreeNodeMouseClickEventArgs eventArg = new TreeNodeMouseClickEventArgs(this.rectanglesTreeView.SelectedNode,
+                MouseButtons.Left, 1, 0, 0);
+            rectanglesTreeView_NodeMouseClick(this, eventArg);
+            
             return node;
         }
 
@@ -329,7 +327,7 @@ namespace Taio
                     rectangles.RemoveAt(index);
                     this.rectanglesTreeView.Nodes[0].Nodes.RemoveAt(index);
                     if (this.rectanglesTreeView.Nodes[0].Nodes.Count == 0)
-                        viewRectangle(null, null);
+                        this.rectangleViewer.Clear();
                     indexChange(index);
                 }
                 else if (this.rectanglesTreeView.SelectedNode.Parent.Name.Equals("Solutions"))
@@ -337,8 +335,12 @@ namespace Taio
                     solutions.RemoveAt(index);
                     this.rectanglesTreeView.Nodes[1].Nodes.RemoveAt(index);
                     if (this.rectanglesTreeView.Nodes[1].Nodes.Count == 0)
-                        viewRectangle(null, null);
+                        this.rectangleViewer.Clear(); 
                 }
+
+                TreeNodeMouseClickEventArgs eventArg = new TreeNodeMouseClickEventArgs(this.rectanglesTreeView.SelectedNode,
+                                MouseButtons.Left, 1, 0, 0);
+                rectanglesTreeView_NodeMouseClick(this, eventArg);
             }
         }
 
@@ -356,7 +358,7 @@ namespace Taio
                 {
                     index = e.Node.Index;
                     isSolution = true;
-                }
+                }                
             }
             if (index >= 0)
             {
@@ -366,7 +368,7 @@ namespace Taio
                     viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);
             }
             else
-                viewRectangle(null, null);
+                this.rectangleViewer.Clear(); 
         }
 
         private void rectanglesTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -381,17 +383,17 @@ namespace Taio
                 {
                     index = e.Node.Index;
                     isSolution = true;
-                }
+                }                
             }
             if (index >= 0)
             {
                 if (isSolution && solutions[index].Correct)
                     viewRectangle(solutions[index].Rectangle, this.rectanglesTreeView.SelectedNode);
                 else
-                    viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);
+                    viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);                
             }
             else
-                viewRectangle(null, null);
+                this.rectangleViewer.Clear(); 
         }
 
         // aktualizacja indeksów prostok¹tów na liœcie, po usuniêciu prostok¹ta
