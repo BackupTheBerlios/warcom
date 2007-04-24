@@ -67,7 +67,7 @@ namespace SONStock
             this.butCancel.Name = "butCancel";
             this.butCancel.Size = new System.Drawing.Size(75, 23);
             this.butCancel.TabIndex = 1;
-            this.butCancel.Text = "Cancel";
+            this.butCancel.Text = "Anuluj";
             this.butCancel.UseVisualStyleBackColor = true;
             this.butCancel.Click += new System.EventHandler(this.CancelButton_Click);
             // 
@@ -216,9 +216,9 @@ namespace SONStock
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.label6.Location = new System.Drawing.Point(12, 170);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(117, 16);
+            this.label6.Size = new System.Drawing.Size(118, 16);
             this.label6.TabIndex = 4;
-            this.label6.Text = "Analizy techniczna";
+            this.label6.Text = "Analiza techniczna";
             // 
             // useTechnicalAnalysisCheckBox
             // 

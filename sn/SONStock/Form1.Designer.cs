@@ -45,9 +45,15 @@ namespace SONStock
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.wyczyœæDaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.elmanNetErrorTextBox = new System.Windows.Forms.TextBox();
+            this.elmanNetErrorPanel = new System.Windows.Forms.Panel();
+            this.errorLabel = new System.Windows.Forms.Label();
+            this.modifyNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.dataGraph1 = new SONStock.DataGraph();
             this.exitValuesMatrixPreview = new SONStock.MatrixPreview();
             this.menuStrip1.SuspendLayout();
+            this.elmanNetErrorPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -58,7 +64,7 @@ namespace SONStock
             this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(697, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(695, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -70,7 +76,9 @@ namespace SONStock
             this.toolStripSeparator1,
             this.networkMatrixPreviewToolStripMenuItem,
             this.toolStripSeparator2,
-            this.learnNetworkToolStripMenuItem});
+            this.learnNetworkToolStripMenuItem,
+            this.toolStripSeparator5,
+            this.modifyNetworkToolStripMenuItem});
             this.networkToolStripMenuItem.Name = "networkToolStripMenuItem";
             this.networkToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.networkToolStripMenuItem.Text = "&Sieæ";
@@ -181,6 +189,45 @@ namespace SONStock
             this.settingsToolStripMenuItem.Text = "&Ustawienia";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
+            // elmanNetErrorTextBox
+            // 
+            this.elmanNetErrorTextBox.Location = new System.Drawing.Point(13, 16);
+            this.elmanNetErrorTextBox.Name = "elmanNetErrorTextBox";
+            this.elmanNetErrorTextBox.Size = new System.Drawing.Size(197, 20);
+            this.elmanNetErrorTextBox.TabIndex = 7;
+            // 
+            // elmanNetErrorPanel
+            // 
+            this.elmanNetErrorPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.elmanNetErrorPanel.Controls.Add(this.errorLabel);
+            this.elmanNetErrorPanel.Controls.Add(this.elmanNetErrorTextBox);
+            this.elmanNetErrorPanel.Location = new System.Drawing.Point(12, 293);
+            this.elmanNetErrorPanel.Name = "elmanNetErrorPanel";
+            this.elmanNetErrorPanel.Size = new System.Drawing.Size(221, 46);
+            this.elmanNetErrorPanel.TabIndex = 8;
+            this.elmanNetErrorPanel.Visible = false;
+            // 
+            // errorLabel
+            // 
+            this.errorLabel.AutoSize = true;
+            this.errorLabel.Location = new System.Drawing.Point(10, 0);
+            this.errorLabel.Name = "errorLabel";
+            this.errorLabel.Size = new System.Drawing.Size(200, 13);
+            this.errorLabel.TabIndex = 8;
+            this.errorLabel.Text = "B³¹d œredniokwadratowy nauczonej sieci";
+            // 
+            // modifyNetworkToolStripMenuItem
+            // 
+            this.modifyNetworkToolStripMenuItem.Name = "modifyNetworkToolStripMenuItem";
+            this.modifyNetworkToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.modifyNetworkToolStripMenuItem.Text = "Modyfikuj sieæ";
+            this.modifyNetworkToolStripMenuItem.Click += new System.EventHandler(this.modifyNetworkToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(184, 6);
+            // 
             // dataGraph1
             // 
             this.dataGraph1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -195,7 +242,7 @@ namespace SONStock
             this.exitValuesMatrixPreview.BackColor = System.Drawing.SystemColors.Control;
             this.exitValuesMatrixPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.exitValuesMatrixPreview.CellWidth = 100;
-            this.exitValuesMatrixPreview.Location = new System.Drawing.Point(268, 280);
+            this.exitValuesMatrixPreview.Location = new System.Drawing.Point(239, 293);
             this.exitValuesMatrixPreview.Name = "exitValuesMatrixPreview";
             this.exitValuesMatrixPreview.Size = new System.Drawing.Size(292, 146);
             this.exitValuesMatrixPreview.TabIndex = 5;
@@ -206,7 +253,8 @@ namespace SONStock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(697, 431);
+            this.ClientSize = new System.Drawing.Size(695, 446);
+            this.Controls.Add(this.elmanNetErrorPanel);
             this.Controls.Add(this.dataGraph1);
             this.Controls.Add(this.exitValuesMatrixPreview);
             this.Controls.Add(this.menuStrip1);
@@ -216,6 +264,8 @@ namespace SONStock
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.elmanNetErrorPanel.ResumeLayout(false);
+            this.elmanNetErrorPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -239,11 +289,17 @@ namespace SONStock
         private System.Windows.Forms.ToolStripMenuItem loadDataFromManyFilesToolStripMenuItem;
 
         private SettingsForm settingsForm = new SettingsForm();
+        private ModifyNetworkForm modifyNetworkForm = new ModifyNetworkForm();
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem wyczyœæDaneToolStripMenuItem;
         private MatrixPreview exitValuesMatrixPreview;
         private DataGraph dataGraph1;
+        private System.Windows.Forms.TextBox elmanNetErrorTextBox;
+        private System.Windows.Forms.Panel elmanNetErrorPanel;
+        private System.Windows.Forms.Label errorLabel;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem modifyNetworkToolStripMenuItem;
     }
 }
 

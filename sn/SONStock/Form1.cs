@@ -53,6 +53,7 @@ namespace SONStock
         {
             //TODO
             this.elmanNet = this.data.LoadNetwork();
+            this.elmanNetErrorPanel.Visible = false;
         }
 
         private void saveNetworkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -64,7 +65,7 @@ namespace SONStock
             }
             else
             {
-                MessageBox.Show("Brak sieci zapisanej w programie");
+                MessageBox.Show("Brak sieci zapisanej w programie!");
             }
         }
 
@@ -73,7 +74,32 @@ namespace SONStock
 //TODO
             this.elmanNet = this.data.Learn(this.elmanNet);
             if (data != null && elmanNet != null && data.Count >= elmanNet.NumberOfEntryNeurons)
+            {
                 this.performEstimationToolStripMenuItem.Enabled = true;
+                double error = elmanNet.CountError();
+                MessageBox.Show("Sieæ nauczona. B³¹d œredniokwadratowy: " + error);
+                this.elmanNetErrorTextBox.Text = error.ToString();
+                this.elmanNetErrorPanel.Visible = true;
+            }
+        }
+
+        private void modifyNetworkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (elmanNet == null)
+            {
+                MessageBox.Show("Nie ma nauczonej sieci!");
+                return;
+            }
+
+            if (modifyNetworkForm.ShowDialog() == DialogResult.OK)
+            {
+                elmanNet.ModifyNumberOfHiddenNeurons(modifyNetworkForm.NewHiddenLayerSize,
+                    modifyNetworkForm.SaveWeights,
+                    modifyNetworkForm.SaveStatistics);
+
+                if (!modifyNetworkForm.SaveStatistics)
+                    elmanNetErrorPanel.Show();
+            }
         }
 
         private void networkMatrixPreviewToolStripMenuItem_Click(object sender, EventArgs e)
@@ -182,126 +208,7 @@ namespace SONStock
         }
         #endregion
 
+
+
     }
 }
-
-#region Arch
-/*private void button1_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "pliki csv (*.csv)|*.csv";
-            ofd.Title = "Wybierz plik z danymi";
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                this.AddNewDataFromFile(ofd.FileName, !this.checkBox1.Checked);
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            OpenDirectoryDialog odd = new OpenDirectoryDialog();
-            string dir;
-            if ((dir = odd.GetFolder()) != null && dir != "")
-            {
-                string[] files = Directory.GetFiles(dir, "*.csv");
-                if (files.Length > 0)
-                {
-                    if (!this.checkBox1.Checked)
-                        this.data.Clear();
-                    for (int i = 0; i < files.Length; ++i)
-                    {
-                        this.AddNewDataFromFile(files[i], false);
-                    }
-                }
-                else
-                    MessageBox.Show("Niestety nie znaleziono ¿adnych plików *.csv");
-                
-                Learn();
-            }
-        }*/
-
-/*
-private void button3_Click(object sender, EventArgs e)
-{
-    if (this.elman != null)
-    {
-        SaveFileDialog sfd = new SaveFileDialog();
-        sfd.Filter = "pliki csv (*.xml)|*.xml";
-        sfd.Title = "Wybierz plik z sieci¹";
-        if (sfd.ShowDialog() == DialogResult.OK)
-        {
-            //Opens a file and serializes the object into it in binary format.
-            Stream stream = File.Open(sfd.FileName, FileMode.Create);
-            SoapFormatter formatter = new SoapFormatter();
-
-            //BinaryFormatter formatter = new BinaryFormatter();
-
-            formatter.Serialize(stream, elman);
-            stream.Close();
-        }
-    }
-    else
-    {
-        MessageBox.Show("Brak sieci zapisanej w programie");
-    }
-}
-
-private void button4_Click(object sender, EventArgs e)
-{
-    OpenFileDialog ofd = new OpenFileDialog();
-    ofd.Filter = "pliki csv (*.xml)|*.xml";
-    ofd.Title = "Wybierz plik z sieci¹";
-    if (ofd.ShowDialog() == DialogResult.OK)
-    {
-        try
-        {
-            //Opens file "data.xml" and deserializes the object from it.
-            Stream stream = File.Open(ofd.FileName, FileMode.Open);
-            SoapFormatter formatter = new SoapFormatter();
-
-            //formatter = new BinaryFormatter();
-
-            this.elman = (ElmansNetwork)formatter.Deserialize(stream);
-            stream.Close();
-        }
-        catch (Exception)
-        {
-            MessageBox.Show("Deserializacja zakoñczy³a siê niepowodzeniem");
-        }
-    }
-}
-        private void Learn()
-        {
-            IEnumerator enumerator = data.Keys.GetEnumerator();
-            double[] values = new double[data.Count];
-            int i = 0, MAX_ENTRY = 10, MAX_EXIT = 1;
-            while (enumerator.MoveNext())
-            {
-                DateTime dt = (DateTime)enumerator.Current;
-                //MessageBox.Show(dt.ToString());
-                values[i++] = data[dt];
-            }
-
-            ElmansNetwork en = new ElmansNetwork(10, 2, 1);
-            double[] val = new double[MAX_ENTRY];
-            double[] correct = new double[MAX_EXIT];
-            for (i = 0; i < values.Length - 11; ++i)
-            {
-                for (int j = 0; j < MAX_ENTRY; ++j)
-                {
-                    val[j] = values[i + j];
-                }
-                for (int j = 0; j < MAX_EXIT; ++j)
-                {
-                    correct[j] = values[i + j + MAX_ENTRY];
-                }
-                en.Learn(val, correct);
-            }
-            double[] exit = en.ComputeExitValues(val);
-            for (int j = 0; j < exit.Length; ++j)
-                label1.Text = exit[j].ToString();
-        }
- 
- */
-
-#endregion
