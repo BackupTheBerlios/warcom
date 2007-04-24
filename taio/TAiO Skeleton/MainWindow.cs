@@ -22,7 +22,7 @@ namespace Taio
         private DataLoader dataLoader = new DataLoader();
         private IAlgorithm algorithm;
         private BackgroundWorker bw;
-
+        
         public MainWindow()
         {
             bw = new BackgroundWorker();
@@ -74,6 +74,7 @@ namespace Taio
             TreeNodeMouseClickEventArgs eventArg = new TreeNodeMouseClickEventArgs(this.rectanglesTreeView.SelectedNode,
                 MouseButtons.Left, 1, 0, 0);
             rectanglesTreeView_NodeMouseClick(this, eventArg);
+            this.rectanglesTreeView.Refresh();
             this.algorithm = null;
             this.EnableMenu(true);
         }
@@ -308,6 +309,7 @@ namespace Taio
             TreeNodeMouseClickEventArgs eventArg = new TreeNodeMouseClickEventArgs(this.rectanglesTreeView.SelectedNode,
                 MouseButtons.Left, 1, 0, 0);
             rectanglesTreeView_NodeMouseClick(this, eventArg);
+            this.rectanglesTreeView.Refresh();
             
             return node;
         }
@@ -341,36 +343,10 @@ namespace Taio
                 TreeNodeMouseClickEventArgs eventArg = new TreeNodeMouseClickEventArgs(this.rectanglesTreeView.SelectedNode,
                                 MouseButtons.Left, 1, 0, 0);
                 rectanglesTreeView_NodeMouseClick(this, eventArg);
+                this.rectanglesTreeView.Refresh();
             }
         }
-
-        // na razie zostawi³em t¹ metodê metodê
-        // wyœwietlany odpowiedni prostok¹t z listy
-        private void rectanglesTreeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            bool isSolution = false;     // zmienna mówi, z której listy ma byæ wyœwietlony prostok¹t
-            int index = -1;
-            if (this.rectanglesTreeView.SelectedNode != null)
-            {
-                if (e.Node.Parent != null && e.Node.Parent.Name.Equals("Rectangles"))
-                    index = e.Node.Index;
-                else if (e.Node.Parent != null && e.Node.Parent.Name.Equals("Solutions"))
-                {
-                    index = e.Node.Index;
-                    isSolution = true;
-                }                
-            }
-            if (index >= 0)
-            {
-                if (isSolution && solutions[index].Correct)
-                    viewRectangle(solutions[index].Rectangle, this.rectanglesTreeView.SelectedNode);
-                else
-                    viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);
-            }
-            else
-                this.rectangleViewer.Clear(); 
-        }
-
+                
         private void rectanglesTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             bool isSolution = false;     // zmienna mówi, z której listy ma byæ wyœwietlony prostok¹t
@@ -390,7 +366,16 @@ namespace Taio
                 if (isSolution && solutions[index].Correct)
                     viewRectangle(solutions[index].Rectangle, this.rectanglesTreeView.SelectedNode);
                 else
-                    viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);                
+                {
+                    Keys keysMod = Control.ModifierKeys;
+                    if (keysMod == Keys.Control)
+                    {
+                        this.rectangleViewer.SelectRectangleByNumber(rectangles[index].Number);
+                        this.rectangleViewer.Refresh();
+                    }
+                    else
+                        viewRectangle(rectangles[index], this.rectanglesTreeView.SelectedNode);
+                }
             }
             else
                 this.rectangleViewer.Clear(); 
@@ -572,7 +557,5 @@ namespace Taio
         }
 
         #endregion
-
-
     }
 }
