@@ -40,6 +40,17 @@ namespace SONStock
             data.Clear();
         }
 
+        public void RemoveData(List<DateTime> keys)
+        {
+            if (keys == null)
+                throw new ArgumentNullException();
+
+            if (data != null)
+                foreach (DateTime key in keys)
+                    if (key != null)
+                        data.Remove(key);
+        }
+
         public int Count
         {
             get 
@@ -181,9 +192,10 @@ namespace SONStock
         {
             if (data == null || data.Count == 0)
             {
-                MessageBox.Show("Wczytaj zestaw ucz¹cy");
+                //MessageBox.Show("Wczytaj zestaw ucz¹cy");
                 return elmanNet;
             }
+
 
             int entryLayerSize = Properties.Settings.Default.entryLayerSize;
             int exitLayerSize = Properties.Settings.Default.estimationTime;

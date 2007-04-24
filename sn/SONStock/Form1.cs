@@ -14,6 +14,7 @@ namespace SONStock
         private ElmansNetwork elmanNet;
         private MatrixPreviewForm matrixPreviewForm;
         private DataLoader data = new DataLoader();
+        private ChooseLearningDataForm chooseLearningDataForm = new ChooseLearningDataForm();
 
         public Form1()
         {
@@ -49,6 +50,16 @@ namespace SONStock
         }
 
         #region NetworkToolStripMenu
+        private void newNetworkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(this.data != null)
+                this.data.ClearData();
+            this.dataGraph1.ClearData();
+            this.elmanNet = null;
+            this.elmanNetErrorPanel.Visible = false;
+            this.exitValuesMatrixPreview.Visible = false;
+        }
+
         private void loadNetworkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //TODO
@@ -72,6 +83,12 @@ namespace SONStock
         private void learnNetworkToolStripMenuItem_Click(object sender, EventArgs e)
         {
 //TODO
+            if (data == null || data.Count == 0)
+            {
+                MessageBox.Show("Wczytaj zestaw ucz¹cy");
+                return;
+            }
+
             this.elmanNet = this.data.Learn(this.elmanNet);
             if (data != null && elmanNet != null && data.Count >= elmanNet.NumberOfEntryNeurons)
             {
@@ -81,6 +98,36 @@ namespace SONStock
                 this.elmanNetErrorTextBox.Text = error.ToString();
                 this.elmanNetErrorPanel.Visible = true;
             }
+        }
+
+        private void shrinkLearninDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (data == null || data.Count == 0)
+            {
+                MessageBox.Show("Wczytaj zestaw ucz¹cy");
+                return;
+            }
+
+            /*this.chooseLearningDataForm.LoadData(data.Data);
+            if (chooseLearningDataForm.ShowDialog() == DialogResult.OK)
+            {
+                DateTime initialDate = chooseLearningDataForm.InitialDate;
+                int learningDataSetSize = chooseLearningDataForm.LearningDataSetSize;
+                List<DateTime> toRemove = new List<DateTime>();
+                bool before = true, after = false;
+                int counter = 0;
+                foreach (DateTime dt in data.Data)
+                {
+
+                    if (dt.Equals(initialDate))
+                    {
+                        before = true;
+                        counter++;
+                        continue;
+                    }
+
+                }
+            }*/
         }
 
         private void modifyNetworkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -207,8 +254,6 @@ namespace SONStock
             }
         }
         #endregion
-
-
 
     }
 }

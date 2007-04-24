@@ -38,6 +38,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChooseLearningDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooseLearningDataForm.Designer.cs">
+      <DependentUpon>ChooseLearningDataForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="DataGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -73,6 +79,10 @@
     <Compile Include="OpenDirectoryDialog.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChooseLearningDataForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChooseLearningDataForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataGraph.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DataGraph.cs</DependentUpon>

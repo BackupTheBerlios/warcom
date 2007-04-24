@@ -36,6 +36,8 @@ namespace SONStock
             this.networkMatrixPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.learnNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.modifyNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.estimateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadDataFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadDataFromManyFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,10 +50,10 @@ namespace SONStock
             this.elmanNetErrorTextBox = new System.Windows.Forms.TextBox();
             this.elmanNetErrorPanel = new System.Windows.Forms.Panel();
             this.errorLabel = new System.Windows.Forms.Label();
-            this.modifyNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.dataGraph1 = new SONStock.DataGraph();
             this.exitValuesMatrixPreview = new SONStock.MatrixPreview();
+            this.shrinkLearninDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.elmanNetErrorPanel.SuspendLayout();
             this.SuspendLayout();
@@ -71,11 +73,13 @@ namespace SONStock
             // networkToolStripMenuItem
             // 
             this.networkToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newNetworkToolStripMenuItem,
             this.saveNetworkToolStripMenuItem,
             this.loadNetworkToolStripMenuItem,
             this.toolStripSeparator1,
             this.networkMatrixPreviewToolStripMenuItem,
             this.toolStripSeparator2,
+            this.shrinkLearninDataToolStripMenuItem,
             this.learnNetworkToolStripMenuItem,
             this.toolStripSeparator5,
             this.modifyNetworkToolStripMenuItem});
@@ -86,40 +90,52 @@ namespace SONStock
             // saveNetworkToolStripMenuItem
             // 
             this.saveNetworkToolStripMenuItem.Name = "saveNetworkToolStripMenuItem";
-            this.saveNetworkToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.saveNetworkToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.saveNetworkToolStripMenuItem.Text = "Zapisz sieæ";
             this.saveNetworkToolStripMenuItem.Click += new System.EventHandler(this.saveNetworkToolStripMenuItem_Click);
             // 
             // loadNetworkToolStripMenuItem
             // 
             this.loadNetworkToolStripMenuItem.Name = "loadNetworkToolStripMenuItem";
-            this.loadNetworkToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.loadNetworkToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.loadNetworkToolStripMenuItem.Text = "Wczytaj sieæ";
             this.loadNetworkToolStripMenuItem.Click += new System.EventHandler(this.loadNetworkToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(197, 6);
             // 
             // networkMatrixPreviewToolStripMenuItem
             // 
             this.networkMatrixPreviewToolStripMenuItem.Name = "networkMatrixPreviewToolStripMenuItem";
-            this.networkMatrixPreviewToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.networkMatrixPreviewToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.networkMatrixPreviewToolStripMenuItem.Text = "Zobacz macierze wag";
             this.networkMatrixPreviewToolStripMenuItem.Click += new System.EventHandler(this.networkMatrixPreviewToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(184, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(197, 6);
             // 
             // learnNetworkToolStripMenuItem
             // 
             this.learnNetworkToolStripMenuItem.Name = "learnNetworkToolStripMenuItem";
-            this.learnNetworkToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.learnNetworkToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.learnNetworkToolStripMenuItem.Text = "Ucz sieæ";
             this.learnNetworkToolStripMenuItem.Click += new System.EventHandler(this.learnNetworkToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(197, 6);
+            // 
+            // modifyNetworkToolStripMenuItem
+            // 
+            this.modifyNetworkToolStripMenuItem.Name = "modifyNetworkToolStripMenuItem";
+            this.modifyNetworkToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.modifyNetworkToolStripMenuItem.Text = "Modyfikuj sieæ";
+            this.modifyNetworkToolStripMenuItem.Click += new System.EventHandler(this.modifyNetworkToolStripMenuItem_Click);
             // 
             // estimateToolStripMenuItem
             // 
@@ -216,18 +232,6 @@ namespace SONStock
             this.errorLabel.TabIndex = 8;
             this.errorLabel.Text = "B³¹d œredniokwadratowy nauczonej sieci";
             // 
-            // modifyNetworkToolStripMenuItem
-            // 
-            this.modifyNetworkToolStripMenuItem.Name = "modifyNetworkToolStripMenuItem";
-            this.modifyNetworkToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.modifyNetworkToolStripMenuItem.Text = "Modyfikuj sieæ";
-            this.modifyNetworkToolStripMenuItem.Click += new System.EventHandler(this.modifyNetworkToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(184, 6);
-            // 
             // dataGraph1
             // 
             this.dataGraph1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -248,6 +252,20 @@ namespace SONStock
             this.exitValuesMatrixPreview.TabIndex = 5;
             this.exitValuesMatrixPreview.Title = "Przewidywane wartoœci";
             this.exitValuesMatrixPreview.Visible = false;
+            // 
+            // shrinkLearninDataToolStripMenuItem
+            // 
+            this.shrinkLearninDataToolStripMenuItem.Name = "shrinkLearninDataToolStripMenuItem";
+            this.shrinkLearninDataToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.shrinkLearninDataToolStripMenuItem.Text = "Ogranicz zestaw ucz¹cy";
+            this.shrinkLearninDataToolStripMenuItem.Click += new System.EventHandler(this.shrinkLearninDataToolStripMenuItem_Click);
+            // 
+            // newNetworkToolStripMenuItem
+            // 
+            this.newNetworkToolStripMenuItem.Name = "newNetworkToolStripMenuItem";
+            this.newNetworkToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.newNetworkToolStripMenuItem.Text = "Nowa sieæ";
+            this.newNetworkToolStripMenuItem.Click += new System.EventHandler(this.newNetworkToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -300,6 +318,8 @@ namespace SONStock
         private System.Windows.Forms.Label errorLabel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem modifyNetworkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newNetworkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem shrinkLearninDataToolStripMenuItem;
     }
 }
 

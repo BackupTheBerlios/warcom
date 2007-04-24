@@ -46,6 +46,7 @@ namespace SONStock
             this.butCancel.TabIndex = 3;
             this.butCancel.Text = "Anuluj";
             this.butCancel.UseVisualStyleBackColor = true;
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
             // 
             // butOK
             // 
