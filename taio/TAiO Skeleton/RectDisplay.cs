@@ -69,35 +69,7 @@ namespace Kontrolka_do_TAiO
             axisTextFont = new Font("Arial", 8);
         }
 
-        private void displayArea_Paint(object sender, PaintEventArgs e)
-        {
-            zoomControlSize = this.zoomIn.Height;
-            yDrawingStartValue = this.Height - 4 * yBorder;
-            xDrawingStartValue = xBorder;
-            maxX = this.displayArea.Width - 2 * xBorder;
-            maxY = this.displayArea.Height - 4 * yBorder;
-            if (!realValue.IsEmpty || rectangle != null)
-                DrawRectangle(e.Graphics);
-            PaintAxis(e.Graphics);
-        }
-
-        //draw rectangle
-        private void DrawRectangle(Graphics graph)
-        {
-            if (rectangle != null)
-                DrawComplexRectangle(graph);
-            else if (!realValue.IsEmpty)
-            {
-                DoublePoint endPoint = ConvertRealPostionToImagePosition(realValue);
-                Color color = Color.FromArgb(alfa, 123, 231, 132);
-                graph.FillRectangle(new SolidBrush(color), xDrawingStartValue, (int)endPoint.Y,
-                    (int)endPoint.X - xDrawingStartValue, yDrawingStartValue - (int)endPoint.Y);
-                graph.DrawRectangle(new Pen(GetColorInversion(color), 2), xDrawingStartValue,
-                    (int)endPoint.Y, (int)endPoint.X - xDrawingStartValue,
-                    yDrawingStartValue - (int)endPoint.Y);
-            }
-        }
-
+        #region rect_info
         //tries to get information about rectangle which is pointed by mouse pointer
         private void TrySetRectangleInfo()
         {
@@ -127,6 +99,37 @@ namespace Kontrolka_do_TAiO
                         rectangle.RightDown.X + "," + rectangle.RightDown.Y + ")");
                     indexOfRectangleToDisplay = i;
                 }
+            }
+        }
+        #endregion
+
+        #region drawing
+        private void displayArea_Paint(object sender, PaintEventArgs e)
+        {
+            zoomControlSize = this.zoomIn.Height;
+            yDrawingStartValue = this.Height - 4 * yBorder;
+            xDrawingStartValue = xBorder;
+            maxX = this.displayArea.Width - 2 * xBorder;
+            maxY = this.displayArea.Height - 4 * yBorder;
+            if (!realValue.IsEmpty || rectangle != null)
+                DrawRectangle(e.Graphics);
+            PaintAxis(e.Graphics);
+        }
+
+        //draw rectangle
+        private void DrawRectangle(Graphics graph)
+        {
+            if (rectangle != null)
+                DrawComplexRectangle(graph);
+            else if (!realValue.IsEmpty)
+            {
+                DoublePoint endPoint = ConvertRealPostionToImagePosition(realValue);
+                Color color = Color.FromArgb(alfa, 123, 231, 132);
+                graph.FillRectangle(new SolidBrush(color), xDrawingStartValue, (int)endPoint.Y,
+                    (int)endPoint.X - xDrawingStartValue, yDrawingStartValue - (int)endPoint.Y);
+                graph.DrawRectangle(new Pen(GetColorInversion(color), 2), xDrawingStartValue,
+                    (int)endPoint.Y, (int)endPoint.X - xDrawingStartValue,
+                    yDrawingStartValue - (int)endPoint.Y);
             }
         }
 
@@ -181,19 +184,7 @@ namespace Kontrolka_do_TAiO
             graph.DrawString("(0 ; " + (int)(maxY * scale) + ")", axisTextFont, axisTextBrush,
                 new Point(yStopPoint.X + 5, yStopPoint.Y));
         }
-
-        private void displayArea_MouseMove(object sender, MouseEventArgs e)
-        {
-            bool validMousePos = DisplayMousePosition(e.X, e.Y);
-            if (validMousePos && e.Button == MouseButtons.Left && canDraw)
-            {
-                this.realValue = realMousePosition;
-                this.xTextBox.Text = ((int)realValue.X).ToString();
-                this.yTextBox.Text = ((int)realValue.Y).ToString();
-            }
-            TrySetRectangleInfo();
-            this.Refresh();
-        }
+        #endregion
 
         //display mouse coordinates in real coordinates, and check whether this coordinates are above axis
         private bool DisplayMousePosition(int mX, int mY)
@@ -232,7 +223,7 @@ namespace Kontrolka_do_TAiO
         }
 
         //converts real coordinates to image coordinates
-        public DoublePoint ConvertRealPostionToImagePosition(DoublePoint realPos)
+        private DoublePoint ConvertRealPostionToImagePosition(DoublePoint realPos)
         {
             float imgX, imgY;
             imgX = (float)((int)realPos.X / scale + xBorder);
@@ -348,13 +339,6 @@ namespace Kontrolka_do_TAiO
             }
         }
         
-        public void ChangeColor()
-        {
-            this.label1.BackColor = Taio.Properties.Settings.Default.color;
-            this.label2.BackColor = Taio.Properties.Settings.Default.color;
-            this.label3.BackColor = Taio.Properties.Settings.Default.color;
-        }
-
         private void SetColors()
         {
             int MYSTERIOUS_VALUE = 2 << 24;
@@ -382,25 +366,32 @@ namespace Kontrolka_do_TAiO
                     ExtractRectangles(rectangle.ContainedRectangles[i]);
         }
 
-        private void zoomOut_Click(object sender, EventArgs e)
+        #region public_methods
+        public void SelectRectangleByNumber(int number)
         {
-            ZoomOut();
-        }
-
-        private void zoomIn_Click(object sender, EventArgs e)
-        {
-            ZoomIn();
-        }
-
-        private void displayArea_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (rectangle != null && this.rectInfo.Items.Count > 0)
+            if (extractedRectangles != null)
             {
-                Taio.Rectangle rect = extractedRectangles[indexOfRectangleToDisplay];
-                RectangleClicked(rect.Number);
-                extractedRectangles.RemoveAt(indexOfRectangleToDisplay);
-                extractedRectangles.Add(rect);
+                int index = -1;
+                for (int i = 0; i < extractedRectangles.Count; ++i)
+                    if (extractedRectangles[i].Number == number)
+                    {
+                        index = i;
+                        break;
+                    }
+                if (index != -1)
+                {
+                    Taio.Rectangle rect = extractedRectangles[index];
+                    extractedRectangles.RemoveAt(index);
+                    extractedRectangles.Add(rect);
+                }
             }
+        }
+
+        public void ChangeColor()
+        {
+            this.label1.BackColor = Taio.Properties.Settings.Default.color;
+            this.label2.BackColor = Taio.Properties.Settings.Default.color;
+            this.label3.BackColor = Taio.Properties.Settings.Default.color;
         }
 
         public void Clear()
@@ -433,7 +424,9 @@ namespace Kontrolka_do_TAiO
                 this.Refresh();
             }
         }
+        #endregion
 
+        #region DoublePoint
         public class DoublePoint
         {
             float x, y;
@@ -468,6 +461,42 @@ namespace Kontrolka_do_TAiO
             public static implicit operator DoublePoint(Point f)
             {
                 return new DoublePoint((float)f.X, (float)f.Y);
+            }
+        }
+        #endregion
+
+        #region events
+        private void displayArea_MouseMove(object sender, MouseEventArgs e)
+        {
+            bool validMousePos = DisplayMousePosition(e.X, e.Y);
+            if (validMousePos && e.Button == MouseButtons.Left && canDraw)
+            {
+                this.realValue = realMousePosition;
+                this.xTextBox.Text = ((int)realValue.X).ToString();
+                this.yTextBox.Text = ((int)realValue.Y).ToString();
+            }
+            TrySetRectangleInfo();
+            this.Refresh();
+        }
+
+        private void zoomOut_Click(object sender, EventArgs e)
+        {
+            ZoomOut();
+        }
+
+        private void zoomIn_Click(object sender, EventArgs e)
+        {
+            ZoomIn();
+        }
+
+        private void displayArea_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (rectangle != null && this.rectInfo.Items.Count > 0)
+            {
+                Taio.Rectangle rect = extractedRectangles[indexOfRectangleToDisplay];
+                RectangleClicked(rect.Number);
+                extractedRectangles.RemoveAt(indexOfRectangleToDisplay);
+                extractedRectangles.Add(rect);
             }
         }
 
@@ -505,5 +534,6 @@ namespace Kontrolka_do_TAiO
                 this.Refresh();
             }
         }
+        #endregion
     }
 }
