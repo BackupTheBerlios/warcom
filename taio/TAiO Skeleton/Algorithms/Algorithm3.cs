@@ -40,8 +40,8 @@ namespace Taio.Algorithms
             List<Rectangle> holes = new List<Rectangle>();      // dziury
             List<int> rectsFill = new List<int>();              // lista prostok¹tów, które czêœciowo wype³niaj¹ dziury
             List<int> rectHoles = new List<int>();              // indeksy dziur, które czêœciowo wype³nia dany prostok¹t    
-            bool isHoleUP = false;                              // jest dziura na górze
-            bool isHoleRight = false;                           // jest dziura po prawej stronie  
+            //bool isHoleUP = false;                              // jest dziura na górze
+            //bool isHoleRight = false;                           // jest dziura po prawej stronie  
             int index;                                          // index danego prostok¹ta
 
             // dopóki s¹ jakieœ prostok¹ty do wykorzystania oraz algorytm nie zosta³ przerwany
