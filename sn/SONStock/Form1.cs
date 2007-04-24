@@ -111,12 +111,10 @@ namespace SONStock
             this.chooseLearningDataForm.LoadData(data.Data);
             if (chooseLearningDataForm.ShowDialog() == DialogResult.OK)
             {
-                //DateTime initialDate = chooseLearningDataForm.InitialDate;
                 int initialDateIndex = chooseLearningDataForm.InitialDateIndex;
                 int learningDataSetSize = chooseLearningDataForm.LearningDataSetSize;
                 
                 List<DateTime> toRemove = new List<DateTime>();
-                //bool before = true, after = false;
                 int counter = 0;
                 foreach (DateTime dt in data.Data.Keys)
                 {
@@ -126,6 +124,11 @@ namespace SONStock
                 }
 
                 data.RemoveData(toRemove);
+                if (Properties.Settings.Default.entryLayerSize > data.Count)
+                {
+                    Properties.Settings.Default.entryLayerSize = data.Count;
+                    Properties.Settings.Default.Save();
+                }
             }
         }
 
