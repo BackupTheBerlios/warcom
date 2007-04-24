@@ -186,7 +186,11 @@ namespace Kontrolka_do_TAiO
         {
             bool validMousePos = DisplayMousePosition(e.X, e.Y);
             if (validMousePos && e.Button == MouseButtons.Left && canDraw)
+            {
                 this.realValue = realMousePosition;
+                this.xTextBox.Text = ((int)realValue.X).ToString();
+                this.yTextBox.Text = ((int)realValue.Y).ToString();
+            }
             TrySetRectangleInfo();
             this.Refresh();
         }
@@ -306,21 +310,19 @@ namespace Kontrolka_do_TAiO
                     extractedRectangles = new List<Taio.Rectangle>();
                     ExtractRectangles(value);
                     SetColors();
-                    int max = (this.maxX < this.maxY) ? maxX : maxY;
-                    if (value.LongerSide > max * scale)
-                        while (value.LongerSide > max * scale && scale <=maxScale)
-                            scale *= 2;
-                    if (value.LongerSide < max * scale / 2)
-                        while (value.LongerSide < max * scale / 2 && scale >= minScale)
-                            scale /= 2;
+                    Rescale(value.LongerSide);
                     if (value.ContainedRectangles.Count == 0)
                     {
                         realValue = new DoublePoint(value.RightDown.X, value.RightDown.Y);
+                        this.xTextBox.Enabled = true;
+                        this.yTextBox.Enabled = true;
                         canDraw = true;
                     }
                     else
                     {
                         rectangle = value;
+                        this.xTextBox.Enabled = false;
+                        this.yTextBox.Enabled = false;
                         canDraw = false;
                     }
                 }
@@ -328,6 +330,24 @@ namespace Kontrolka_do_TAiO
         }
         #endregion
 
+        private void Rescale(int maxSide)
+        {
+            if (this.autoScaleCheckBox.Checked)
+            {
+                int max = (this.maxX < this.maxY) ? maxX : maxY;
+                if (maxSide > max * scale)
+                    while (maxSide > max * scale && scale <= maxScale)
+                        scale *= 2;
+                if (maxSide < max * scale / 2)
+                    while (maxSide < max * scale / 2 && scale >= minScale)
+                        scale /= 2;
+                if (scale > minScale)
+                    this.zoomOut.Enabled = true;
+                if (scale < maxScale)
+                    this.zoomIn.Enabled = true;
+            }
+        }
+        
         public void ChangeColor()
         {
             this.label1.BackColor = Taio.Properties.Settings.Default.color;
@@ -448,6 +468,41 @@ namespace Kontrolka_do_TAiO
             public static implicit operator DoublePoint(Point f)
             {
                 return new DoublePoint((float)f.X, (float)f.Y);
+            }
+        }
+
+        private void autoScaleCheckBox_Click(object sender, EventArgs e)
+        {
+            if (this.autoScaleCheckBox.Checked)
+            {
+                if (rectangle != null)
+                    Rescale(rectangle.LongerSide);
+                else
+                    Rescale((int)Math.Max(this.realValue.X, this.realValue.Y));
+            }
+        }
+
+        private void xTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            int val;
+            if (Int32.TryParse(xTextBox.Text, out val) && val > 0)
+            {
+                this.realValue = new DoublePoint(val, realValue.Y);
+                int max = (int)Math.Max(realValue.X, realValue.Y);
+                this.Rescale(max);
+                this.Refresh();
+            }
+        }
+
+        private void yTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            int val;
+            if (Int32.TryParse(yTextBox.Text, out val) && val > 0)
+            {
+                this.realValue = new DoublePoint(realValue.X, val);
+                int max = (int)Math.Max(realValue.X, realValue.Y);
+                this.Rescale(max);
+                this.Refresh();
             }
         }
     }
