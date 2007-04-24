@@ -223,7 +223,7 @@ namespace SONStock
             for (int i = 0; i < numberOfContextNeurons; i++)
                 sum += ContextHiddenWeights[i, j] * prev;
             if (k != l)
-                sum += (l < numberOfEntryNeurons) ? entryValues[l] : contextValues[l - numberOfEntryNeurons];
+                sum += (l < realNumberOfEntryNeurons) ? entryValues[l] : contextValues[l - realNumberOfEntryNeurons];
             return sum * fprim;           
         }
 
@@ -243,7 +243,7 @@ namespace SONStock
 
         private double[,,] ModifyEntryHiddenAndContextHiddenWeights(double[,,] prevVals)
         {
-            double[, ,] nextVals = new double[numberOfHiddenNeurons + 1, numberOfEntryNeurons + numberOfContextNeurons, numberOfHiddenNeurons + 1];
+            double[, ,] nextVals = new double[numberOfHiddenNeurons + 1, this.realNumberOfEntryNeurons + numberOfContextNeurons, numberOfHiddenNeurons + 1];
             for (int i = 0; i < realNumberOfEntryNeurons; i++)
                 for (int j = 0; j < NumberOfHiddenNeurons; j++)
                     entryHiddenWeights[i, j] += CountHiddenWeightsChange(i, j, prevVals, nextVals);
@@ -295,7 +295,7 @@ namespace SONStock
             for (int i = 0; i < entryValues.Length; i++)
                 this.entryValues[i] = entryValues[i];
             double error = Int32.MaxValue;
-            double[,,] startVals = new double[numberOfHiddenNeurons + 1,numberOfEntryNeurons + numberOfContextNeurons,numberOfHiddenNeurons + 1];
+            double[,,] startVals = new double[numberOfHiddenNeurons + 1,this.realNumberOfEntryNeurons + numberOfContextNeurons,numberOfHiddenNeurons + 1];
             double[,,] temp;
             int it = 0;
             while (error > this.eps && it < this.MAX_IT)
