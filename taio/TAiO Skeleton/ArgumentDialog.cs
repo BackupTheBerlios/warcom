@@ -12,6 +12,13 @@ namespace Taio
     {
         private int max;
         private int count;
+        private int min;
+
+        public int Min
+        {
+            get { return min; }
+            set { min = value; }
+        }
 
 
         public int Max
@@ -30,13 +37,13 @@ namespace Taio
         public ArgumentDialog()
         {
             InitializeComponent();
+            this.BackColor = Properties.Settings.Default.color;
         }
 
         private void butOK_Click(object sender, EventArgs e)
         {
-            if (ValidateData())
+            if (!ValidateData())
             {
-                this.errorProvider1.SetError(this.CountTextBox, "");
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
@@ -44,21 +51,39 @@ namespace Taio
 
         private bool ValidateData()
         {
-            int max, count;
-            if (Int32.TryParse(this.MaxSideTextBox.Text,out max) && 
-                Int32.TryParse(this.CountTextBox.Text, out count))
+            int no;
+            bool error = false;
+            if (Int32.TryParse(this.CountTextBox.Text, out no) && no > 0)
             {
-                if (max>0 && count>0)
-                {
-                    this.Max = max;
-                    this.Count = count;
-                    this.errorProvider1.SetError(this.CountTextBox, "");
-                    return true;
-                }
+                this.Count = no;
+                this.errorProvider1.SetError(this.CountTextBox, "");
             }
-
-            this.errorProvider1.SetError(this.CountTextBox, "Niepoprawne wartoœci (liczby naturalne > 0 wymagane).");
-            return false;
+            else
+            {
+                error = true;
+                this.errorProvider1.SetError(this.CountTextBox, "Niepoprawne wartoœci (liczby naturalne > 0 wymagane).");
+            }
+            if (Int32.TryParse(this.MaxSideTextBox.Text, out no) && no > 0)
+            {
+                this.Max = no;
+                this.errorProvider1.SetError(this.MaxSideTextBox, "");
+            }
+            else
+            {
+                error = true;
+                this.errorProvider1.SetError(this.MaxSideTextBox, "Niepoprawne wartoœci (liczby naturalne > 0 wymagane).");
+            }
+            if (Int32.TryParse(this.MinSideTextBox.Text, out no) && no > 0)
+            {
+                this.Min = no;
+                this.errorProvider1.SetError(this.MinSideTextBox, "");
+            }
+            else
+            {
+                error = true;
+                this.errorProvider1.SetError(this.MinSideTextBox, "Niepoprawne wartoœci (liczby naturalne > 0 wymagane).");
+            }
+            return error;
         }
     }
 }

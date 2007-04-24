@@ -118,6 +118,7 @@ namespace Taio
         {
             rectangles.Clear();
             solutions.Clear();
+            this.rectangleViewer.Clear();
             this.rectanglesTreeView.Nodes[0].Nodes.Clear();
             this.rectanglesTreeView.Nodes[1].Nodes.Clear();
         }

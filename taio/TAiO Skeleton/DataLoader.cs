@@ -353,12 +353,24 @@ namespace Taio
         }
         #endregion
 
-        public List<Rectangle> RandomRectangles(int count, int maxSide)
+        public List<Rectangle> RandomRectangles(int count, int maxSide, int minSide)
         {
+            if (minSide < 1)
+                minSide = 1;
+            if (maxSide < minSide)
+            {
+                int tmp = minSide;
+                minSide = maxSide;
+                maxSide = minSide;
+            }
             List<Rectangle> rectangles = new List<Rectangle>();
             Random random = new Random();
             for (int i = 0; i < count; ++i)
-                rectangles.Add(new Rectangle(random.Next() % maxSide + 1, random.Next() % maxSide + 1));
+                if(maxSide!=minSide)
+                rectangles.Add(new Rectangle(random.Next() % (maxSide-minSide+1) + minSide,
+                    random.Next() % (maxSide-minSide+1) + minSide));
+                else
+                    rectangles.Add(new Rectangle(minSide, minSide));
             return rectangles;
         }
 

@@ -61,6 +61,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Rectangle.cs" />
     <Compile Include="RectangleContainer.cs" />
     <Compile Include="RectangleLists.cs" />
@@ -71,6 +76,7 @@
       <DependentUpon>RectDisplay.cs</DependentUpon>
     </Compile>
     <Compile Include="Solution.cs" />
+    <Compile Include="TestAlgorithm3.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ArgumentDialog.resx">
@@ -90,6 +96,13 @@
       <DependentUpon>RectDisplay.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

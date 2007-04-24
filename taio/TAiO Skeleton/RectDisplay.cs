@@ -328,6 +328,13 @@ namespace Kontrolka_do_TAiO
         }
         #endregion
 
+        public void ChangeColor()
+        {
+            this.label1.BackColor = Taio.Properties.Settings.Default.color;
+            this.label2.BackColor = Taio.Properties.Settings.Default.color;
+            this.label3.BackColor = Taio.Properties.Settings.Default.color;
+        }
+
         private void SetColors()
         {
             int MYSTERIOUS_VALUE = 2 << 24;

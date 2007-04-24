@@ -37,7 +37,6 @@ namespace Taio
             this.addRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
             this.stopAlgorithm = new System.Windows.Forms.Button();
             this.acceptChangebutton = new System.Windows.Forms.Button();
             this.addRectbutton = new System.Windows.Forms.Button();
@@ -60,6 +59,10 @@ namespace Taio
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.programHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.randomAddRectanglesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorChangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -150,21 +153,6 @@ namespace Taio
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 1;
             // 
-            // rectangleViewer
-            // 
-            this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
-            this.rectangleViewer.BackgroundColor = System.Drawing.Color.White;
-            this.rectangleViewer.CanDraw = true;
-            this.rectangleViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
-            this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
-            this.rectangleViewer.Name = "rectangleViewer";
-            this.rectangleViewer.Size = new System.Drawing.Size(510, 338);
-            this.rectangleViewer.TabIndex = 0;
-            this.rectangleViewer.XBorder = 5;
-            this.rectangleViewer.YBorder = 5;
-            this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
-            // 
             // stopAlgorithm
             // 
             this.stopAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -199,6 +187,7 @@ namespace Taio
             // fileMenuItem
             // 
             this.fileMenuItem.AutoToolTip = true;
+            this.fileMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newFileToolStripMenuItem,
             this.openFileToolStripMenuItem,
@@ -213,6 +202,7 @@ namespace Taio
             // 
             // newFileToolStripMenuItem
             // 
+            this.newFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
             this.newFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.newFileToolStripMenuItem.Text = "Nowy";
@@ -220,6 +210,7 @@ namespace Taio
             // 
             // openFileToolStripMenuItem
             // 
+            this.openFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
             this.openFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.openFileToolStripMenuItem.Text = "Otwórz";
@@ -227,6 +218,7 @@ namespace Taio
             // 
             // saveFileToolStripMenuItem
             // 
+            this.saveFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
             this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.saveFileToolStripMenuItem.Text = "Zapisz";
@@ -234,6 +226,7 @@ namespace Taio
             // 
             // saveSolutionFileToolStripMenuItem
             // 
+            this.saveSolutionFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.saveSolutionFileToolStripMenuItem.Name = "saveSolutionFileToolStripMenuItem";
             this.saveSolutionFileToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.saveSolutionFileToolStripMenuItem.Text = "Zapisz rozwi¹zanie";
@@ -246,6 +239,7 @@ namespace Taio
             // 
             // exitToolStripMenuItem
             // 
+            this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.exitToolStripMenuItem.Text = "Wyjœcie";
@@ -253,9 +247,11 @@ namespace Taio
             // 
             // rectanglesToolStripMenuItem
             // 
+            this.rectanglesToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.rectanglesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newRectanglesToolStripMenuItem,
-            this.randomRectanglesToolStripMenuItem});
+            this.randomRectanglesToolStripMenuItem,
+            this.randomAddRectanglesToolStripMenuItem});
             this.rectanglesToolStripMenuItem.Name = "rectanglesToolStripMenuItem";
             this.rectanglesToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.rectanglesToolStripMenuItem.Text = "Prostok¹ty";
@@ -263,19 +259,20 @@ namespace Taio
             // newRectanglesToolStripMenuItem
             // 
             this.newRectanglesToolStripMenuItem.Name = "newRectanglesToolStripMenuItem";
-            this.newRectanglesToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.newRectanglesToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.newRectanglesToolStripMenuItem.Text = "Nowy prostok¹t";
             this.newRectanglesToolStripMenuItem.Click += new System.EventHandler(this.newRectanglesToolStripMenuItem_Click);
             // 
             // randomRectanglesToolStripMenuItem
             // 
             this.randomRectanglesToolStripMenuItem.Name = "randomRectanglesToolStripMenuItem";
-            this.randomRectanglesToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.randomRectanglesToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.randomRectanglesToolStripMenuItem.Text = "Generowanie losowe";
             this.randomRectanglesToolStripMenuItem.Click += new System.EventHandler(this.randomRectanglesToolStripMenuItem_Click);
             // 
             // solutionToolStripMenuItem
             // 
+            this.solutionToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.solutionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.preciseSolutionToolStripMenuItem,
             this.algorithm1SolutionToolStripMenuItem,
@@ -315,8 +312,10 @@ namespace Taio
             // 
             // helpToolStripMenuItem
             // 
+            this.helpToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.programHelpToolStripMenuItem});
+            this.programHelpToolStripMenuItem,
+            this.colorChangeToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.helpToolStripMenuItem.Text = "Pomoc";
@@ -324,7 +323,7 @@ namespace Taio
             // programHelpToolStripMenuItem
             // 
             this.programHelpToolStripMenuItem.Name = "programHelpToolStripMenuItem";
-            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
             this.programHelpToolStripMenuItem.Text = "Plik pomocy";
             this.programHelpToolStripMenuItem.Click += new System.EventHandler(this.programHelpToolStripMenuItem_Click);
             // 
@@ -342,10 +341,40 @@ namespace Taio
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // randomAddRectanglesToolStripMenuItem
+            // 
+            this.randomAddRectanglesToolStripMenuItem.Name = "randomAddRectanglesToolStripMenuItem";
+            this.randomAddRectanglesToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.randomAddRectanglesToolStripMenuItem.Text = "Dodanie danych losowych";
+            this.randomAddRectanglesToolStripMenuItem.Click += new System.EventHandler(this.randomAddRectanglesToolStripMenuItem_Click);
+            // 
+            // colorChangeToolStripMenuItem
+            // 
+            this.colorChangeToolStripMenuItem.Name = "colorChangeToolStripMenuItem";
+            this.colorChangeToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.colorChangeToolStripMenuItem.Text = "Zmiana koloru";
+            this.colorChangeToolStripMenuItem.Click += new System.EventHandler(this.colorChangeToolStripMenuItem_Click);
+            // 
+            // rectangleViewer
+            // 
+            this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
+            this.rectangleViewer.BackgroundColor = System.Drawing.Color.White;
+            this.rectangleViewer.CanDraw = true;
+            this.rectangleViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
+            this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
+            this.rectangleViewer.Name = "rectangleViewer";
+            this.rectangleViewer.Size = new System.Drawing.Size(510, 338);
+            this.rectangleViewer.TabIndex = 0;
+            this.rectangleViewer.XBorder = 5;
+            this.rectangleViewer.YBorder = 5;
+            this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.DodgerBlue;
             this.ClientSize = new System.Drawing.Size(769, 438);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
@@ -398,5 +427,8 @@ namespace Taio
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem programHelpToolStripMenuItem;
         private System.Windows.Forms.Button stopAlgorithm;
+        private System.Windows.Forms.ToolStripMenuItem randomAddRectanglesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem colorChangeToolStripMenuItem;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }
