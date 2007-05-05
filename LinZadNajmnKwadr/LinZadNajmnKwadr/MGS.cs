@@ -5,28 +5,19 @@ using System.Text;
 
 namespace LinZadNajmnKwadr
 {
-    class MGS
+    class MGS : LeastSquare
     {
         private Matrix q;
         private Matrix r;
-        private Matrix a;
-
-        private int m, n;
 
         public MGS(Matrix a)
+            : base(a)
         {
-            if (a == null)
-                throw new ArgumentNullException();
-
-            this.a = a;
             this.q = new Matrix(a.Rows, a.Columns);
             this.r = new Matrix(a.Columns, a.Columns);
-
-            this.m = a.Rows;
-            this.n = a.Columns;
         }
 
-        public void Ortogonalization()
+        new public void Ortogonalization()
         {
             if (a == null)
                 throw new ArgumentNullException();
@@ -36,17 +27,16 @@ namespace LinZadNajmnKwadr
                 q.SetColumn(k, a, k);
                 for (int i = 0; i < k - 1; i++)
                 {
-                    Matrix temp = q.GetColumn(i).Transposition()*q.GetColumn(k);
+                    Matrix temp = q.GetColumn(i).Transposition() * q.GetColumn(k);
                     r[i, k] = temp[0, 0];
 
-                    temp = q.GetColumn(k) - q.GetColumn(i)*r[i,k];
+                    temp = q.GetColumn(k) - q.GetColumn(i) * r[i, k];
                     q.SetColumn(k, temp, 0);
                 }
-
                 r[k, k] = q.GetColumn(k).Norm();
                 Matrix qk = q.GetColumn(k);
                 qk /= r[k, k];
-                q.SetColumn(k, qk,0);
+                q.SetColumn(k, qk, 0);
             }
         }
 
@@ -58,11 +48,6 @@ namespace LinZadNajmnKwadr
         public Matrix Q
         {
             get { return q; }
-        }
-
-        public Matrix A
-        {
-            get { return a; }
         }
     }
 }

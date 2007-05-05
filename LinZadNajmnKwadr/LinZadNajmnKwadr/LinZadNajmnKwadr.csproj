@@ -34,6 +34,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Householder.cs" />
+    <Compile Include="LeastSquare.cs" />
     <Compile Include="LinearLeastSquares.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="MGS.cs" />

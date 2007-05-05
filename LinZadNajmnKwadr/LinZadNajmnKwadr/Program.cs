@@ -6,6 +6,8 @@ namespace LinZadNajmnKwadr
 {
     class Program
     {
+        private static bool switchOn = true;
+
         static void Main(string[] args)
         {
             //MGSOrtogonalizationTest();
@@ -22,7 +24,7 @@ namespace LinZadNajmnKwadr
             double[] tabb = new double[] { 1, 0, 0, 1 };
             Matrix A = new Matrix(tab, 4, 3);
             Matrix b = new Matrix(tabb, 4, 1);
-            LinearLeastSquares lls = new LinearLeastSquares(A,b);
+            LinearLeastSquares lls = new LinearLeastSquares(A,b, switchOn);
             lls.Solve();
             Console.WriteLine("A:");
             Console.WriteLine(A);

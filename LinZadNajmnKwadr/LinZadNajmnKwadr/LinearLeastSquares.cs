@@ -6,14 +6,14 @@ namespace LinZadNajmnKwadr
 {
     class LinearLeastSquares
     {
-        private MGS mgs;
+        private LeastSquare mgs;
         private Matrix r;
         private Matrix x;
 
         private Matrix b;
         private int n;
 
-        public LinearLeastSquares(Matrix a, Matrix b)
+        public LinearLeastSquares(Matrix a, Matrix b,bool isSwitchOn)
         {
             if (a == null || b == null)
                 throw new ArgumentNullException();
@@ -25,7 +25,10 @@ namespace LinZadNajmnKwadr
                 throw new ArgumentException("b must be a vector!");
 
             this.n = a.Columns;
-            mgs = new MGS(a);
+            if (isSwitchOn)
+                mgs = new MGS(a);
+            else
+                mgs = null;
             mgs.Ortogonalization();
             this.b = b;
             this.x = new Matrix(a.Columns, 1);
