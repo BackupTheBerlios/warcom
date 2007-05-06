@@ -10,9 +10,10 @@ namespace LinZadNajmnKwadr
 
         static void Main(string[] args)
         {
-            //MGSOrtogonalizationTest();
-
-            LLSTest();
+            MGSOrtogonalizationTest();
+            Console.WriteLine("--------------------------");
+            HouseholderOrtogonalizationTest();
+            //LLSTest();
         }
 
         private static void LLSTest()
@@ -75,6 +76,48 @@ namespace LinZadNajmnKwadr
                 Console.WriteLine(mgs[i].R);
                 Console.WriteLine("spr");
                 Console.WriteLine(mgs[i].Q * mgs[i].R);
+            }
+        }
+
+        private static void HouseholderOrtogonalizationTest()
+        {
+            double[] tab = new double[]{1,-2,3,
+                                       3,1,4,
+                                        2,5,1};
+            //double[] tabb= new double[]{-7,5,18};//przyklad 1
+
+
+            double[] tab1 = new double[]{1,2,3,
+                                        2,5,8,
+                                        3,8,14};
+            //double[] tabb1= new double[]{4,9,11};//przyklad 2
+
+            double[] tab2 = new double[]{1,2,-1,0,
+                                        4,8,-7,1,
+                                        1,2,-1,1,
+                                        -1,1,4,6};
+            //double[] tabb2= new double[]{0,1,1,0};//przyklad 3
+
+            double[] tab3 = new double[]{2,1,-1,1,
+                                        3,-2,2,-3,
+                                        5,1,-1,2,
+                                        2,-1,1,-3};
+            //double[] tabb3 = new double[] { 1, 2, -1, 4 };//przyklad 4
+
+            Householder[] hous = new Householder[] {new Householder(new Matrix(tab, 3, 3)),
+                                    new Householder(new Matrix(tab1,3,3)),
+                                    new Householder(new Matrix(tab2, 4,4)),
+                                    new Householder(new Matrix(tab3, 4,4))};
+
+            for (int i = 0; i < hous.Length; i++)
+            {
+                hous[i].Ortogonalization();
+                Console.WriteLine("Q:");
+                Console.WriteLine(hous[i].Q);
+                Console.WriteLine("R:");
+                Console.WriteLine(hous[i].R);
+                Console.WriteLine("spr");
+                Console.WriteLine(hous[i].Q * hous[i].R);
             }
         }
     }

@@ -6,7 +6,7 @@ namespace LinZadNajmnKwadr
 {
     class LinearLeastSquares
     {
-        private LeastSquare mgs;
+        private LeastSquare leastSquare;
         private Matrix r;
         private Matrix x;
 
@@ -26,10 +26,20 @@ namespace LinZadNajmnKwadr
 
             this.n = a.Columns;
             if (isSwitchOn)
-                mgs = new MGS(a);
+                leastSquare = new MGS(a);
             else
-                mgs = null;
-            mgs.Ortogonalization();
+                leastSquare = new Householder(a);
+            leastSquare.Ortogonalization();
+            if (isSwitchOn)
+            {
+                leastSquare.Q.ToString();
+                leastSquare.R.ToString();
+            }
+            else
+            {
+                leastSquare.A.ToString();
+                leastSquare.R.ToString();
+            }
             this.b = b;
             this.x = new Matrix(a.Columns, 1);
         }
@@ -39,9 +49,9 @@ namespace LinZadNajmnKwadr
             r = new Matrix(b);
             for (int i = 0; i < n; i++)
             {
-                Matrix temp = mgs.Q.GetColumn(i).Transposition()*r;
+                Matrix temp = leastSquare.Q.GetColumn(i).Transposition()*r;
                 x[i, 0] = temp[0, 0];
-                r -= mgs.Q.GetColumn(i) * x[i, 0];
+                r -= leastSquare.Q.GetColumn(i) * x[i, 0];
             }
 
             for (int k = n - 1; k > 0; k--)
@@ -49,9 +59,9 @@ namespace LinZadNajmnKwadr
                 /*x[k, 0] /= r[k, k];
                 for (int i = 0; i < k; i++)
                     x[i, 0] -= r[i, k] * x[k, 0];*/
-                x[k, 0] /= mgs.R[k, k];
+                x[k, 0] /= leastSquare.R[k, k];
                 for (int i = 0; i < k; i++)
-                    x[i, 0] -= mgs.R[i, k] * x[k, 0];
+                    x[i, 0] -= leastSquare.R[i, k] * x[k, 0];
             }
         }
 

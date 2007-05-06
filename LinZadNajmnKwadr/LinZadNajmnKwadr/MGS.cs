@@ -7,9 +7,6 @@ namespace LinZadNajmnKwadr
 {
     class MGS : LeastSquare
     {
-        private Matrix q;
-        private Matrix r;
-
         public MGS(Matrix a)
             : base(a)
         {
@@ -38,16 +35,6 @@ namespace LinZadNajmnKwadr
                 qk /= r[k, k];
                 q.SetColumn(k, qk, 0);
             }
-        }
-
-        public Matrix R
-        {
-            get { return r; }
-        }
-
-        public Matrix Q
-        {
-            get { return q; }
         }
     }
 }

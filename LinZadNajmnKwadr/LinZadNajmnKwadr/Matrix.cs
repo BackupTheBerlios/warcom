@@ -29,6 +29,13 @@ namespace LinZadNajmnKwadr
 
         }
 
+        public void SetAllValues(double val)
+        {
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < columns; j++)
+                    m[i, j] = val;
+        }
+
         public Matrix(Matrix matrix)
         {
             rows = matrix.Rows;
