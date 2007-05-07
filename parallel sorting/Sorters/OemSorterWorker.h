@@ -1,5 +1,11 @@
 #ifndef OEMSORTERWORKER_H_
 #define OEMSORTERWORKER_H_
+#include<mpi.h>
+#include<iostream>
+#include "../Tools/DataLoader.h"
+using namespace MPI;
+using namespace std;
+using namespace tools;
 
 namespace sorting
 {

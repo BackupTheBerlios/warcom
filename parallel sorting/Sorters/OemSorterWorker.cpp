@@ -11,14 +11,14 @@ OemSorterWorker::OemSorterWorker(string inFile, string outFile)
 
 void OemSorterWorker::sort()
 {
-	MPI::Status status; 
-   	MPI::Init();
-   	int myrank = MPI::COMM_WORLD.Get_rank(); 
-   	int numprocs = MPI::COMM_WORLD.Get_size(); 
+	Status status; 
+   	Init();
+   	int myrank = COMM_WORLD.Get_rank(); 
+   	int numprocs = COMM_WORLD.Get_size(); 
    	if(myrank == 0)
    	{
    		cout<<"There are "<< numprocs <<" procs" << endl<<endl;
-		DataLoader dl(inputFile, numprocs);
+		DataLoader dl(inFile, numprocs);
 		dl.loadAndSendData();
 		
 			//TODO potem chyba normalny udział w sortowaniu?
@@ -40,7 +40,6 @@ void OemSorterWorker::sort()
 		if(buffer != NULL)
 			delete(buffer);
    	}
-   	MPI::Finalize();
+   	Finalize();
 }
-
 }

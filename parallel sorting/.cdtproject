@@ -52,5 +52,16 @@
 <pathentry kind="out" path=""/>
 <pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
 </item>
+<item id="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="psort" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>make</buildCommand>
+<buildArguments></buildArguments>
+<buildTarget>lam</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+</target>
+</buildTargets>
+</item>
 </data>
 </cdtproject>

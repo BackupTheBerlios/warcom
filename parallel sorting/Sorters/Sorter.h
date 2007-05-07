@@ -1,6 +1,6 @@
 #ifndef SORTER_H_
 #define SORTER_H_
-#include<mpi.h>
+#include "mpi.h"
 
 namespace sorting
 {
