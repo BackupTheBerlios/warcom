@@ -1,8 +1,6 @@
 #include<iostream>
-#include "Tools/DataLoader.h"
 #include "Tools/Utils.h"
-#include "Sorters/Sorter.h"
-#include "Sorters/OemSorter.h"
+#include "Sorters/OemSorterWorker.h"
 using namespace std; 
 using namespace tools; 
 using namespace sorting;
@@ -13,7 +11,6 @@ bool shell = false;
 string inputFile;
 string outputFile;
 
-void testOem();
 
 void showUsage()
 {
@@ -52,13 +49,25 @@ bool checkInput(string args[], int argc)
 	return bitonic||oem||shell;
 }
 
-int main(string args[], int argc)
+int main(int argc, string args[])
 {
-	testOem();
 	if(checkInput(args, argc))
 	{
-		//TODO jak bedzie wiecej kodu to napisze cos co na podstawie
-		//wejscia wybierze odpowiednie sortowania i wywola wszystkie funkcje		
+		if(oem)
+		{
+			 cout<<"Sortowanie algorytmem oem rozpoczete"<<endl;
+			 OemSorterWorker* osw = new OemSorterWorker(inputFile, outputFile);
+			 osw->sort(); 
+			 cout<<"Sortowanie zakonczone"<<endl;
+		}
+		if(shell)
+		{
+			
+		}	
+		if(bitonic)
+		{
+			
+		}	
 	}
 	else
 	{
@@ -68,11 +77,3 @@ int main(string args[], int argc)
 	return 0;
 }
 
-void testOem()
-{
-	int test[] = { 4, 1, 7, 2, 4, 9, 3};
-	OemSorter* oem = new OemSorter();
-	oem->sort(test, 7);
-	oem->display();
-	
-}

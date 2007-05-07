@@ -9,7 +9,7 @@ using namespace std;
 namespace sorting
 {
 
-class OemSorter : public Sorter
+class OemSorter
 {
 public:
 	OemSorter();
