@@ -14,4 +14,38 @@ void Utils::example()
 	cout<<"TEST";
 }
 
+int Utils::mpi_send(int* buf, int count, int dest, int tag)
+{
+	int ret = MPI_Send((void*) buf, count, MPI_INT,
+		 dest, tag, MPI_COMM_WORLD);
+	if(ret == MPI_SUCCESS) 
+		return 0;
+	else
+	{
+		cout<<"mpi_send error: ";
+		if(ret == MPI_ERR_COMM)
+			cout<<"MPI_ERR_COMM";
+		if(ret == MPI_ERR_COUNT)
+			cout<<"MPI_ERR_COUNT";			
+		if(ret == MPI_ERR_TYPE)
+			cout<<"MPI_ERR_TYPE";
+		if(ret == MPI_ERR_TAG)
+			cout<<"MPI_ERR_TAG";
+		if(ret == MPI_ERR_RANK)
+			cout<<"MPI_ERR_RANK";	
+		return 1;
+	}		
+}
+int Utils:: mpi_recv(int* buf, int count, int source, int tag, MPI_Status *status)
+{
+	int ret = MPI_Recv((void*) buf, count, MPI_INT, source, tag, MPI_COMM_WORLD, status);
+	if(ret == MPI_SUCCESS) 
+		return 0;
+	else
+	{
+		cout<<"mpi_recv error: ";
+		return 1;
+	}	
+}
+
 }
