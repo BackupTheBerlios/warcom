@@ -37,22 +37,24 @@ namespace Taio.Algorithms
             if (rectanglesList.Count == 0)
                 throw new ArgumentException("Empty rectangles list");
 
+            k = rectanglesList.Count / 3;
+
             RectangleContainer container = new RectangleContainer();
             rects = new RectanglesList(rectanglesList);
 
-            Rectangle resultRectangle = rects.GetLargestRect();
-            container.InsertRectangle(resultRectangle, Rectangle.Orientation.Vertical);
+            rectangle = rects.GetLargestRect();
+            container.InsertRectangle(rectangle, Rectangle.Orientation.Vertical);
 
-            //int iter = 0;
+            Rectangle bestWithShapeCondition = null;
+            if(IsShapeConditionValid(rectangle.SideA, rectangle.SideB))
+                bestWithShapeCondition = rectangle;
+
             Rectangle w;
             while (!rects.IsEmpty() && running)
             {
-                //iter++;
-
                 w = container.MaxCorrectRect;
-                //doklejanie
-                /*if (w.RectangleOrientation != Rectangle.Orientation.Vertical)
-                    w.Rotate();*/
+                if (IsShapeConditionValid(w.SideA, w.SideB))
+                    bestWithShapeCondition = w;
 
                 Rectangle n = rects.GetLongestRect(w.LongerSide);
                 if (n == null)
@@ -90,7 +92,6 @@ namespace Taio.Algorithms
                     if (t == null)
                         break;
 
-                    //TODO - to zmienic - nie jest tak prosto, bo moga nie pasowac wymiary prostokata
                     //jeœli jest wiêkszy ni¿ puste, przejdŸmy od razu do k-tego kroku zalepiania
                     if (t.Area >= container.EmptyFieldsArea)
                     {
@@ -101,19 +102,18 @@ namespace Taio.Algorithms
                         }
                     }
 
-                    //tutaj zmienic tak, by uwzglednic czy ostatnio dodany by³ z boku czy z dolu
+                    //uwzgledniamy czy ostatnio dodany prostok¹t by³ doklejany z boku czy z dolu
                     // z boku
                     Point nLT;
                     if (addingToLeft)
                     {
-                        if (/*t.ShorterSide >= pathWidth &&*/ !t.RectangleOrientation.Equals(Rectangle.Orientation.Horizontal))
+                        if (!t.RectangleOrientation.Equals(Rectangle.Orientation.Horizontal))
                             t.Rotate();
-                        //nLT = new Point(n.RightDown.X - t.SideA, n.RightDown.Y - t.SideB);
                         nLT = new Point(n.RightDown.X - t.SideA, n.RightDown.Y);
                     }
                     else
                     {
-                        if (/*t.ShorterSide >= pathWidth && */!t.RectangleOrientation.Equals(Rectangle.Orientation.Vertical))
+                        if (!t.RectangleOrientation.Equals(Rectangle.Orientation.Vertical))
                             t.Rotate();
                         nLT = new Point(n.RightDown.X, n.RightDown.Y - t.SideB);
                     }
@@ -134,10 +134,17 @@ namespace Taio.Algorithms
             }
 
             //sprawdzaæ jeszcze warunek poprawnoœci (mo¿e nowy prostok¹t - ostatni, który spe³nia³ warunki)
-            resultRectangle = container.MaxCorrectRect;
-            rectangle = resultRectangle;
+            rectangle = container.MaxCorrectRect;
 
-            return resultRectangle;
+            if (!IsShapeConditionValid(rectangle.SideA, rectangle.SideB))
+            {
+                Console.WriteLine("Najlepsze znalezione rozwi¹zanie " + rectangle + " nie spe³nia warunku 2:1");
+                rectangle = bestWithShapeCondition;
+                Console.WriteLine("Za rozwi¹zanie przyjmujê " + rectangle);
+            }
+            //rectangle = resultRectangle;
+
+            return rectangle;
         }
 
         /// <summary>
