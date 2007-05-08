@@ -10,10 +10,10 @@ namespace LinZadNajmnKwadr
 
         static void Main(string[] args)
         {
-            MGSOrtogonalizationTest();
-            Console.WriteLine("--------------------------");
-            HouseholderOrtogonalizationTest();
-            //LLSTest();
+            //MGSOrtogonalizationTest();
+            //Console.WriteLine("--------------------------");
+            //HouseholderOrtogonalizationTest();
+            LLSTest();
         }
 
         private static void LLSTest()
@@ -24,7 +24,16 @@ namespace LinZadNajmnKwadr
                                         10,11,12};
             double[] tabb = new double[] { 1, 0, 0, 1 };
             Matrix A = new Matrix(tab, 4, 3);
-            Matrix b = new Matrix(tabb, 4, 1);
+            Matrix b = new Matrix(tabb, 4, 1); 
+
+            /*double[] tab = new double[]{1, 2, -1, 0,
+                                        4, 8, -7, 1,
+                                        1, 2, -1, 1,
+                                        -1,1, 4, 6};
+            double[] tabb = new double[] { 0, 1, 1, 0 };
+            Matrix A = new Matrix(tab, 4, 4);
+            Matrix b = new Matrix(tabb, 4, 1); */
+
             LinearLeastSquares lls = new LinearLeastSquares(A,b, switchOn);
             lls.Solve();
             Console.WriteLine("A:");
