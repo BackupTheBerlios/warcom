@@ -37,7 +37,8 @@ namespace Taio.Algorithms
             if (rectanglesList.Count == 0)
                 throw new ArgumentException("Empty rectangles list");
 
-            k = rectanglesList.Count / 3;
+            k =  (int)(rectanglesList.Count * 0.75);
+            //k = rectanglesList.Count;
 
             RectangleContainer container = new RectangleContainer();
             rects = new RectanglesList(rectanglesList);
@@ -81,6 +82,8 @@ namespace Taio.Algorithms
 
                 if (container.IsCorrectRectangle)
                     continue;
+
+                //k = rectanglesList.Count;
 
                 //zalepianie bêdzie k-krokowe (k jak kiedyœ)
                 //k-ty krok to SimpleMend czyli proste zalepianie (³atanie)
