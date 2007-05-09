@@ -31,7 +31,7 @@ void showAuthors()
 	cout<<"Piotr Olejnik"<<endl;
 }
 
-bool checkInput(string args[], int argc)
+bool checkInput(char* args[], int argc)
 {
 	if(argc < 4)
 		return false;
@@ -39,26 +39,25 @@ bool checkInput(string args[], int argc)
 	outputFile = args[2];
 	for(int i=3;i<argc;i++)
 	{
-		if(args[i].compare("-b"))
+		string temp = args[i];
+		if(!temp.compare("-b"))
 			bitonic = true;
-		else if(args[i].compare("-oem"))
+		else if(!temp.compare("-oem"))
 			oem = true;
-		else if(args[i].compare("-s"))
+		else if(!temp.compare("-s"))
 			shell = true;
 	}
 	return bitonic||oem||shell;
 }
 
-int main(int argc, string args[])
+int main(int argc, char* args[])
 {
 	if(checkInput(args, argc))
 	{
 		if(oem)
 		{
-			 cout<<"Sortowanie algorytmem oem rozpoczete"<<endl;
 			 OemSorterWorker* osw = new OemSorterWorker(inputFile, outputFile);
 			 osw->sort(); 
-			 cout<<"Sortowanie zakonczone"<<endl;
 		}
 		if(shell)
 		{

@@ -3,6 +3,7 @@
 #include<mpi.h>
 #include<iostream>
 #include "../Tools/DataLoader.h"
+#include "OemSorter.h"
 using namespace MPI;
 using namespace std;
 using namespace tools;
