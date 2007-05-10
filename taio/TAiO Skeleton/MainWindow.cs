@@ -227,7 +227,7 @@ namespace Taio
         private void algorithm1SolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.EnableMenu(false);
-            this.algorithm = new Algorithm1();
+            this.algorithm = new Algorithm1Mod();
             bw.RunWorkerAsync();
         }
 
@@ -551,7 +551,7 @@ namespace Taio
             List<Rectangle> rr = new List<Rectangle>();
             rr.Add(r1);
 
-            Algorithm1 al = new Algorithm1();
+            Algorithm1Mod al = new Algorithm1Mod();
             Rectangle res = al.ComputeMaximumRectangle(rr);
             System.Console.WriteLine(res.SideA + " " + res.SideB);
         }

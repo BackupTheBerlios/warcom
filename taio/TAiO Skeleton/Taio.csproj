@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="Algorithms\Algorithm0.cs" />
     <Compile Include="Algorithms\Algorithm1 mod.cs" />
-    <Compile Include="Algorithms\Algorithm1.cs" />
     <Compile Include="Algorithms\Algorithm2.cs" />
     <Compile Include="Algorithms\Algorithm3.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
