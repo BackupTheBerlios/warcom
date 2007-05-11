@@ -6,6 +6,7 @@
 #include<string>
 #include<mpi.h>
 #include "myio.h"
+#include "Utils.h"
 using namespace std;
 
 #define BUFFER_SIZE_TAG 142
@@ -20,15 +21,21 @@ namespace tools
 			int fileh;
 			
 			int bufferSize;
-			int* buffer;
+			//int* buffer;
+			int** buffer;
 			int pcsCount;
 		
+			int* loadData(int bufferNo);
+			
 		public:
 			DataLoader(string, int);
 			~DataLoader();
-			int* loadData();
+			//int* loadData();
+
 			void saveData(int*, int size, string);
 			int loadAndSendData();
+			int* loadPrimeProcessData();
+			int getBufferSize() { return bufferSize;};
 	};
 }
 

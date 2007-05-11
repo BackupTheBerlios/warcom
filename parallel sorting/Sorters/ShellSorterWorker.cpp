@@ -14,31 +14,41 @@ void ShellSorterWorker::sort()
 	Status status; 
    	MPI::Init();
    	int myrank = COMM_WORLD.Get_rank(); 
-   	int numprocs = COMM_WORLD.Get_size(); 
+   	int numprocs = COMM_WORLD.Get_size();
+   	
+   	int* buffer;
+   	int bufSize; 
+   	
    	if(myrank == 0)
    	{
    		DataLoader dl(inFile, numprocs);
 		dl.loadAndSendData();
+		bufSize = dl.getBufferSize();
+		buffer = dl.loadPrimeProcessData();
 		
-			//TODO potem chyba normalny udział w sortowaniu?
+		cout<<"Process #"<<myrank<<": My buffer: ";
+		for(int i=0; i<bufSize; i++)
+			cout<<buffer[i]<<" ";
+		cout<<endl;
+		//TODO potem normalny udział w sortowaniu
    	}
    	else
    	{
    		ShellSorter* shells = new ShellSorter();
    		
-   		MPI_Status status;
+   		MPI_Status mpi_status;
    		MPI_Request request;
-   		int bufSize;
-   		int* buffer;
    		
-   		MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &status);
-   		buffer = new int[bufSize];
-		MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &status);
+		buffer = Utils::recv_init_buffer(bufSize, myrank, mpi_status);
+		
 		cout<<"Process #"<<myrank<<": My buffer: ";
-		shells->sort(buffer, bufSize);
 		for(int i=0; i<bufSize; i++)
 			cout<<buffer[i]<<" ";
 		cout<<endl;
+		
+		if(buffer != NULL)
+			shells->sort(buffer, bufSize);
+		
 		if(buffer != NULL)
 			delete(buffer);
    	}

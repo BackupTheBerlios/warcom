@@ -16,37 +16,49 @@ namespace tools
 		MyIO::my_read(fileh, &setSize,  sizeof(int),  0,  SEEK_CUR);
 		cout<<"setSize: "<<setSize<<endl;
 		
-		//TODO: to ustalenie wielkości bufora jest złe, oczywiście ;-)
-		//moze zrobic tak, by I proces czytal size/pcsCount+size%pcsCount?
-		//moze czytaja po rowno size/pcsCount a reszte zaniedbujemy?
 		this->bufferSize = (setSize%pcsCount != 0) ? setSize/pcsCount+1 : setSize/pcsCount;
 		cout<<"bufferSize: "<<this->bufferSize<<endl;
 		
-		buffer = new int[bufferSize];
+		buffer = new int*[bufferSize];
+		for(int i=0; i< pcsCount; i++)
+			buffer[i] = new int[bufferSize];
 		cout<<"Initialization for data loading done."<<endl<<"-------------"<<endl;
 	}
 	
 	DataLoader::~DataLoader()
 	{
+		for(int i=0; i<pcsCount; i++)
+			if(buffer[i] != NULL)
+				delete(buffer[i]);
+				
 		if(buffer != NULL)
 			delete(buffer);
+			
 		if(fileh != -1)
 			MyIO::my_close(fileh);
 	}
 	
-	int* DataLoader::loadData()
+	int* DataLoader::loadData(int bufferNo)
 	{
-		if(fileh == -1)
+		if(fileh == -1 || bufferNo < 0 || bufferNo > pcsCount)
+			return NULL;
+			
+		if(buffer == NULL || buffer[bufferNo] == NULL)
 			return NULL;
 		
-		MyIO::my_read(fileh, buffer, bufferSize*sizeof(int), 0, SEEK_CUR);
+		MyIO::my_read(fileh, buffer[bufferNo], bufferSize*sizeof(int), 0, SEEK_CUR);
 		/*for(int j=0; j< bufferSize; j++)
 			cout<<buffer[j]<<" ";
 		cout<<endl;*/ 
 		
 		//TODO obmyślic jak przydzielac pamiec bufora (nie mozna chyba do tego samego - czekanie zmarnuje asynchr) i co zwracac
 		// moze dwa bufory, raz korzystac z jednego raz z drugiego?
-		return buffer;
+		return buffer[bufferNo];
+	}
+	
+	int* DataLoader::loadPrimeProcessData()
+	{
+		return loadData(0);
 	}
 	
 	void DataLoader::saveData(int* array, int size, string outputFile)
@@ -58,24 +70,28 @@ namespace tools
 		MPI_Status status[bufferSize];
 		MPI_Request request[bufferSize];
 		
-		//TODO ustalić tagi
-		//TODO czy przed rozsylaniem danych wyslac wszystkim rozmiar bloku?
+		int* buff;
+		
 		cout<<"Sending bufferSize"<<endl;
 		for(int i=1; i< pcsCount; i++)
 			MPI_Send( &this->bufferSize, 1, MPI_INT, i, BUFFER_SIZE_TAG, MPI_COMM_WORLD);
 			
 		
-		//TODO dla i = 0 - przekaz dane do posortowania dla procesu głównego (na końcu?)
 		for(int i=1; i< pcsCount; i++)
 		{
-			loadData();
-			cout<<"Sending buffer to "<<i<<". Buffer content: ";
-			for(int j=0; j<bufferSize; j++)
-				cout<<buffer[j]<<" ";
-			cout<<endl;
-			MPI_Isend( buffer, bufferSize, MPI_INT, i, WORK_TAG, MPI_COMM_WORLD, &request[i] );
-			//wyslij odpowiedniemu procesowi
+			buff = loadData(i);
+			if(buff != NULL)
+			{
+				cout<<"Sending buffer to "<<i<<". Buffer content: ";
+				for(int j=0; j<bufferSize; j++)
+					cout<<buff[j]<<" ";
+				cout<<endl;
+				MPI_Isend( buff, bufferSize, MPI_INT, i, WORK_TAG, MPI_COMM_WORLD, &request[i] );
+			}
 		}
+		
+		//dane do posortowania dla procesu głównego otrzymywane
+		
 		//do kazdego senda jakis test?
 		return 0;
 	}
