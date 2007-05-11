@@ -24,6 +24,8 @@ namespace tools
 			//int* buffer;
 			int** buffer;
 			int pcsCount;
+			
+			MPI_Request* request;
 		
 			int* loadData(int bufferNo);
 			

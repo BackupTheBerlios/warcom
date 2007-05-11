@@ -58,11 +58,17 @@ int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
     }*/
     
     cout<<"Process #"<<myrank<<": I received bufferSize="<<bufSize<<endl;
+    if(bufSize <= 0)
+    	return NULL;
+    	
    	int* buffer = new int[bufSize];
    	
    	if(buffer == NULL)
    		return NULL;
-		
+	
+	for(int i=0; i< bufSize; i++)
+   		buffer[i] = 0;	
+	
 	MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &mpi_status);
 	/*if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &mpi_status) != 0)
     {
@@ -70,8 +76,6 @@ int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
     	return 1;
     }*/
 	
-	
-		
 	return buffer;
 }
 
