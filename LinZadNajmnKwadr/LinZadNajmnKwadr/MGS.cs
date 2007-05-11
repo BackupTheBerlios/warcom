@@ -7,14 +7,25 @@ namespace LinZadNajmnKwadr
 {
     class MGS : LeastSquare
     {
+        private Matrix a;
+        private Matrix q;
+        private Matrix r;
+
+        private int m, n;
+
         public MGS(Matrix a)
-            : base(a)
         {
+            if (a == null)
+                throw new ArgumentNullException();
+
+            this.a = new Matrix(a);
+            this.m = a.Rows;
+            this.n = a.Columns;
             this.q = new Matrix(a.Rows, a.Columns);
             this.r = new Matrix(a.Columns, a.Columns);
         }
 
-        new public void Ortogonalization()
+        public void Ortogonalization()
         {
             if (a == null)
                 throw new ArgumentNullException();
@@ -35,6 +46,32 @@ namespace LinZadNajmnKwadr
                 qk /= r[k, k];
                 q.SetColumn(k, qk, 0);
             }
+        }
+
+
+        public Matrix A
+        {
+            get { return a; }
+        }
+
+        public Matrix R
+        {
+            get { return r; }
+        }
+
+        public Matrix Q
+        {
+            get { return q; }
+        }
+
+        public Matrix GetQ()
+        {
+            return Q;
+        }
+
+        public Matrix GetR()
+        {
+            return R;
         }
     }
 }

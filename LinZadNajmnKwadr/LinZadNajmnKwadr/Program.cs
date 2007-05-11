@@ -15,7 +15,7 @@ namespace LinZadNajmnKwadr
             //HouseholderOrtogonalizationTest();
             LLSTest();
         }
-
+        
         private static void LLSTest()
         {
             double[] tab = new double[]{1,2,3,
@@ -84,6 +84,8 @@ namespace LinZadNajmnKwadr
                 Console.WriteLine("R:");
                 Console.WriteLine(mgs[i].R);
                 Console.WriteLine("spr");
+                Console.WriteLine("X");
+               
                 Console.WriteLine(mgs[i].Q * mgs[i].R);
             }
         }

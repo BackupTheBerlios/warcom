@@ -8,15 +8,25 @@ namespace LinZadNajmnKwadr
     {
         private int l;
         private Matrix qk;
+        private Matrix a;
+        private Matrix q;
+        private Matrix r;
+
+        private int m, n;
         
         public Householder(Matrix a)
-            : base(a)
         {
+            if (a == null)
+                throw new ArgumentNullException();
+
+            this.a = new Matrix(a);
+            this.m = a.Rows;
+            this.n = a.Columns;
             qk = new Matrix(1, a.Columns);
             l = Math.Min(this.n, this.m - 1);
         }
 
-        new public void Ortogonalization()
+        public void Ortogonalization()
         {
             if (a == null)
                 throw new ArgumentNullException();
@@ -44,7 +54,7 @@ namespace LinZadNajmnKwadr
                 qk[0, n - 1] = a[n - 1, n - 1];
         }
 
-        new public Matrix R
+        public Matrix R
         {
             get
             {
@@ -61,7 +71,7 @@ namespace LinZadNajmnKwadr
             }
         }
 
-        new public Matrix Q
+        public Matrix Q
         {
             get {
                 if (q == null)
@@ -88,6 +98,21 @@ namespace LinZadNajmnKwadr
                 }
                 return q;
             }
+        }
+
+        public Matrix GetQ()
+        {
+            return Q;
+        }
+
+        public Matrix GetR()
+        {
+            return R;
+        }
+        
+        public Matrix A
+        {
+            get { return a; }
         }
     }
 }
