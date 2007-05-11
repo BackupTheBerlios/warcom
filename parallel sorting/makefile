@@ -1,4 +1,5 @@
-FILES = Tools/Utils.cpp Tools/Utils.h Tools/DataLoader.cpp Tools/DataLoader.h Tools/myio.cpp Tools/myio.h Sorters/Sorter.h Sorters/Sorter.cpp Sorters/OemSorter.h Sorters/OemSorter.cpp Sorters/BSorter.cpp Sorters/BSorter.h Sorters/OemSorterWorker.cpp Sorters/OemSorterWorker.h
+FILES = Tools/Utils.cpp Tools/Utils.h Tools/DataLoader.cpp Tools/DataLoader.h Tools/myio.cpp Tools/myio.h Sorters/Sorter.h Sorters/Sorter.cpp Sorters/OemSorter.h Sorters/OemSorter.cpp Sorters/ShellSorter.h Sorters/ShellSorter.cpp Sorters/BSorter.cpp Sorters/BSorter.h Sorters/OemSorterWorker.cpp Sorters/OemSorterWorker.h Sorters/ShellSorterWorker.cpp Sorters/ShellSorterWorker.h
+
 
 all: psort
 

@@ -1,6 +1,7 @@
 #include<iostream>
 #include "Tools/Utils.h"
 #include "Sorters/OemSorterWorker.h"
+#include "Sorters/ShellSorterWorker.h"
 using namespace std; 
 using namespace tools; 
 using namespace sorting;
@@ -61,7 +62,8 @@ int main(int argc, char* args[])
 		}
 		if(shell)
 		{
-			
+			ShellSorterWorker* shsw = new ShellSorterWorker(inputFile, outputFile);
+			shsw->sort();
 		}	
 		if(bitonic)
 		{
