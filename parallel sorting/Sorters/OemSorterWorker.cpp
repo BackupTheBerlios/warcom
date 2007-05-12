@@ -15,12 +15,11 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 	MPI_Request request;
 	MPI_Status status; 
 	OemSorter* sorter = new OemSorter();
-	//cout<<"NR "<<myId<<" wyslal do "<<idProcess<<endl;
-	MPI_Isend( buffer, bufSize, MPI_INT, idProcess,
-		WORK_TAG+50, MPI_COMM_WORLD, &request );
+	MPI_Send( buffer, bufSize, MPI_INT, idProcess, WORK_TAG+50, MPI_COMM_WORLD);
+//	MPI_Isend( buffer, bufSize, MPI_INT, idProcess,
+//		WORK_TAG+50, MPI_COMM_WORLD, &request );
 	MPI_Recv(buffer2, bufSize, MPI_INT, idProcess,
 		WORK_TAG+50, MPI_COMM_WORLD, &status);	
-	//cout<<"NR "<<myId<<" dostal od "<<idProcess<<endl;
 	for(int i = 0; i<bufSize; ++i)
 		buffer2[i+bufSize] = buffer[i];
 	sorter->sort(buffer2, bufSize * 2);
@@ -38,8 +37,8 @@ int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 {
 	if(j > 0 )
 	{
-		int forbiden = 2 << (j - 1);
-		int block = 2 << (i + 1);
+		int forbiden = (int)pow(2,j - 1);
+		int block = 2 << i;
 		int modulo = ((k - 1) % block) + 1;
 		if(modulo <= forbiden || modulo > (block - forbiden)) 
 		{
@@ -51,12 +50,11 @@ int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 	return 1;
 }
 
-//TODO tutaj to trzeba jakas inaczej wyliczac
 int OemSorterWorker::findPartner(int k , int i ,int j)
 {
-	int block = 2 << (i + 1);
+	int block = 2 << i;
 	int partner =  k + i + 1 - j;
-	int expr = (( k - 1 ) % block) + i + 2 - j; 
+	int expr = (( k - 1 ) % block) + i + 2 - j;
 	if(expr > block)
 		partner = k - i - 1 + j;
 	return partner;
