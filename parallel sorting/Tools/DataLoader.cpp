@@ -5,7 +5,7 @@ namespace tools
 	DataLoader::DataLoader(string fileName, int pcsCount)
 	{
 		this->fileName = fileName;
-		cout<<"File to perform: "<<this->fileName << endl;
+		//cout<<"File to perform: "<<this->fileName << endl;
 		this->pcsCount = pcsCount;
 		
 		request = new MPI_Request[pcsCount];
@@ -16,15 +16,15 @@ namespace tools
 			
 		int setSize = 0;
 		MyIO::my_read(fileh, &setSize,  sizeof(int),  0,  SEEK_CUR);
-		cout<<"setSize: "<<setSize<<endl;
+		//cout<<"setSize: "<<setSize<<endl;
 		
 		this->bufferSize = (setSize%pcsCount != 0) ? setSize/pcsCount+1 : setSize/pcsCount;
-		cout<<"bufferSize: "<<this->bufferSize<<endl;
+		//cout<<"bufferSize: "<<this->bufferSize<<endl;
 		
 		buffer = new int*[bufferSize];
 		for(int i=0; i< pcsCount; i++)
 			buffer[i] = new int[bufferSize];
-		cout<<"Initialization for data loading done."<<endl<<"-------------"<<endl;
+	//	cout<<"Initialization for data loading done."<<endl<<"-------------"<<endl;
 	}
 	
 	DataLoader::~DataLoader()
@@ -85,7 +85,7 @@ namespace tools
 	{
 		int* buff;
 		
-		cout<<"Sending bufferSize"<<endl;
+		//cout<<"Sending bufferSize"<<endl;
 		for(int i=0; i< pcsCount; i++)
 			MPI_Send( &this->bufferSize, 1, MPI_INT, i, BUFFER_SIZE_TAG, MPI_COMM_WORLD);
 			
@@ -96,7 +96,7 @@ namespace tools
 			buff = loadData(i);
 			if(buff != NULL)
 			{
-				cout<<"Sending buffer to "<<i<<endl;
+				//cout<<"Sending buffer to "<<i<<endl;
 				/*cout<<". Buffer content: ";
 				for(int j=0; j<bufferSize; j++)
 					cout<<buff[j]<<" ";
