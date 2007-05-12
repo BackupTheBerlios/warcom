@@ -21,7 +21,7 @@ namespace Taio
         {
             this.log = new StringBuilder();
             SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Pliki TAiO (*.tao)|*.tao";
+            sfd.Filter = "Pliki TAiO (*.taio;*.tao)|*.taio;*.tao|Wszystkie pliki (*.*)|*.*";
             sfd.Title = "Wybierz plik do zapisu danych";
             if (sfd.ShowDialog() == DialogResult.OK)
             {
@@ -60,7 +60,7 @@ namespace Taio
             this.log = new StringBuilder();
             clearLists = false;
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Pliki TAiO (*.tao)|*.tao";
+            ofd.Filter = "Pliki TAiO (*.taio;*.tao)|*.taio;*.tao|Wszystkie pliki (*.*)|*.*";
             ofd.Title = "Wybierz plik zawieraj¹cy prostok¹ty";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -212,8 +212,17 @@ namespace Taio
                         List<Rectangle> rects = new List<Rectangle>();
                         for (int i = 0; i < x1.Count; ++i)
                         {
-                            Rectangle rect = new Rectangle(new Point(Int32.Parse(x1[i].Value), Int32.Parse(y1[i].Value)),
-                                    new Point(Int32.Parse(x2[i].Value), Int32.Parse(y2[i].Value)));
+                            int l = Int32.Parse(x1[i].Value) <= Int32.Parse(x2[i].Value)?
+                                Int32.Parse(x1[i].Value) : Int32.Parse(x2[i].Value);
+                            int rt = Int32.Parse(x1[i].Value) <= Int32.Parse(x2[i].Value) ?
+                                Int32.Parse(x2[i].Value) : Int32.Parse(x1[i].Value);
+                            int d = Int32.Parse(y1[i].Value) <= Int32.Parse(y2[i].Value) ?
+                                Int32.Parse(y1[i].Value) : Int32.Parse(y2[i].Value);
+                            int g = Int32.Parse(y1[i].Value) <= Int32.Parse(y2[i].Value) ?
+                                Int32.Parse(y2[i].Value) : Int32.Parse(y1[i].Value);
+                            //g += d;
+                            //rt += l;
+                            Rectangle rect = new Rectangle(new Point(l, d), new Point(rt, g));
                             if (rects.Count == 0 ||
                                     rect.LeftTop.X <= rects[0].LeftTop.X && rect.LeftTop.Y <= rects[0].LeftTop.Y)
                                 rects.Insert(0, rect);
@@ -267,6 +276,10 @@ namespace Taio
                     wr.WriteLine(solutions[0].Info);
                 else
                     wr.WriteLine("Plik stworzony przez grupê Aproksumuj¹cych z Wilkami:)))");
+                foreach (Solution s in solutions)
+                    if (s.Tag.StartsWith("AW") && (s.Info == null || s.Info == ""))
+                        wr.WriteLine("Czas wykonania algorytmu " + s.Tag +
+                            " wynosi³: " + s.Ts);
                 wr.WriteLine("##");
                 for (int i = 0; i < rectangles.Count; ++i)
                     wr.WriteLine(rectangles[i].SideA + "," + rectangles[i].SideB);

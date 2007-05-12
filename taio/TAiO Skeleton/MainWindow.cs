@@ -22,6 +22,7 @@ namespace Taio
         private DataLoader dataLoader = new DataLoader();
         private IAlgorithm algorithm;
         private BackgroundWorker bw;
+        private DateTime dt;
         
         public MainWindow()
         {
@@ -56,6 +57,7 @@ namespace Taio
             }
 
             Solution s = new Solution(this.algorithm.GetTag(), this.algorithm.GetRectangle());
+            s.Ts = DateTime.Now.Subtract(dt);
             for (int i = 0; i < this.solutions.Count; ++i)
             {
                 if (this.solutions[i].Tag == s.Tag && i < this.rectanglesTreeView.Nodes[1].Nodes.Count)
@@ -77,11 +79,13 @@ namespace Taio
             this.rectanglesTreeView.Refresh();
             this.algorithm = null;
             this.EnableMenu(true);
+            MessageBox.Show("Gdzieœ to wypada³oby wyœwietliæ, czas wykonania= " +  s.Ts.ToString());
         }
 
         private void startThread(object sender, DoWorkEventArgs e)
         {
             Debug.WriteLine("W¹tek rozpoczêty");
+            dt = DateTime.Now;
             if (this.algorithm != null)
                 this.algorithm.ComputeMaximumRectangle(this.rectangles);
         }

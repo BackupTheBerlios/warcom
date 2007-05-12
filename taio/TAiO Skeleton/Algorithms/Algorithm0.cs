@@ -12,15 +12,15 @@ namespace Taio.Algorithms
         private string tag = "AW0";
         private Rectangle rect;
         private bool stop;
-        private TimeSpan ts;
+        //private TimeSpan ts;
 
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rectangles)
         {
             try
             {
-                DateTime dt = DateTime.Now;
+                //DateTime dt = DateTime.Now;
                 this.rect = this.ComputeRectangles(rectangles);
-                this.ts = DateTime.Now.Subtract(dt);
+                //this.ts = DateTime.Now.Subtract(dt);
             }
             catch (Exception) { }
             return this.rect;

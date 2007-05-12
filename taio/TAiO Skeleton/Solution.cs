@@ -9,7 +9,22 @@ namespace Taio
         private Rectangle rectangle;
         private string tag ="";
         private bool correct;
-        private string info;
+        private string info=null;
+        private TimeSpan ts;
+        private String solutionInfo;
+
+        public TimeSpan Ts
+        {
+            get { return ts; }
+            set { ts = value; }
+        }
+        
+
+        public String SolutionInfo
+        {
+            get { return solutionInfo; }
+            set { solutionInfo = value; }
+        }
 
         public string Info
         {
