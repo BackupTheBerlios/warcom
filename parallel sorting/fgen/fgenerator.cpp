@@ -11,22 +11,19 @@ int maxNumber = 100;
 
 void showUsage()
 {
-	cout<<"Invalid entry"<<endl;
-	cout<<"fgen outputFile numberCount [numberMax]"<<endl;
+	cout<<"Correct usage:"<<endl;
+	cout<<"fgen outputFile numberCount [numberMax (default=100)]"<<endl;
 }
 
 
 bool checkInput(int argc, char* argv[])
 {	
-	if(argc < 2 || argc > 4)
-	{
-		showUsage();
+	if(argc < 3)
 		return false;
-	}
 
 	outputFile = argv[1];
 	numbers = atoi(argv[2]);
-	if(argc == 3)
+	if(argc == 4)
 	{
 		int tmn = atoi(argv[3]);
 		if(tmn > 0)
@@ -53,11 +50,12 @@ int main(int argc, char* argv[])
 		MyIO::my_write(fd, &numbers, sizeof(int), 0, SEEK_CUR);
 		for(int i=0; i<numbers; i++)
 		{
-			random=rand()%maxNumber+minNumber;
+			random=rand()%(maxNumber+1);
+			//cout<<random<<endl;
 			MyIO::my_write(fd, &random, sizeof(int), 0, SEEK_CUR);
 		}
 		MyIO::my_close(fd);
-		cout<<"File "<< outputFile << " with "<<numbers<<" integers to sort generated."<< endl;
+		cout<<"File "<< outputFile << " with "<<numbers<<" integers (max = "<<maxNumber<<") to sort generated."<< endl;
 	}
 	else
 	{
