@@ -83,7 +83,7 @@ namespace Taio
                 {
                     try
                     {
-                        str = str.Replace(" ", "");
+                        //str = str.Replace(" ", "");
                         Match elem = wyr.Match(str);
                         if (elem.Success)
                         {
@@ -267,7 +267,7 @@ namespace Taio
             }
         }
 
-        private void AppendSolutions(string fileName, List<Solution> solutions, List<Rectangle> rectangles)
+        public void AppendSolutions(string fileName, List<Solution> solutions, List<Rectangle> rectangles)
         {
             using (TextWriter wr = new StreamWriter(fileName))
             {
@@ -279,7 +279,7 @@ namespace Taio
                 foreach (Solution s in solutions)
                     if (s.Tag.StartsWith("AW") && (s.Info == null || s.Info == ""))
                         wr.WriteLine("Czas wykonania algorytmu " + s.Tag +
-                            " wynosi³: " + s.Ts);
+                            " wynosi³: " + s.Ts.ToString());
                 wr.WriteLine("##");
                 for (int i = 0; i < rectangles.Count; ++i)
                     wr.WriteLine(rectangles[i].SideA + "," + rectangles[i].SideB);

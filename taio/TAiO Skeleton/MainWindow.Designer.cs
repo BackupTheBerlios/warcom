@@ -38,6 +38,7 @@ namespace Taio
             this.removeRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.stopAlgorithm = new System.Windows.Forms.Button();
             this.acceptChangebutton = new System.Windows.Forms.Button();
             this.addRectbutton = new System.Windows.Forms.Button();
@@ -144,6 +145,7 @@ namespace Taio
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.progressBar1);
             this.splitContainer2.Panel2.Controls.Add(this.stopAlgorithm);
             this.splitContainer2.Panel2.Controls.Add(this.acceptChangebutton);
             this.splitContainer2.Panel2.Controls.Add(this.addRectbutton);
@@ -166,6 +168,17 @@ namespace Taio
             this.rectangleViewer.XBorder = 5;
             this.rectangleViewer.YBorder = 5;
             this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(274, 16);
+            this.progressBar1.Maximum = 1000;
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(100, 23);
+            this.progressBar1.Step = 1;
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBar1.TabIndex = 3;
+            this.progressBar1.Visible = false;
             // 
             // stopAlgorithm
             // 
@@ -419,5 +432,6 @@ namespace Taio
         private System.Windows.Forms.ToolStripMenuItem randomAddRectanglesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem colorChangeToolStripMenuItem;
         private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

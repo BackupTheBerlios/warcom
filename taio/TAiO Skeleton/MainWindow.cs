@@ -36,6 +36,7 @@ namespace Taio
             //testDrawingComplexRects();
             //testAlgorihm1();
             //testAlgorithm2();
+            //this.testAlgoritm0();
             this.ChangeColor();
         }
 
@@ -51,6 +52,7 @@ namespace Taio
             Debug.WriteLine("W¹tek zakoñczony");
             if (this.algorithm.GetRectangle() == null)
             {
+                MessageBox.Show("b³¹d lub stop");
                 this.algorithm = null;
                 this.EnableMenu(true);
                 return;
@@ -224,7 +226,8 @@ namespace Taio
         private void preciseSolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.EnableMenu(false);
-            this.algorithm = new Algorithm0();
+            //this.algorithm = new Algorithm0();
+            this.algorithm = new Algorithm0v2();
             bw.RunWorkerAsync();
         }
 
@@ -560,6 +563,64 @@ namespace Taio
             System.Console.WriteLine(res.SideA + " " + res.SideB);
         }
 
+
+        private void testAlgoritm0()
+        {
+            BackgroundWorker bwTest = new BackgroundWorker();
+            bwTest.DoWork += new DoWorkEventHandler(startAlg0);
+            bwTest.ProgressChanged += new ProgressChangedEventHandler(infoAlg0);
+            bwTest.RunWorkerAsync();
+        }
+
+        private void infoAlg0(object sender, ProgressChangedEventArgs e)
+        {
+            this.progressBar1.Visible = true;
+            this.progressBar1.Value = e.ProgressPercentage;
+            this.progressBar1.Invalidate();           
+        }
+
+        private void startAlg0(object sender, DoWorkEventArgs e)
+        {
+            this.progressBar1.Maximum = 10000;
+            for (int i = 0; i < 10000; ++i)
+            {
+                List<Rectangle> rects=null;
+                if(i%10-1==0)
+                    rects = this.dataLoader.RandomRectangles(5, 3, 1);
+                else
+                    rects = this.dataLoader.RandomRectangles(4, 3, 1);
+                IAlgorithm alg0 = new Algorithm0();
+                DateTime dt = DateTime.Now;
+                alg0.ComputeMaximumRectangle(rects);
+                Solution s1 = new Solution(alg0.GetTag(), alg0.GetRectangle());
+                s1.Ts = DateTime.Now.Subtract(dt);
+                alg0 = new Algorithm0v1();
+                dt = DateTime.Now;
+                alg0.ComputeMaximumRectangle(rects);
+                Solution s2 = new Solution(alg0.GetTag(), alg0.GetRectangle());
+                s2.Ts = DateTime.Now.Subtract(dt);
+                alg0 = new Algorithm0v2();
+                dt = DateTime.Now;
+                alg0.ComputeMaximumRectangle(rects);
+                Solution s3 = new Solution(alg0.GetTag(), alg0.GetRectangle());
+                s3.Ts = DateTime.Now.Subtract(dt);
+                if (s1.Rectangle.Area != s2.Rectangle.Area ||
+                    s1.Rectangle.Area != s3.Rectangle.Area 
+                    ||s3.Rectangle.Area != s2.Rectangle.Area
+                    )
+                {
+                    List<Solution> s = new List<Solution>();
+                    s.Add(s1);
+                    s.Add(s2);
+                    s.Add(s3);
+                    this.dataLoader.AppendSolutions(@"C:\Documents and Settings\Jakub\Pulpit\projekty\testy\test" 
+                        + i + ".taio",s, rects);
+                }
+                BackgroundWorker bw1 = (BackgroundWorker)sender;
+                bw1.WorkerReportsProgress = true;
+                bw1.ReportProgress(i+1);
+            }
+        }
         #endregion
     }
 }
