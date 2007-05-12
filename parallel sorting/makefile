@@ -1,16 +1,17 @@
-FILES = Tools/Utils.cpp Tools/Utils.h Tools/DataLoader.cpp Tools/DataLoader.h Tools/myio.cpp Tools/myio.h Sorters/Sorter.h Sorters/Sorter.cpp Sorters/OemSorter.h Sorters/OemSorter.cpp Sorters/ShellSorter.h Sorters/ShellSorter.cpp Sorters/BSorter.cpp Sorters/BSorter.h Sorters/OemSorterWorker.cpp Sorters/OemSorterWorker.h Sorters/ShellSorterWorker.cpp Sorters/ShellSorterWorker.h
+FILES = psort.cpp Sorters/Sorter.h Sorters/Sorter.cpp
 
+TOOLS = Tools/Utils.cpp Tools/Utils.h Tools/DataLoader.cpp Tools/DataLoader.h Tools/myio.cpp Tools/myio.h
 
-all: psort
+OEM = Sorters/OemSorter.h Sorters/OemSorter.cpp Sorters/OemSorterWorker.cpp Sorters/OemSorterWorker.h
+
+SHELL = Sorters/ShellSorter.h Sorters/ShellSorter.cpp Sorters/ShellSorterWorker.cpp Sorters/ShellSorterWorker.h
+
+BITONIC = Sorters/BSorter.cpp Sorters/BSorter.h
+
+all: lam
 
 clean:
-	-rm -f psort dlt
+	-rm -f psort
 
-psort: psort.cpp
-	g++ -o2 -Wall psort.cpp $(FILES) -o psort
-	
 lam: psort.cpp
-	mpic++ -o2 psort.cpp $(FILES) -o psort
-
-dlt: dataLoaderTest.cpp
-	mpic++ -o2 dataLoaderTest.cpp $(FILES) -o dlt
+	mpic++ -o2 $(FILES) $(TOOLS) $(SHELL) $(OEM) $(BITONIC) -o psort

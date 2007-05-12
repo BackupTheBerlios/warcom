@@ -67,6 +67,7 @@ void OemSorterWorker::sort()
    	}
    	else
    	{
+   		cout<<myrank<<endl;
    		OemSorter* oem = new OemSorter();
    		MPI_Status status;
    		MPI_Request request;
