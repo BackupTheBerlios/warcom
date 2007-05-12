@@ -1,6 +1,7 @@
 #ifndef OEMSORTERWORKER_H_
 #define OEMSORTERWORKER_H_
 #include<mpi.h>
+#include<math.h>
 #include<iostream>
 #include "../Tools/DataLoader.h"
 #include "OemSorter.h"
@@ -20,6 +21,10 @@ public:
 private:
 	string inFile;
 	string outFile; 
+	int canTransferInThisStep(int,int,int);
+	int findPartner(int, int,int);
+	int compareSplit(int idProces,int myId, int* buffer, int bufSize);
+	
 };
 }
 #endif /*OEMSORTERWORKER_H_*/
