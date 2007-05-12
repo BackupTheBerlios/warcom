@@ -18,8 +18,9 @@ namespace tools
 		MyIO::my_read(fileh, &setSize,  sizeof(int),  0,  SEEK_CUR);
 		//cout<<"setSize: "<<setSize<<endl;
 		
-		this->bufferSize = (setSize%pcsCount != 0) ? setSize/pcsCount+1 : setSize/pcsCount;
-		//cout<<"bufferSize: "<<this->bufferSize<<endl;
+		//this->bufferSize = (setSize%pcsCount != 0) ? setSize/pcsCount+1 : setSize/pcsCount;
+		this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/pcsCount : setSize/(pcsCount-1);
+		cout<<"bufferSize: "<<this->bufferSize<<endl;
 		
 		buffer = new int*[bufferSize];
 		for(int i=0; i< pcsCount; i++)
