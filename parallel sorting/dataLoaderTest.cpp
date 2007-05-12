@@ -16,16 +16,11 @@ void showUsage()
 
 
 bool checkInput(int argc, char* argv[])
-{
-	/*cout<<"argc = " << argc << endl;
-	for(int i=0; i< argc; i++)
-		cout<<"arg["<<i<<"]: "<<argv[i] << endl;*/
-		
+{	
 	if(argc < 2)
 		return false;
 
 	inputFile = argv[1];
-	//outputFile = argv[2];
 	return true;
 }
 
@@ -54,10 +49,22 @@ int main(int argc, char* argv[])
     		MPI_Request request;
     		int bufSize;
     		int* buffer;
-    		MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &status);
+
+			//MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &status);
+    		if(Utils::mpi_recv(&bufSize, 1, 0, BUFFER_SIZE_TAG, &status) != 0)
+    		{
+    			MPI::Finalize();
+    			return 1;
+    		}	
+    		
     		cout<<"Process #"<<myrank<<": I received bufferSize="<<bufSize<<endl;
     		buffer = new int[bufSize];
-			MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &status);
+			//MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &status);
+			if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status) != 0)
+    		{
+    			MPI::Finalize();
+    			return 1;
+    		}
 			cout<<"Process #"<<myrank<<": My buffer: ";
 			for(int i=0; i<bufSize; i++)
 				cout<<buffer[i]<<" ";
