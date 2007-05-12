@@ -15,7 +15,6 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 	MPI_Request request;
 	MPI_Status status; 
 	OemSorter* sorter = new OemSorter();
-		
 	MPI_Isend( buffer, bufSize, MPI_INT, idProcess,
 		WORK_TAG+50, MPI_COMM_WORLD, &request );
 	MPI_Recv(buffer2, bufSize, MPI_INT, idProcess,
@@ -82,6 +81,7 @@ void OemSorterWorker::sort()
 					if(canTransferInThisStep(myrank, i, j))
 					{
 						int partner = findPartner(myrank, i, j);
+						cout<<"comsplit "<<myrank<<"<->"<<partner<<endl;
 						compareSplit(partner, myrank, buffer, bufSize);
 					}
 		for(int i=0; i<bufSize; i++)
