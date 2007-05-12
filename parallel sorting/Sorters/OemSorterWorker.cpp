@@ -30,6 +30,7 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 		    buffer[i] = buffer2[i+shift];
 	if(buffer2 != NULL)
 			delete(buffer2);
+	cout<<"comsplit finished"<<myId<<"<->"<<idProcess<<endl;	
 	return 0;	
 }
 
@@ -41,12 +42,8 @@ int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 		int block = 2 << i;
 		int modulo = ((k - 1) % block) + 1;
 		if(modulo <= forbiden || modulo > (block - forbiden)) 
-		{
-			cout<<"Odmowiono"<<k<<" "<<i<<" "<<j<<endl;
-			return 0;
-		}	
+			return 0;	
 	}
-	cout<<"Zezwolono"<<k<<" "<<i<<" "<<j<<endl;
 	return 1;
 }
 
@@ -60,7 +57,7 @@ int OemSorterWorker::findPartner(int k , int i ,int j)
 	return partner;
 }
 
-void OemSorterWorker::sort()
+int OemSorterWorker::sort()
 {
 	Status status; 
    	MPI::Init();
@@ -90,6 +87,7 @@ void OemSorterWorker::sort()
 						cout<<"comsplit "<<myrank<<"<->"<<partner<<endl;
 						compareSplit(partner, myrank, buffer, bufSize);
 					}
+		cout<<"Moj bufor "<<myrank<<endl;
 		for(int i=0; i<bufSize; i++)
 			cout<<buffer[i]<<" ";
 		cout<<endl;
@@ -97,5 +95,6 @@ void OemSorterWorker::sort()
 			delete(buffer);
    	}
    	MPI::Finalize();
+   	return 0;
 }
 }

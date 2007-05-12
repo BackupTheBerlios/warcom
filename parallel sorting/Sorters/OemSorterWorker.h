@@ -16,7 +16,7 @@ class OemSorterWorker
 {
 public:
 	OemSorterWorker(string inFile, string outFile);
-	void sort();
+	int sort();
 	
 private:
 	string inFile;
