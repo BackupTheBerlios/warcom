@@ -30,15 +30,52 @@ int* ShellSorter::sort(int a[], int size)
 	{
 		int otherPId = getPIDForCompSplit(myId-1, allSortersCount, stage)+1;
 		//int otherPId = getPIDForCompSplit(myId, allSortersCount, stage);
-		cout<<"Process #"<<myId<<" before compareSplit with #"<<otherPId<<" at stage "<<stage<<endl;
-		display();
+		//cout<<"Process #"<<myId<<" before compareSplit with #"<<otherPId<<" at stage "<<stage<<endl;
+		//display();
 		//compareSplit(otherPId);
 		compareSplit(otherPId, myId, a, size);
-		cout<<"Process #"<<myId<<" after compareSplit at stage "<<stage<<endl;
-		display();
+		//cout<<"Process #"<<myId<<" after compareSplit at stage "<<stage<<endl;
+		//display();
 	}
 	
 	//second phase - odd-even
+	//cout<<"odd-even phase started"<<endl;
+	//while(!done)
+	for(int i=1; i<=allSortersCount; i++)
+	{
+		//cout<<"stage "<<i<<endl;
+		if(i%2 ==1)
+		{
+			if(myId%2 == 1 && myId+1 < allSortersCount+1) // gdy wszystkie sortują <allSortersCount
+			{
+				//cout<<"Process #"<<myId<<" before odd with #"<<myId+1<<" at stage #"<<i<<endl;
+				compareSplit(myId+1, myId, a, size);
+			}
+			else if (myId-1 > 0 && myId!=allSortersCount) // gdy wszystkie sortują >=0
+			{
+				//cout<<"Process #"<<myId<<" before odd with #"<<myId-1<<" at stage #"<<i<<endl;
+				compareSplit(myId-1, myId, a, size);
+			}
+		}
+		else
+		{
+			if(myId%2 == 0 && myId+1 < allSortersCount+1) // gdy wszystkie sortują <allSortersCount
+			{
+				//cout<<"Process #"<<myId<<" before even with #"<<myId+1<<" at stage #"<<i<<endl;
+				compareSplit(myId+1, myId, a, size);
+			}
+			else if (myId-1 > 0) // gdy wszystkie sortują >=0
+			{
+				//cout<<"Process #"<<myId<<" before even with #"<<myId-1<<" at stage #"<<i<<endl;
+				compareSplit(myId-1, myId, a, size);
+			}
+		}
+		
+		//MPI_Barrier(MPI_COMM_WORLD);
+	}
+	
+	cout<<"Process #"<<myId<<" completed sorting. "<<endl;
+	display();
 	return a;
 }
 
@@ -137,11 +174,7 @@ int ShellSorter::compareSplit(int otherPId, int myId, int* buffer, int bufferSiz
 	else
 		for(int i = 0; i<bufferSize; ++i)
 			buffer[i] = buffer2[i];
-	
-	/*cout<<"compsplit proces "<<myId<<": ";	
-	for(int i = 0; i<bufferSize*2; ++i)
-		cout<< buffer2[i]<<" ";
-	cout<<endl;	*/		
+		
 	if(buffer2 != NULL)
 			delete(buffer2);
 	return 0;

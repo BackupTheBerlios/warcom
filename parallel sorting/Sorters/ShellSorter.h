@@ -2,10 +2,12 @@
 #define SHELLSORTER_H_
 #include<iostream>
 #include<math.h>
+#include<mpi.h>
 
 #include "Sorter.h"
 #include "LocalQSorter.h"
 using namespace std;
+using namespace MPI;
 
 #define COMPARE_SPLIT 2000
 

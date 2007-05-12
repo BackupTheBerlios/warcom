@@ -48,6 +48,8 @@ void ShellSorterWorker::sort()
 //		}
 //		else
 //			cout << "!!! Process #"<<myrank<<": Buffer receiving error!"<<endl;
+
+		//MPI_Barrier(MPI_COMM_WORLD);
    	}
    	else
    	{
