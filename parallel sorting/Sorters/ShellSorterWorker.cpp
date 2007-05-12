@@ -27,52 +27,58 @@ void ShellSorterWorker::sort()
    		DataLoader dl(inFile, numprocs);
 		dl.loadAndSendData();
 		
-		bufSize = dl.getBufferSize();
-		buffer = dl.loadPrimeProcessData();
+		//bufSize = dl.getBufferSize();
+		//buffer = dl.loadPrimeProcessData();
 		
 		//buffer = Utils::recv_init_buffer(bufSize, myrank, mpi_status);
 		
-		if(buffer != NULL)
-		{
-			cout<<"Process #"<<myrank<<": Buffer received"<<endl;
-			/*for(int i=0; i<bufSize; i++)
-				cout<<buffer[i]<<" ";
-			cout<<endl;
-			cout<<"-------------------------------------------------------------------------"<<endl;
-			*/
-			
-			//TODO potem normalny udział w sortowaniu
-			
-			ShellSorter* shells = new ShellSorter();
-			if(buffer != NULL)
-				shells->sort(buffer, bufSize);
-			
-			if(buffer != NULL)
-				delete(buffer);
-		}
-		else
-			cout << "!!! Process #"<<myrank<<": Buffer receiving error!"<<endl;
+//		if(buffer != NULL)
+//		{
+//			cout<<"Process #"<<myrank<<": Buffer received"<<endl;
+//			displayBuffer("Buffer received");
+//			
+//			//TODO potem normalny udział w sortowaniu
+//			
+//			ShellSorter* shells = new ShellSorter();
+//			if(buffer != NULL)
+//				shells->sort(buffer, bufSize);
+//			
+//			if(buffer != NULL)
+//				delete(buffer);
+//		}
+//		else
+//			cout << "!!! Process #"<<myrank<<": Buffer receiving error!"<<endl;
    	}
    	else
    	{
-   		ShellSorter* shells = new ShellSorter();
+   		//cout<<"allSortersCount = "<< numprocs-1<<endl;
+   		ShellSorter* shells = new ShellSorter(myrank, numprocs-1);
    		
 		buffer = Utils::recv_init_buffer(bufSize, myrank, mpi_status);
+		//cout<<"Process #"<<myrank<<": Buffer received"<<endl;
+		//displayBuffer("Buffer received");
 		
-		cout<<"Process #"<<myrank<<": Buffer received"<<endl;
-		/*for(int i=0; i<bufSize; i++)
-			cout<<buffer[i]<<" ";
-		cout<<endl;
-		cout<<"-------------------------------------------------------------------------"<<endl;
-		*/
+		
 		
 		if(buffer != NULL)
-			shells->sort(buffer, bufSize);
+			buffer = shells->sort(buffer, bufSize);
+		
+		//wysłać procesowi głownemu
 		
 		if(buffer != NULL)
 			delete(buffer);
    	}
    	
    	MPI::Finalize();
+}
+
+void ShellSorterWorker::displayBuffer(int* buffer, int bufSize, string comment)
+{
+		cout<<comment<<endl;
+			
+		for(int i=0; i<bufSize; i++)
+			cout<<buffer[i]<<" ";
+		cout<<endl;
+		cout<<"-------------------------------------------------------------------------"<<endl;
 }
 }

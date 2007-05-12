@@ -20,6 +20,8 @@ public:
 private:
 	string inFile;
 	string outFile; 
+	
+	void displayBuffer(int* buffer, int bufferSize, string comment);
 };
 }
 #endif /*SHELLSORTERWORKER_H_*/
