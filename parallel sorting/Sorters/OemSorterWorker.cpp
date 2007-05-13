@@ -15,9 +15,9 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 	MPI_Request request;
 	MPI_Status status; 
 	OemSorter* sorter = new OemSorter();
-	MPI_Send( buffer, bufSize, MPI_INT, idProcess, WORK_TAG+50, MPI_COMM_WORLD);
-//	MPI_Isend( buffer, bufSize, MPI_INT, idProcess,
-//		WORK_TAG+50, MPI_COMM_WORLD, &request );
+//	MPI_Send( buffer, bufSize, MPI_INT, idProcess, WORK_TAG+50, MPI_COMM_WORLD);
+	MPI_Isend( buffer, bufSize, MPI_INT, idProcess,
+		WORK_TAG+50, MPI_COMM_WORLD, &request );
 	MPI_Recv(buffer2, bufSize, MPI_INT, idProcess,
 		WORK_TAG+50, MPI_COMM_WORLD, &status);	
 	for(int i = 0; i<bufSize; ++i)
