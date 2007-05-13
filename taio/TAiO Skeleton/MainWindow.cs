@@ -228,6 +228,7 @@ namespace Taio
             this.EnableMenu(false);
             //this.algorithm = new Algorithm0();
             this.algorithm = new Algorithm0v2();
+            //this.algorithm = new Algorithm0v1();
             bw.RunWorkerAsync();
         }
 
@@ -585,24 +586,27 @@ namespace Taio
             for (int i = 0; i < 10000; ++i)
             {
                 List<Rectangle> rects=null;
-                if(i%10-1==0)
+                if(i%100-1==0)
                     rects = this.dataLoader.RandomRectangles(5, 3, 1);
                 else
-                    rects = this.dataLoader.RandomRectangles(4, 3, 1);
+                if (i % 10 - 1 == 0)
+                    rects = this.dataLoader.RandomRectangles(5, 2, 1);
+                else
+                    rects = this.dataLoader.RandomRectangles(4, 4, 1);
                 IAlgorithm alg0 = new Algorithm0();
                 DateTime dt = DateTime.Now;
                 alg0.ComputeMaximumRectangle(rects);
                 Solution s1 = new Solution(alg0.GetTag(), alg0.GetRectangle());
                 s1.Ts = DateTime.Now.Subtract(dt);
-                alg0 = new Algorithm0v1();
+                IAlgorithm alg1 = new Algorithm0v1();
                 dt = DateTime.Now;
-                alg0.ComputeMaximumRectangle(rects);
-                Solution s2 = new Solution(alg0.GetTag(), alg0.GetRectangle());
+                alg1.ComputeMaximumRectangle(rects);
+                Solution s2 = new Solution(alg1.GetTag(), alg1.GetRectangle());
                 s2.Ts = DateTime.Now.Subtract(dt);
-                alg0 = new Algorithm0v2();
+                IAlgorithm alg2 = new Algorithm0v2();
                 dt = DateTime.Now;
-                alg0.ComputeMaximumRectangle(rects);
-                Solution s3 = new Solution(alg0.GetTag(), alg0.GetRectangle());
+                alg2.ComputeMaximumRectangle(rects);
+                Solution s3 = new Solution(alg2.GetTag(), alg2.GetRectangle());
                 s3.Ts = DateTime.Now.Subtract(dt);
                 if (s1.Rectangle.Area != s2.Rectangle.Area ||
                     s1.Rectangle.Area != s3.Rectangle.Area 

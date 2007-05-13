@@ -232,7 +232,9 @@ namespace Taio.Algorithms
                 for (int j = 0; j < tab.Count - 1; ++j)
                     if ((i >> j & 1) == 1)
                         fact *= tab[j].First;
-                if (fact >= minSide && fact <= maxSide)
+                if (fact >= minSide && fact <= maxSide && 
+                    (((double)fact*fact)/maxArea)<=2.0 &&
+                    ((double)maxArea/(fact*fact))<=2.0 )
                     sides.Add(new SetCoverEntry(fact, maxArea / fact));
             }
             for (int i = 0; i < sides.Count; ++i)
@@ -592,11 +594,14 @@ namespace Taio.Algorithms
                 {
                     rect.Rect = rect.Rect.Rotate();
                     rect.Rot = false;
-                    return this.InsertRectangle(rect);
+                    this.InsertRectangle(rect);
+                    return true;
                 }
                 else
                 {
                     rect.Point = new Point(rect.Point.X + 1, rect.Point.Y);
+                    if (rect.Rect.SideA < rect.Rect.SideB)
+                        rect.Rect = rect.Rect.Rotate();
                     if(this.InsertInGoodPosition(rect))
                     {
                         rect.Rot = true;
@@ -622,7 +627,7 @@ namespace Taio.Algorithms
                     else
                         break;
                 }
-                if (x == maxX && y == maxY)
+                if (y == maxY)
                     return false;
                 else
                 {
