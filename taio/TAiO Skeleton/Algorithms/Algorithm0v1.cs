@@ -31,7 +31,7 @@ namespace Taio.Algorithms
                 throw new ArgumentException("Illegal argument");
             List<Rectangle> rects = new List<Rectangle>();
             foreach (Rectangle r in rectangles)
-                rects.Add(r);
+                rects.Add(new Rectangle(r.LeftTop, r.RightDown, r.Number));
             int maxArea = this.ComputeMaximumArea(rects);
             Rectangle maxRect = this.FindGoodRectangleWithMaxArea(rects);
             while (!stop && maxArea > 0)
