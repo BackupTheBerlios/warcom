@@ -78,9 +78,15 @@ namespace Taio.Algorithms
                 Taio.Rectangle.Orientation.Vertical;
                 }
             }
+            if (startRect.ContainedRectangles.Count == 0)
+            {
+                RectangleContainer rc = new RectangleContainer();
+                rc.InsertRectangle(startRect);
+                startRect = rc.MaxCorrectRect;
+            }
             rectangle = startRect;
             if (bigestSingleRect != null)
-                if (bigestSingleRect.Area > rectangle.Area) 
+                if (bigestSingleRect.Area >= rectangle.Area) 
                     rectangle = bigestSingleRect;
             return rectangle;
         }
@@ -288,8 +294,11 @@ namespace Taio.Algorithms
             }
             if (index != -1)
             {
+                RectangleContainer rc = new RectangleContainer();
                 rectangle = new Rectangle(rects[index].SideA, rects[index].SideB);
                 rectangle.Number = rects[index].Number;
+                rc.InsertRectangle(rectangle);
+                rectangle = rc.MaxCorrectRect;
             }
             return rectangle;
         }
