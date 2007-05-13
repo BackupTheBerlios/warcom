@@ -9,6 +9,7 @@ using namespace sorting;
 bool bitonic = false;
 bool oem = false;
 bool shell = false;
+bool oemlocal = false;
 string inputFile;
 string outputFile;
 
@@ -16,7 +17,7 @@ string outputFile;
 void showUsage()
 {
 	cout<<"Invalid entry"<<endl;
-	cout<<"psort inputFile outputFile -b -oem -s"<<endl;
+	cout<<"psort inputFile outputFile -b -oem -s -oeml"<<endl;
 }
 
 void showAuthors()
@@ -47,6 +48,8 @@ bool checkInput(char* args[], int argc)
 			oem = true;
 		else if(!temp.compare("-s"))
 			shell = true;
+		else if(!temp.compare("-oeml"))
+			oemlocal = true;
 	}
 	return bitonic||oem||shell;
 }
@@ -68,6 +71,15 @@ int main(int argc, char* args[])
 		if(bitonic)
 		{
 			
+		}
+		if(oemlocal)
+		{
+			int test[] = { 3, 2, 69, 1, 23, 53, 12, 84};
+			OemSorter* os = new OemSorter();
+			os->sort(test, 8);
+			for(int i=0;i<8;i++)
+				cout<<test[i]<<" ";
+			cout<<endl;
 		}	
 	}
 	else

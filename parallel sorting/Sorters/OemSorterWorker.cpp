@@ -15,7 +15,6 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 	MPI_Request request;
 	MPI_Status status; 
 	OemSorter* sorter = new OemSorter();
-//	MPI_Send( buffer, bufSize, MPI_INT, idProcess, WORK_TAG+50, MPI_COMM_WORLD);
 	MPI_Isend( buffer, bufSize, MPI_INT, idProcess,
 		WORK_TAG+50, MPI_COMM_WORLD, &request );
 	MPI_Recv(buffer2, bufSize, MPI_INT, idProcess,
@@ -30,7 +29,6 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 		    buffer[i] = buffer2[i+shift];
 	if(buffer2 != NULL)
 			delete(buffer2);
-	cout<<"comsplit finished"<<myId<<"<->"<<idProcess<<endl;	
 	return 0;	
 }
 
@@ -42,7 +40,7 @@ int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 		int block = 2 << i;
 		int modulo = ((k - 1) % block) + 1;
 		if(modulo <= forbiden || modulo > (block - forbiden)) 
-			return 0;	
+			return 0;
 	}
 	return 1;
 }
@@ -52,7 +50,7 @@ int OemSorterWorker::findPartner(int k , int i ,int j)
 	int block = 2 << i;
 	int partner =  k + i + 1 - j;
 	int expr = (( k - 1 ) % block) + i + 2 - j;
-	if(expr > block)
+	if(expr > block || !canTransferInThisStep(partner, i,j))
 		partner = k - i - 1 + j;
 	return partner;
 }
@@ -67,6 +65,7 @@ int OemSorterWorker::sort()
    	{
    		DataLoader dl(inFile, numprocs);
 		dl.loadAndSendData();
+		MPI_Barrier(COMM_WORLD);
    	}
    	else
    	{
@@ -84,9 +83,9 @@ int OemSorterWorker::sort()
 					if(canTransferInThisStep(myrank, i, j))
 					{
 						int partner = findPartner(myrank, i, j);
-						cout<<"comsplit "<<myrank<<"<->"<<partner<<endl;
 						compareSplit(partner, myrank, buffer, bufSize);
 					}
+		MPI_Barrier(COMM_WORLD);
 		cout<<"Moj bufor "<<myrank<<endl;
 		for(int i=0; i<bufSize; i++)
 			cout<<buffer[i]<<" ";
