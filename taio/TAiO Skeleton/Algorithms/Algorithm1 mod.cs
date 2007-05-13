@@ -311,14 +311,24 @@ namespace Taio.Algorithms
             return false;
         }
 
+        private static bool IsBetterRatio(double candidateRatio, double currRatio)
+        {
+            return Math.Abs(1 - currRatio) > Math.Abs(1 - candidateRatio);
+        }
+
         private static Rectangle FindRectangleWithMaxArea(List<Rectangle> rects)
         {
             int max = -1;
+            double bestRatio = Int32.MaxValue;
+            double currRatio;
             int index = 0;
             for (int i = 0; i < rects.Count; ++i)
             {
-                if (rects[i].Area > max)
+                Rectangle rectTemp = rects[i];
+                currRatio = rectTemp.LongerSide / (double)rectTemp.ShorterSide;
+                if (rectTemp.Area > max || (rectTemp.Area >= max && IsBetterRatio(currRatio, bestRatio)))
                 {
+                    bestRatio = currRatio;
                     max = rects[i].Area;
                     index = i;
                 }
