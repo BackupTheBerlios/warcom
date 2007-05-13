@@ -34,12 +34,18 @@ namespace LinZadNajmnKwadr
             Matrix A = new Matrix(tab, 4, 4);
             Matrix b = new Matrix(tabb, 4, 1); */
 
-            LinearLeastSquares lls = new LinearLeastSquares(A,b, switchOn);
-            lls.Solve();
             Console.WriteLine("A:");
             Console.WriteLine(A);
             Console.WriteLine("b:");
             Console.WriteLine(b);
+
+            LinearLeastSquares lls = new LinearLeastSquares(A,b, switchOn);
+            lls.Solve();
+            Console.WriteLine("x:");
+            Console.WriteLine(lls.X);
+
+            lls = new LinearLeastSquares(A, b, !switchOn);
+            lls.Solve();
             Console.WriteLine("x:");
             Console.WriteLine(lls.X);
         }

@@ -39,7 +39,7 @@ namespace LinZadNajmnKwadr
                 qk[0, k] = sign * temp.Norm();
                 a[k, k] = 1 - a[k, k] / qk[0, k];
                 for (int i = k + 1; i < this.m; ++i)
-                    a[i, k] = -a[i, k] / qk[0, k];
+                    a[i, k] = ( - a[i, k] ) / qk[0, k];
                 for (int j = k + 1; j < this.n; ++j)
                 {
                     double beta = 0;

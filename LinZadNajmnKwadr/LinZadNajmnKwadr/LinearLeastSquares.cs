@@ -31,6 +31,10 @@ namespace LinZadNajmnKwadr
                 leastSquare = new Householder(a);
             
             leastSquare.Ortogonalization();
+            Console.WriteLine("Q");
+            Console.WriteLine(leastSquare.GetQ().ToString(4));
+            Console.WriteLine("R");
+            Console.WriteLine(leastSquare.GetR().ToString(4));
             this.b = b;
             this.x = new Matrix(a.Columns, 1);
         }

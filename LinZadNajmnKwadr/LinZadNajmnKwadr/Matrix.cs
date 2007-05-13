@@ -217,6 +217,22 @@ namespace LinZadNajmnKwadr
             return sb.ToString();
         }
 
+        public String ToString(int digits)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < this.Rows; i++)
+            {
+                for (int j = 0; j < this.columns; j++)
+                    sb.Append(Math.Round(this[i, j],digits) + " ");
+
+                sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }
+
+
+
         /*Matrix operator/(const Matrix& m, double d)
         {
             Matrix wynik(m.w, m.k);
