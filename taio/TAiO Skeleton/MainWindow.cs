@@ -106,7 +106,6 @@ namespace Taio
             dt = DateTime.Now;
             if (this.algorithm != null)
             {
-                output.Lines = text.Split(param);
                 this.algorithm.ComputeMaximumRectangle(this.rectangles);
             }
         }
