@@ -6,8 +6,6 @@ namespace LinZadNajmnKwadr
 {
     class Program
     {
-        private static bool switchOn = true;
-
         static void Main(string[] args)
         {
             //MGSOrtogonalizationTest();
