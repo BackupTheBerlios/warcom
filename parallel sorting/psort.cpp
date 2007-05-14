@@ -2,6 +2,7 @@
 #include "Tools/Utils.h"
 #include "Sorters/OemSorterWorker.h"
 #include "Sorters/ShellSorterWorker.h"
+#include "Tools/FDataLoader.h"
 using namespace std; 
 using namespace tools; 
 using namespace sorting;
@@ -51,7 +52,7 @@ bool checkInput(char* args[], int argc)
 		else if(!temp.compare("-oeml"))
 			oemlocal = true;
 	}
-	return bitonic||oem||shell;
+	return bitonic||oem||shell||oemlocal;
 }
 
 int main(int argc, char* args[])
@@ -74,11 +75,13 @@ int main(int argc, char* args[])
 		}
 		if(oemlocal)
 		{
-			int test[] = { 3, 2, 69, 1, 23, 53, 12, 84};
+			FDataLoader* fdl = new FDataLoader(inputFile); 
 			OemSorter* os = new OemSorter();
-			os->sort(test, 8);
-			for(int i=0;i<8;i++)
-				cout<<test[i]<<" ";
+			int* buffer = fdl->getBuffer();
+			int bufferSize = fdl->getBufferSize();
+			os->sort(buffer, bufferSize);
+			for(int i=0;i<bufferSize;i++)
+				cout<<buffer[i]<<" ";
 			cout<<endl;
 		}	
 	}
