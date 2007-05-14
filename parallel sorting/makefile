@@ -4,7 +4,7 @@ OEM = Sorters/OemSorter.h Sorters/OemSorter.cpp Sorters/OemSorterWorker.cpp Sort
 BITONIC = Sorters/BSorter.cpp Sorters/BSorter.h Sorters/ParalBSorter.cpp Sorters/ParalBSorter.h
 SHELLS = Sorters/ShellSorter.h Sorters/ShellSorter.cpp Sorters/ShellSorterWorker.cpp Sorters/ShellSorterWorker.h
 
-all: psort
+all: lam
 
 clean:
 	-rm -f psort

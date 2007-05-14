@@ -2,6 +2,8 @@
 #include "Tools/Utils.h"
 #include "Sorters/OemSorterWorker.h"
 #include "Sorters/ShellSorterWorker.h"
+#include "Sorters/ParalBSorter.h"
+#include "Sorters/BSorter.h"
 #include "Tools/FDataLoader.h"
 using namespace std; 
 using namespace tools; 
@@ -11,6 +13,7 @@ bool bitonic = false;
 bool oem = false;
 bool shell = false;
 bool oemlocal = false;
+bool bitoniclocal = false;
 string inputFile;
 string outputFile;
 
@@ -51,8 +54,10 @@ bool checkInput(char* args[], int argc)
 			shell = true;
 		else if(!temp.compare("-oeml"))
 			oemlocal = true;
+		else if(!temp.compare("-bl"))
+			bitoniclocal = true;
 	}
-	return bitonic||oem||shell||oemlocal;
+	return bitonic||oem||shell||oemlocal||bitoniclocal;
 }
 
 int main(int argc, char* args[])
@@ -71,12 +76,24 @@ int main(int argc, char* args[])
 		}	
 		if(bitonic)
 		{
-			
+			ParalBSorter* pbs = new ParalBSorter(inputFile, outputFile);
+			pbs->sort();
 		}
 		if(oemlocal)
 		{
 			FDataLoader* fdl = new FDataLoader(inputFile); 
 			OemSorter* os = new OemSorter();
+			int* buffer = fdl->getBuffer();
+			int bufferSize = fdl->getBufferSize();
+			os->sort(buffer, bufferSize);
+			for(int i=0;i<bufferSize;i++)
+				cout<<buffer[i]<<" ";
+			cout<<endl;
+		}	
+		if(bitoniclocal)
+		{
+			FDataLoader* fdl = new FDataLoader(inputFile); 
+			BSorter* os = new BSorter();
 			int* buffer = fdl->getBuffer();
 			int bufferSize = fdl->getBufferSize();
 			os->sort(buffer, bufferSize);
