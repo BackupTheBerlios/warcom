@@ -31,7 +31,8 @@ namespace Taio.Algorithms
                 throw new ArgumentException("Illegal argument");
             List<Rectangle> rects = new List<Rectangle>();
             foreach (Rectangle r in rectangles)
-                rects.Add(new Rectangle(r.LeftTop, r.RightDown, r.Number));int maxArea = this.ComputeMaximumArea(rects);
+                rects.Add(new Rectangle(r.LeftTop, r.RightDown, r.Number));
+            int maxArea = this.ComputeMaximumArea(rects);
             Rectangle maxRect = this.FindGoodRectangleWithMaxArea(rects);
             while (!stop && maxArea > 0)
             {
@@ -105,6 +106,8 @@ namespace Taio.Algorithms
         {
             for (int i = rds.Count - 2; i >= 0; --i)
             {
+                if(i==2 && rds[i].Point.Y == 3)
+                    i =2;
                 arc.Remove(rds[i + 1]);
                 if (!arc.Move(rds[i]))
                     continue;
@@ -612,7 +615,7 @@ namespace Taio.Algorithms
 
             public bool InsertInGoodPosition(RectangleData rect)
             {
-                rect.Rot = false;
+                rect.Rot = true;
                 int x = rect.Point.X, y = rect.Point.Y;
                 int maxX = this.tab[0].Length; // -rect.Rect.ShorterSide;
                 int maxY = this.tab.Length;    // -rect.Rect.ShorterSide;
