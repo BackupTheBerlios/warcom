@@ -39,12 +39,12 @@ namespace LinZadNajmnKwadr
             Console.WriteLine("b:");
             Console.WriteLine(b);
 
-            LinearLeastSquares lls = new LinearLeastSquares(A,b, switchOn);
+            LinearLeastSquares lls = new LinearLeastSquares(A,b, LinearLeastSquares.Method.MGS);
             lls.Solve();
             Console.WriteLine("x:");
             Console.WriteLine(lls.X);
 
-            lls = new LinearLeastSquares(A, b, !switchOn);
+            lls = new LinearLeastSquares(A, b, LinearLeastSquares.Method.Householder);
             lls.Solve();
             Console.WriteLine("x:");
             Console.WriteLine(lls.X);

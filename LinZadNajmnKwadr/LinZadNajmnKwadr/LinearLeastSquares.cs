@@ -13,7 +13,7 @@ namespace LinZadNajmnKwadr
         private Matrix b;
         private int n;
 
-        public LinearLeastSquares(Matrix a, Matrix b,bool isSwitchOn)
+        public LinearLeastSquares(Matrix a, Matrix b, Method method)
         {
             if (a == null || b == null)
                 throw new ArgumentNullException();
@@ -25,9 +25,9 @@ namespace LinZadNajmnKwadr
                 throw new ArgumentException("b must be a vector!");
 
             this.n = a.Columns;
-            if (isSwitchOn)
+            if (method == Method.MGS)
                 leastSquare = new MGS(a);
-            else
+            else if (method == Method.Householder)
                 leastSquare = new Householder(a);
             
             leastSquare.Ortogonalization();
@@ -63,6 +63,11 @@ namespace LinZadNajmnKwadr
         public Matrix X
         {
             get { return x; }
+        }
+
+        public enum Method
+        {
+            MGS, Householder
         }
     }
 }
