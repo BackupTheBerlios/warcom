@@ -182,6 +182,10 @@ namespace Taio
         /// <param name="o">Inserted rectangle orientation</param>
         public void InsertRectangle(Rectangle r, Point rLeftTop, Rectangle.Orientation o)
         {
+            Console.WriteLine("insert rect[(" + r.LeftTop.X + ", " + r.LeftTop.Y + "), (" +
+                r.RightDown.X + ", " + r.RightDown.Y + ")]" + " -> (" + rLeftTop.X + ", " +
+                rLeftTop.Y + ")");
+
             InsertRectangleCheckParameters(r, rLeftTop);
 
             if (o.Equals(Rectangle.Orientation.Horizontal) && r.SideA < r.SideB)
@@ -357,7 +361,10 @@ namespace Taio
                         toDelete.Add(empty);
                         List<Rectangle> subtr = empty.Subtract(insertedRectangle);
                         //emptyFields.AddRange(subtr);
-                        toAdd.AddRange(subtr);
+
+                        // poprawione - Pawe³
+                        //toAdd.AddRange(subtr);
+                        addToList(toAdd, subtr);
                     }
                 }
             }
@@ -365,7 +372,9 @@ namespace Taio
                 emptyFields.Remove(r);
             toDelete.Clear();
             foreach (Rectangle r in toAdd)
-                emptyFields.AddRange(toAdd);
+                // poprawione - Pawe³
+                //emptyFields.AddRange(toAdd);
+                addToList(emptyFields, toAdd);
             toAdd.Clear();
 
             //sprawdzamy czy trzeba dodac jakies nowe EmptyFields
@@ -389,14 +398,57 @@ namespace Taio
                     Rectangle temp = nEmpEnum.Current;
                     List<Rectangle> tempEmpties = temp.Subtract(insertedRectangle);
                     if (tempEmpties.Count > 0)
-                        emptyFields.AddRange(tempEmpties);
+                        // poprawione - Pawe³
+                        //emptyFields.AddRange(tempEmpties);
+                        addToList(emptyFields, tempEmpties);
                 }
             }
         }
         #endregion
         #endregion
+
+        #region Pawe³
+        /// <summary>
+        /// Metoda sprwadza, czy prostok¹t o danych wspó³rzêdnych i wymiarach znajduje siê
+        /// ju¿ na liœcie.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <param name="rect">sprawdzany prostok¹t</param>
+        private bool isOnList(List<Rectangle> rectangles, Rectangle rect)
+        {
+            if (rectangles == null || rect == null)
+                return false;
+
+            foreach (Rectangle r in rectangles)
+                if (r.LeftTop.X == rect.LeftTop.X && r.LeftTop.Y == rect.LeftTop.Y &&
+                    r.RightDown.X == rect.RightDown.X && r.RightDown.Y == rect.RightDown.Y)
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Metoda dodaje prostok¹ty z jednej listy do drugiej sprawdzaj¹c jednoczeœnie,
+        /// czy dany prostok¹ty siê nie powtarzaj¹.
+        /// </summary>
+        /// <param name="rectsTarget">lista prostok¹tów, na któr¹ bêd¹ dodawane nowe prostok¹ty</param>
+        /// <param name="rectsSource">lista prostok¹tów do dodania</param>
+        private void addToList(List<Rectangle> rectsTarget, List<Rectangle> rectsSource)
+        {
+            if (rectsTarget == null || rectsSource == null)
+                return;
+
+            foreach (Rectangle rect in rectsSource)
+            {
+                if (!isOnList(rectsTarget, rect))
+                    rectsTarget.Add(rect);
+            }
+        }
+        #endregion
     }
+
 }
+
 
 #region Arch
 /*public void AddRectangle(Rectangle r, Point rLeftTop, Rectangle.Orientation o)
