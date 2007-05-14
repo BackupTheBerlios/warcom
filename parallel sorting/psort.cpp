@@ -5,6 +5,7 @@
 #include "Sorters/ParalBSorter.h"
 #include "Sorters/BSorter.h"
 #include "Tools/FDataLoader.h"
+#include "Tools/TaskTimer.h"
 using namespace std; 
 using namespace tools; 
 using namespace sorting;
@@ -81,14 +82,21 @@ int main(int argc, char* args[])
 		}
 		if(oemlocal)
 		{
+			TaskTimer* tt = new TaskTimer();
+			tt->startTask("load");
 			FDataLoader* fdl = new FDataLoader(inputFile); 
-			OemSorter* os = new OemSorter();
 			int* buffer = fdl->getBuffer();
 			int bufferSize = fdl->getBufferSize();
+			tt->endTask("load", 1);
+			tt->startTask("sort");
+			OemSorter* os = new OemSorter();
 			os->sort(buffer, bufferSize);
-			for(int i=0;i<bufferSize;i++)
+			tt->endTask("sort", 1);
+			tt->startTask("display");
+			/*for(int i=0;i<bufferSize;i++)
 				cout<<buffer[i]<<" ";
-			cout<<endl;
+			cout<<endl;*/
+			tt->endTask("display",1);
 		}	
 		if(bitoniclocal)
 		{
