@@ -30,7 +30,7 @@ namespace LinZadNajmnKwadr
             else if (method == Method.Householder)
                 leastSquare = new Householder(a);
             
-            leastSquare.Ortogonalization();
+            leastSquare.Orthogonalization();
             Console.WriteLine("Q");
             Console.WriteLine(leastSquare.GetQ().ToString(4));
             Console.WriteLine("R");
@@ -51,11 +51,8 @@ namespace LinZadNajmnKwadr
 
             for (int k = n - 1; k > 0; k--)
             {
-                /*x[k, 0] /= r[k, k];
-                for (int i = 0; i < k; i++)
-                    x[i, 0] -= r[i, k] * x[k, 0];*/
                 x[k, 0] /= leastSquare.GetR()[k, k];
-                for (int i = 0; i < k; i++)
+                for (int i = 0; i < k - 1 ; i++)
                     x[i, 0] -= leastSquare.GetR()[i, k] * x[k, 0];
             }
         }

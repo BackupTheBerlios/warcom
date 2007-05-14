@@ -24,13 +24,13 @@ namespace LinZadNajmnKwadr
                                         10,11,12};
             double[] tabb = new double[] { 1, 0, 0, 1 };
             Matrix A = new Matrix(tab, 4, 3);
-            Matrix b = new Matrix(tabb, 4, 1); 
+            Matrix b = new Matrix(tabb, 4, 1);                //rozw [-0.25 0 0.25]
 
             /*double[] tab = new double[]{1, 2, -1, 0,
                                         4, 8, -7, 1,
                                         1, 2, -1, 1,
                                         -1,1, 4, 6};
-            double[] tabb = new double[] { 0, 1, 1, 0 };
+            double[] tabb = new double[] { 0, 1, 1, 0 };        // rozw [4 -2 0 1]
             Matrix A = new Matrix(tab, 4, 4);
             Matrix b = new Matrix(tabb, 4, 1); */
 
@@ -82,7 +82,7 @@ namespace LinZadNajmnKwadr
 
             for (int i = 0; i < mgs.Length; i++)
             {
-                mgs[i].Ortogonalization();
+                mgs[i].Orthogonalization();
                 Console.WriteLine("A:");
                 Console.WriteLine(mgs[i].A);
                 Console.WriteLine("Q:");
@@ -128,7 +128,7 @@ namespace LinZadNajmnKwadr
 
             for (int i = 0; i < hous.Length; i++)
             {
-                hous[i].Ortogonalization();
+                hous[i].Orthogonalization();
                 Console.WriteLine("Q:");
                 Console.WriteLine(hous[i].Q);
                 Console.WriteLine("R:");

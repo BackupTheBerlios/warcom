@@ -6,7 +6,7 @@ namespace LinZadNajmnKwadr
 {
     interface LeastSquare
     {
-        void Ortogonalization();
+        void Orthogonalization();
         Matrix GetQ();
         Matrix GetR();
 

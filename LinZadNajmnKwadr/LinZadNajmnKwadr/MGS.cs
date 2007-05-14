@@ -25,7 +25,7 @@ namespace LinZadNajmnKwadr
             this.r = new Matrix(a.Columns, a.Columns);
         }
 
-        public void Ortogonalization()
+        public void Orthogonalization()
         {
             if (a == null)
                 throw new ArgumentNullException();

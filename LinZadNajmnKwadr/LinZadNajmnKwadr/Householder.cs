@@ -26,7 +26,7 @@ namespace LinZadNajmnKwadr
             l = Math.Min(this.n, this.m - 1);
         }
 
-        public void Ortogonalization()
+        public void Orthogonalization()
         {
             if (a == null)
                 throw new ArgumentNullException();
