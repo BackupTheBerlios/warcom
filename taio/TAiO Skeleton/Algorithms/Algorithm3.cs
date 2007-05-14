@@ -21,8 +21,7 @@ namespace Taio.Algorithms
         private int Min_Y;
         private int Max_X;
         private int Max_Y;
-        private Hole cornerHole;
-        int counter;
+        //int counter;
         #endregion
 
         #region Metody podstawowe
@@ -91,7 +90,7 @@ namespace Taio.Algorithms
         /// <returns>maksymalny prostok¹t, jaki da siê zbudowaæ za pomoc¹ tego algorytmu</returns>
         private Rectangle computeRectangles(List<Rectangle> rectangles)
         {
-            counter = 0;
+            //counter = 0;
 
             int maxArea = computeMaximumArea(rectangles);
             setMaximumSides(maxArea);
@@ -132,7 +131,7 @@ namespace Taio.Algorithms
 
                 hole = findHole(holesRight, holesDown, out rightSide);
                 rectToFill = findRectangle(correctRects, hole, rightSide);
-                Console.WriteLine("#" + rectToFill.Number + "rect[" + rectToFill.SideA + ", " + rectToFill.SideB + "]");
+                //Console.WriteLine("#" + rectToFill.Number + "rect[" + rectToFill.SideA + ", " + rectToFill.SideB + "]");
 
                                
                 if (hole != null)
@@ -144,18 +143,34 @@ namespace Taio.Algorithms
                 rects.Add(rectToFill);
                 correctRects.Remove(rectToFill);
 
-                counter++;
+                //counter++;
             }
 
-            Console.WriteLine("po pêtli.");
+            //Console.WriteLine("po pêtli.");
 
             result = maxCorrectRectangle(rects);
-            if (result != null && maxRectangle.Area > result.Area)
-                result = maxRectangle;
-            else if(result == null)
-                result = maxRectangle;
+            if (result != null)
+            {
+                if (!correctRectangleFound(result))
+                    result = maxRectangle;
+                else if (maxRectangle != null && maxRectangle.Area > result.Area)
+                    result = maxRectangle;
+            }
+            else
+                result = maxRectangle;            
 
             return result;
+        }
+
+        private bool correctRectangleFound(Rectangle rect)
+        {
+            if (rect == null)
+                return false;
+
+            if (rect.LongerSide / rect.ShorterSide > ratio)
+                return false;
+
+            return true;
         }
 
         private void stickRectangle(List<OutRect> outsRight, List<OutRect> outsDown, 
@@ -268,7 +283,7 @@ namespace Taio.Algorithms
                             List<Hole> holesRight, List<Hole> holesDown, Rectangle rect,
                             Hole hole, bool rightSide)
         {
-            Console.WriteLine("fillHole");
+            //Console.WriteLine("fillHole");
 
             Hole newHole;
             OutRect outRect, or;
@@ -518,13 +533,17 @@ namespace Taio.Algorithms
             if (rectangles == null || rectangles.Count == 0)
                 return rect;
 
-            rect = rectangles[0];
             foreach (Rectangle rc in rectangles)
             {
-                if (rc.LongerSide > rect.LongerSide)
-                    rect = rc;
-                else if (rc.LongerSide == rect.LongerSide && rc.Area > rect.Area)
-                    rect = rc;
+                if (rc.LongerSide / rc.ShorterSide <= ratio)
+                {
+                    if (rect == null)
+                        rect = rc;
+                    else if (rc.LongerSide > rect.LongerSide)
+                        rect = rc;
+                    else if (rc.LongerSide == rect.LongerSide && rc.Area > rect.Area)
+                        rect = rc;
+                }
             }
 
             return rect;
@@ -551,34 +570,18 @@ namespace Taio.Algorithms
 
         private Rectangle maxCorrectRectangle(List<Rectangle> rectangles)
         {
-            Rectangle rect1 = null;
-            Rectangle rect2 = null;
             Rectangle result = null;
             RectangleContainer rc = new RectangleContainer();
-            //RectangleContainer rc2 = new RectangleContainer();
-            //List<Rectangle> tempRects = copyRectangles(rectangles);
-
-            //rc.InsertRectangles(rectangles);
-            //rect1 = rc.MaxCorrectRect;
-
-            Console.WriteLine("maxCorrectRectangle");
+           
 
             correctRectangles(rectangles);
-            //rect2 = correctMaxRectangle(tempRects);
-            //result = rect2;
 
-            Console.WriteLine("przed insertem");
+            foreach (Rectangle rect in rectangles)
+            {
+                rc.InsertRectangle(rect, rect.LeftTop);
+            }
 
-            rc.InsertRectangles(rectangles);
-
-            Console.WriteLine("przed maxem");
-
-            result = rc.MaxCorrectRect;
-
-            /*if (rect1.Area > rect2.Area)
-                result = rect1;
-            else
-                result = rect2;*/
+            result = rc.MaxCorrectRect;           
 
             return result;
         }
@@ -789,7 +792,7 @@ namespace Taio.Algorithms
         private void updateHoles(List<OutRect> outsRight, List<OutRect> outsDown, List<Hole> holesRight,
                                     List<Hole> holesDown)
         {
-            Console.WriteLine("updateHoles");
+            //Console.WriteLine("updateHoles");
             ///TODO - poprawiæ tutaj
             int min_x = minHoles_X(holesRight, outsRight);
             int min_y = minHoles_Y(holesDown, outsDown);            
@@ -811,7 +814,7 @@ namespace Taio.Algorithms
 
         private void updateOutsRight(List<OutRect> outsRight)
         {
-            Console.WriteLine("updateOutsRight");
+            //Console.WriteLine("updateOutsRight");
 
             List<OutRect> outsToRemove = new List<OutRect>();
 
@@ -827,7 +830,7 @@ namespace Taio.Algorithms
 
         private void updateOutsDown(List<OutRect> outsDown)
         {
-            Console.WriteLine("updateOutsDown");
+            //Console.WriteLine("updateOutsDown");
 
             List<OutRect> outsToRemove = new List<OutRect>();
 
@@ -843,24 +846,24 @@ namespace Taio.Algorithms
 
         private int minHoles_X(List<Hole> holesRight, List<OutRect> outsRight)
         {
-            Console.WriteLine("minHoles_X");
+            //Console.WriteLine("minHoles_X");
 
             if(holesRight == null || holesRight.Count==0)
                 return minOutsRight(outsRight);
 
-            Console.WriteLine("minHoles_X: " + holesRight.Count);
+            //Console.WriteLine("minHoles_X: " + holesRight.Count);
 
             int result = holesRight[0].Rect.LeftTop.X;
 
             foreach (Hole hl in holesRight)
             {
-                Console.WriteLine("in loopX");
+                //Console.WriteLine("in loopX");
                 
 
                 if (result > hl.Rect.LeftTop.X && hl.Rect.LeftTop.Y < Min_Y)
                     result = hl.Rect.LeftTop.X;
 
-                Console.WriteLine("in loopX");
+                //Console.WriteLine("in loopX");
             }
 
             return result;
@@ -868,54 +871,35 @@ namespace Taio.Algorithms
 
         private int minHoles_Y(List<Hole> holesDown, List<OutRect> outsDown)
         {
-            Console.WriteLine("minHoles_Y");
+            //Console.WriteLine("minHoles_Y");
 
             if(holesDown == null || holesDown.Count==0)
                 return minOutsDown(outsDown);
 
-            Console.WriteLine("minHoles_Y: " + holesDown.Count);
+            //Console.WriteLine("minHoles_Y: " + holesDown.Count);
 
             int result = holesDown[0].Rect.LeftTop.Y;
 
-            /*foreach (Hole hl in holesDown)
+            foreach (Hole hl in holesDown)
             {
-                Console.WriteLine("in loopY");
+                //Console.WriteLine("in loopY");
                 if (result > hl.Rect.LeftTop.Y && hl.Rect.LeftTop.X < Min_X)
                     result = hl.Rect.LeftTop.Y;
 
-                Console.WriteLine("in loopY2");
-            }*/
-            /*List<Hole>.Enumerator it = holesDown.GetEnumerator();
-            while(it.MoveNext())
-            {
-                Console.WriteLine("in iterator loopY");
-                if (result > it.Current.Rect.LeftTop.Y && it.Current.Rect.LeftTop.X < Min_X)
-                    result = it.Current.Rect.LeftTop.Y;
-
-                Console.WriteLine("in iterator loopY2");
-            }*/
-
-            for (int i = 0; i < holesDown.Count; i++)
-            {
-                Console.WriteLine(counter);
-                Console.WriteLine("in for loopY");
-                if (result > holesDown[i].Rect.LeftTop.Y && holesDown[i].Rect.LeftTop.X < Min_X)
-                    result = holesDown[i].Rect.LeftTop.Y;
-
-                Console.WriteLine("in for loopY2");
+                //Console.WriteLine("in loopY2");
             }
-
-                return result;
+            
+            return result;
         }
 
         private int minOutsRight(List<OutRect> outsRight)
         {
-            Console.WriteLine("minOutsRight");
+            //Console.WriteLine("minOutsRight");
 
             if (outsRight == null || outsRight.Count == 0)
                 return Min_X;
 
-            Console.WriteLine("minOutsRight " + outsRight.Count);
+            //Console.WriteLine("minOutsRight " + outsRight.Count);
 
             int result = outsRight[0].RightDown.X;
             int yPos = 0;
@@ -940,12 +924,12 @@ namespace Taio.Algorithms
 
         private int minOutsDown(List<OutRect> outsDown)
         {
-            Console.WriteLine("minOutsDown");
+            //Console.WriteLine("minOutsDown");
 
             if (outsDown == null || outsDown.Count == 0)
                 return Min_Y;
 
-            Console.WriteLine("minOutsDown: " + outsDown.Count);
+            //Console.WriteLine("minOutsDown: " + outsDown.Count);
 
             int result = outsDown[0].RightDown.Y;
             int xPos = 0;
