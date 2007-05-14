@@ -23,6 +23,8 @@ namespace Taio
         private IAlgorithm algorithm;
         private BackgroundWorker bw;
         private DateTime dt;
+        private String text;
+        private char[] param = "\n".ToCharArray();
         
         public MainWindow()
         {
@@ -43,6 +45,16 @@ namespace Taio
         private void MainWindow_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private int countArea()
+        {
+            int result = 0;
+
+            foreach (Rectangle rect in rectangles)
+                result += rect.Area;
+
+            return result;
         }
 
         private void threadCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -81,7 +93,11 @@ namespace Taio
             this.rectanglesTreeView.Refresh();
             this.algorithm = null;
             this.EnableMenu(true);
-            MessageBox.Show("Gdzieœ to wypada³oby wyœwietliæ, czas wykonania= " +  s.Ts.ToString());
+            //MessageBox.Show("Gdzieœ to wypada³oby wyœwietliæ, czas wykonania= " +  s.Ts.ToString());
+            text += "Suma wszystkich prostok¹tów:  " + countArea() + "\n";
+            text += "Pole wyliczonego prostok¹ta:     " + s.Rectangle.Area + "\n";
+            text += "Czas wykonania:                          " + s.Ts.ToString();
+            output.Lines = text.Split(param);
         }
 
         private void startThread(object sender, DoWorkEventArgs e)
@@ -89,7 +105,10 @@ namespace Taio
             Debug.WriteLine("W¹tek rozpoczêty");
             dt = DateTime.Now;
             if (this.algorithm != null)
+            {
+                output.Lines = text.Split(param);
                 this.algorithm.ComputeMaximumRectangle(this.rectangles);
+            }
         }
 
         private void ChangeColor()
@@ -225,6 +244,7 @@ namespace Taio
 
         private void preciseSolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            text = "Algorytm dok³adny:\n";
             this.EnableMenu(false);
             //this.algorithm = new Algorithm0();
             this.algorithm = new Algorithm0v2();
@@ -234,6 +254,7 @@ namespace Taio
 
         private void algorithm1SolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            text = "Algorytm aproksymuj¹cy 1:\n";
             this.EnableMenu(false);
             this.algorithm = new Algorithm1Mod();
             bw.RunWorkerAsync();
@@ -241,6 +262,7 @@ namespace Taio
 
         private void algorithm2SolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            text = "Algorytm aproksymuj¹cy 2:\n";
             this.EnableMenu(false);
             this.algorithm = new Algorithm2();
             bw.RunWorkerAsync();
@@ -248,6 +270,7 @@ namespace Taio
 
         private void algorithm3SolutionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            text = "Algorytm aproksymuj¹cy 3:\n";
             this.EnableMenu(false);
             this.algorithm = new Algorithm3();
             bw.RunWorkerAsync();

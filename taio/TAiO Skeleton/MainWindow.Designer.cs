@@ -37,7 +37,6 @@ namespace Taio
             this.addRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeRectangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.stopAlgorithm = new System.Windows.Forms.Button();
             this.acceptChangebutton = new System.Windows.Forms.Button();
@@ -63,6 +62,8 @@ namespace Taio
             this.colorChangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.output = new System.Windows.Forms.TextBox();
+            this.rectangleViewer = new Kontrolka_do_TAiO.RectDisplay();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -81,19 +82,22 @@ namespace Taio
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.stopAlgorithm);
+            this.splitContainer1.Panel1.Controls.Add(this.progressBar1);
             this.splitContainer1.Panel1.Controls.Add(this.rectanglesTreeView);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(769, 414);
-            this.splitContainer1.SplitterDistance = 255;
+            this.splitContainer1.SplitterDistance = 254;
             this.splitContainer1.TabIndex = 1;
             // 
             // rectanglesTreeView
             // 
+            this.rectanglesTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
             this.rectanglesTreeView.ContextMenuStrip = this.rectanglesContextMenuStrip;
-            this.rectanglesTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rectanglesTreeView.Location = new System.Drawing.Point(0, 0);
             this.rectanglesTreeView.Name = "rectanglesTreeView";
             treeNode1.Name = "Rectangles";
@@ -105,7 +109,7 @@ namespace Taio
             this.rectanglesTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1,
             treeNode2});
-            this.rectanglesTreeView.Size = new System.Drawing.Size(255, 414);
+            this.rectanglesTreeView.Size = new System.Drawing.Size(255, 324);
             this.rectanglesTreeView.TabIndex = 0;
             this.toolTip.SetToolTip(this.rectanglesTreeView, "Lista prostok¹tów i rozwi¹zañ");
             this.rectanglesTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rectanglesTreeView_NodeMouseClick);
@@ -145,47 +149,33 @@ namespace Taio
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.progressBar1);
-            this.splitContainer2.Panel2.Controls.Add(this.stopAlgorithm);
+            this.splitContainer2.Panel2.Controls.Add(this.output);
             this.splitContainer2.Panel2.Controls.Add(this.acceptChangebutton);
             this.splitContainer2.Panel2.Controls.Add(this.addRectbutton);
-            this.splitContainer2.Size = new System.Drawing.Size(510, 414);
-            this.splitContainer2.SplitterDistance = 338;
+            this.splitContainer2.Size = new System.Drawing.Size(511, 414);
+            this.splitContainer2.SplitterDistance = 324;
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 1;
             // 
-            // rectangleViewer
-            // 
-            this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
-            this.rectangleViewer.BackgroundColor = System.Drawing.Color.White;
-            this.rectangleViewer.CanDraw = true;
-            this.rectangleViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
-            this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
-            this.rectangleViewer.Name = "rectangleViewer";
-            this.rectangleViewer.Size = new System.Drawing.Size(510, 338);
-            this.rectangleViewer.TabIndex = 0;
-            this.rectangleViewer.XBorder = 5;
-            this.rectangleViewer.YBorder = 5;
-            this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
-            // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(274, 16);
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.progressBar1.Location = new System.Drawing.Point(12, 335);
             this.progressBar1.Maximum = 1000;
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(100, 23);
+            this.progressBar1.Size = new System.Drawing.Size(137, 23);
             this.progressBar1.Step = 1;
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 3;
-            this.progressBar1.Visible = false;
             // 
             // stopAlgorithm
             // 
-            this.stopAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.stopAlgorithm.Location = new System.Drawing.Point(423, 16);
+            this.stopAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.stopAlgorithm.Location = new System.Drawing.Point(12, 379);
             this.stopAlgorithm.Name = "stopAlgorithm";
-            this.stopAlgorithm.Size = new System.Drawing.Size(75, 23);
+            this.stopAlgorithm.Size = new System.Drawing.Size(59, 23);
             this.stopAlgorithm.TabIndex = 2;
             this.stopAlgorithm.Text = "Stop";
             this.stopAlgorithm.UseVisualStyleBackColor = true;
@@ -193,7 +183,8 @@ namespace Taio
             // 
             // acceptChangebutton
             // 
-            this.acceptChangebutton.Location = new System.Drawing.Point(117, 16);
+            this.acceptChangebutton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptChangebutton.Location = new System.Drawing.Point(386, 3);
             this.acceptChangebutton.Name = "acceptChangebutton";
             this.acceptChangebutton.Size = new System.Drawing.Size(113, 23);
             this.acceptChangebutton.TabIndex = 1;
@@ -203,7 +194,8 @@ namespace Taio
             // 
             // addRectbutton
             // 
-            this.addRectbutton.Location = new System.Drawing.Point(3, 16);
+            this.addRectbutton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addRectbutton.Location = new System.Drawing.Point(386, 32);
             this.addRectbutton.Name = "addRectbutton";
             this.addRectbutton.Size = new System.Drawing.Size(108, 23);
             this.addRectbutton.TabIndex = 0;
@@ -373,6 +365,35 @@ namespace Taio
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // output
+            // 
+            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.output.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.output.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.output.Location = new System.Drawing.Point(0, -2);
+            this.output.Multiline = true;
+            this.output.Name = "output";
+            this.output.ReadOnly = true;
+            this.output.Size = new System.Drawing.Size(369, 81);
+            this.output.TabIndex = 2;
+            // 
+            // rectangleViewer
+            // 
+            this.rectangleViewer.AxisTextFont = new System.Drawing.Font("Arial", 8F);
+            this.rectangleViewer.BackgroundColor = System.Drawing.Color.White;
+            this.rectangleViewer.CanDraw = true;
+            this.rectangleViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
+            this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
+            this.rectangleViewer.Name = "rectangleViewer";
+            this.rectangleViewer.Size = new System.Drawing.Size(511, 324);
+            this.rectangleViewer.TabIndex = 0;
+            this.rectangleViewer.XBorder = 5;
+            this.rectangleViewer.YBorder = 5;
+            this.rectangleViewer.RectangleClicked += new Kontrolka_do_TAiO.RectDisplay.RectangleClickHandler(this.rectangleViewer_RectangleClicked);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -391,6 +412,7 @@ namespace Taio
             this.rectanglesContextMenuStrip.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -433,5 +455,6 @@ namespace Taio
         private System.Windows.Forms.ToolStripMenuItem colorChangeToolStripMenuItem;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.TextBox output;
     }
 }
