@@ -13,6 +13,7 @@ namespace Taio.Algorithms
         private Rectangle rectangle;
         private string tag = "AW1";
 
+        //Sluzy od zaptrzymania dzialania algorytmu
         public void StopThread()
         {
             running = false;
@@ -28,13 +29,19 @@ namespace Taio.Algorithms
             return tag;
         }
 
+        //glowna petla algorytmu
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rects)
         {
+            //znajdujemy maksymalne mozliwe pole prostokata
             int maxArea = ComputeMaximumArea(rects);
             bool onlySideChange = false;
+            //na podstawie maxArea okreslamy jakie moga byc maksymalne boki wyjsciowego prostokata
             SetMaximumSides(maxArea);
+            //znajdujemy maksymalny pojedynczy poprawny prostokat
             Rectangle bigestSingleRect = FindBiggestSingleRect(rects);
+            //usuwamy te prostokaty ktore maja dluzsze boki niz te obliczone w SetMaximumSide
             List<Rectangle> correctRects = RemoveTooBigRectangles(rects);
+            //znajdz prostokat o najwiekszym polu
             Rectangle startRect = FindRectangleWithMaxArea(correctRects);
             bool change = true;
             int currentSide = (startRect.LongerSide == startRect.SideA) ? startRect.SideA : startRect.SideB;
@@ -45,15 +52,20 @@ namespace Taio.Algorithms
             while (change && correctRects.Count > 0 && running)
             {
                 change = false;
+                //szukamy prostokata ktory bedzie najlepiej pasowal do juz istniejacych
                 Rectangle tempRect = TryFindRectangleToThenNextStep(currentSide, correctRects, orientation);
                 if (tempRect != null)
                 {
                     int currentSum = tempRect.LongerSide;
                     tempRectsList.Add(tempRect);
+                    //probujemy utworzyc linie zlozonona z prostokatow ktora da sie dolaczyc do juz istniejacych
+                    //elemento
                     bool foundLine = TryFillLine(currentSum, currentSide, tempRect, correctRects,
                         tempRectsList, orientation);
                     if (foundLine)
                     {
+                        //probujemy dodac znaleziono linie i sprawdzamy czy powstaly prostokat spelnia warunki
+                        //na ksztalt
                         Rectangle maxCorrect = AddFoundRectanglesToStartRect(tempRectsList,
                             startRect, orientation);
                         if (maxCorrect == null || !IsShapeConditionValid(maxCorrect.SideA, maxCorrect.SideB))
@@ -91,6 +103,7 @@ namespace Taio.Algorithms
             return rectangle;
         }
 
+        //probuje do istniejace prostokata stworzyc linie prostokatow ktora bedzie przylegac do jednego z bokow
         private static bool TryFillLine(int currentSum, int currentSide, Rectangle tempRect,
             List<Rectangle> correctRects, List<Rectangle> tempRectsList, Taio.Rectangle.Orientation orientation)
         {
@@ -110,6 +123,7 @@ namespace Taio.Algorithms
             return foundLine;
         }
 
+        //dodaje znaleziono linie prostokatow do istniejacego prostokata
         private static Rectangle AddFoundRectanglesToStartRect(List<Rectangle> foundRects,
             Rectangle startRect, Rectangle.Orientation orientation)
         {
@@ -142,6 +156,7 @@ namespace Taio.Algorithms
             return rc.MaxCorrectRect;
         }
 
+        //znajduje minimalna dlugosc boku prostokata uwzgledniajac tylko boki o podanej orientacji
         private static int FindMinHeight(List<Rectangle> rects, Rectangle.Orientation orientation)
         {
             int min = Int32.MaxValue;
@@ -155,6 +170,7 @@ namespace Taio.Algorithms
             return min;
         }
 
+        //oblicza "strate" pola w zalezonosci od ulozenia prostokata
         private static int CountAreaLost(int currentSide, int maxSide, int shorterSide, int sideA, int sideB)
         {
             int lostArea = 0;
@@ -169,6 +185,7 @@ namespace Taio.Algorithms
             return lostArea;
         }
 
+        //probuje znalezc prostokat do uzupelnienia linii prostokatow
         private static Rectangle TryFindNextRect(int shorterSide, int currentSide, int maxSide,
             List<Rectangle> rects, Taio.Rectangle.Orientation orientation)
         {
@@ -206,6 +223,7 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        //Probuje znalezc prostokat od ktorego bedzie najlepiej ukladac nowa linie prostokatow
         private static Rectangle TryFindRectangleToThenNextStep(int side, List<Rectangle> rects,
             Rectangle.Orientation orientation)
         {
@@ -232,6 +250,7 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        //wylicza sume pol prostokatow
         private static int ComputeMaximumArea(List<Rectangle> rects)
         {
             int area = 0;
@@ -240,6 +259,8 @@ namespace Taio.Algorithms
             return area;
         }
 
+        //na podstawie danego pola okresla jakie moga byc maksymalne dlugosci bokow wyjsciowego prostokata
+        //spelniajce warunki na ksztalt
         private void SetMaximumSides(int area)
         {
             double shorterSide = (int)Math.Sqrt(area);
@@ -265,6 +286,8 @@ namespace Taio.Algorithms
             }
         }
 
+        //usuwa te prostokaty ktorych boki sa za dlugie i w zwiazku z tym nigdy nie zostana wykorzystane przy
+        //budowie wyjsciowego prostokata
         private List<Rectangle> RemoveTooBigRectangles(List<Rectangle> rects)
         {
             List<Rectangle> correctRects = new List<Rectangle>();
@@ -278,6 +301,7 @@ namespace Taio.Algorithms
             return correctRects;
         }
 
+        //Znajduje najwiekszy pojedynczy prostokat ktore spelnia warunki na ksztalt
         private Rectangle FindBiggestSingleRect(List<Rectangle> rects)
         {
             int index = -1;
@@ -303,6 +327,7 @@ namespace Taio.Algorithms
             return rectangle;
         }
 
+        //sprawdza czy podane boki prostokata spleniaja warunek ksztaltu
         private static bool IsShapeConditionValid(int sideA, int sideB)
         {
             double prop = sideA / (double)sideB;
@@ -311,11 +336,13 @@ namespace Taio.Algorithms
             return false;
         }
 
+        //okresla ktory z stosunkow bokow prostokata bardziej przypomina kwadrat
         private static bool IsBetterRatio(double candidateRatio, double currRatio)
         {
             return Math.Abs(1 - currRatio) > Math.Abs(1 - candidateRatio);
         }
 
+        //znajduje prostokat z najwiekszym polem
         private static Rectangle FindRectangleWithMaxArea(List<Rectangle> rects)
         {
             int max = -1;

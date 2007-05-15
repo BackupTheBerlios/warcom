@@ -321,6 +321,7 @@ namespace Kontrolka_do_TAiO
         }
         #endregion
 
+        //rescales rectangle in the way that longest side is shown as half of longer axis
         private void Rescale(int maxSide)
         {
             if (this.autoScaleCheckBox.Checked)
@@ -339,6 +340,7 @@ namespace Kontrolka_do_TAiO
             }
         }
 
+        //creates colors for rectangles
         private void SetColors()
         {
             int MYSTERIOUS_VALUE = 2 << 24;
@@ -353,6 +355,7 @@ namespace Kontrolka_do_TAiO
             }
         }
 
+        //seeks complex rectangle and extracts all simple rectangles
         private void ExtractRectangles(Taio.Rectangle rectangle)
         {
             if (rectangle.ContainedRectangles.Count == 0)
@@ -367,6 +370,7 @@ namespace Kontrolka_do_TAiO
         }
 
         #region public_methods
+        //set visibility of rectangle with given number at tommost
         public void SelectRectangleByNumber(int number)
         {
             if (extractedRectangles != null)
@@ -387,6 +391,7 @@ namespace Kontrolka_do_TAiO
             }
         }
 
+        //changle colors of control
         public void ChangeColor()
         {
             this.label1.BackColor = Taio.Properties.Settings.Default.color;
@@ -394,6 +399,7 @@ namespace Kontrolka_do_TAiO
             this.label3.BackColor = Taio.Properties.Settings.Default.color;
         }
 
+        //clears view area
         public void Clear()
         {
             this.rectangle = null;
