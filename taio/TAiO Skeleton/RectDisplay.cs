@@ -338,7 +338,7 @@ namespace Kontrolka_do_TAiO
                     this.zoomIn.Enabled = true;
             }
         }
-        
+
         private void SetColors()
         {
             int MYSTERIOUS_VALUE = 2 << 24;
@@ -398,6 +398,9 @@ namespace Kontrolka_do_TAiO
         {
             this.rectangle = null;
             this.realValue = new DoublePoint();
+            this.canDraw = true;
+            this.xTextBox.Enabled = true;
+            this.yTextBox.Enabled = true;
             this.Refresh();
         }
 
@@ -513,6 +516,11 @@ namespace Kontrolka_do_TAiO
 
         private void xTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
+            ValidateTextBoxes();
+        }
+
+        private void ValidateTextBoxes()
+        {
             int val;
             if (Int32.TryParse(xTextBox.Text, out val) && val > 0)
             {
@@ -521,18 +529,19 @@ namespace Kontrolka_do_TAiO
                 this.Rescale(max);
                 this.Refresh();
             }
-        }
-
-        private void yTextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            int val;
             if (Int32.TryParse(yTextBox.Text, out val) && val > 0)
             {
                 this.realValue = new DoublePoint(realValue.X, val);
                 int max = (int)Math.Max(realValue.X, realValue.Y);
                 this.Rescale(max);
                 this.Refresh();
+
             }
+        }
+
+        private void yTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ValidateTextBoxes();
         }
         #endregion
     }
