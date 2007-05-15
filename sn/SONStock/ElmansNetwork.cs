@@ -26,6 +26,7 @@ namespace SONStock
         private double ni = 0.9;
         private int MAX_IT = 50000;
         private double delta = 0.1;
+        [NonSerialized()]
         private List<double> errors = new List<double>();
         private bool useTechnicalAnalysis = false;
 
