@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
@@ -51,6 +52,11 @@ namespace SONStock
         //maximum possible scale
         private int maxScale = 256;
 
+        private int estimatedValueMarker = -1;
+        //private int estimatedValues = 0;
+
+
+
         private bool isScaleUserSet = false;
         private Random random = new Random();
 
@@ -72,6 +78,9 @@ namespace SONStock
             this.data.Clear();
             this.minYVal = double.PositiveInfinity;
             this.xValuesCounter = 1;
+            this.dataSeriesComboBox.Items.Clear();
+            this.estimatedValueMarker = -1;
+            //this.estimatedValues = 0;
         }
 
         public void AddDataSeries(double[] dataArray)
@@ -82,6 +91,7 @@ namespace SONStock
             if (dataArray.Length > this.xValuesCounter)
             {
                 Array.Copy(dataArray, dataArray.Length - xValuesCounter, dataArray, 0, xValuesCounter);
+                //Array.Copy(dataArray, dataArray.Length - xValuesCounter, dataArray, 0, xValuesCounter - estimatedValues);
             }
             data.Add(dataArray);
 
@@ -93,6 +103,12 @@ namespace SONStock
             this.ComputeScale();
             
             //this.xValuesCounter = this.xValuesCounter > dataArray.Length ? this.xValuesCounter : dataArray.Length;
+        }
+
+        public void AddEstimatedDataMarker(int position)
+        {
+            if(position > 0)
+                this.estimatedValueMarker = position;
         }
 
         /*public void AppendDataSeries(int seriesIndex)
@@ -190,6 +206,14 @@ namespace SONStock
             if (minYVal != Double.PositiveInfinity)
                 graph.DrawString(" " + minYVal, axisTextFont, axisTextBrush,
                     new Point(yStopPoint.X + 5, zeroPoint.Y - 15));
+
+
+
+            Brush estVMBrush = new HatchBrush(HatchStyle.DashedVertical, Color.Red);
+            Pen estVMPen = new Pen(estVMBrush);
+            Point estMarkerDown = new Point(zeroPoint.X + estimatedValueMarker * xUnit, zeroPoint.Y);
+            if(estimatedValueMarker != -1)
+                graph.DrawLine(estVMPen, estMarkerDown, new Point(estMarkerDown.X, yStopPoint.Y));
         }
 
         public void PaintDataList(Graphics graph, Point zeroPoint, int dataListIndex)
@@ -273,7 +297,7 @@ namespace SONStock
         private void changeColor_Click(object sender, EventArgs e)
         {
             int brushIndex = dataSeriesComboBox.SelectedIndex;
-            if (brushIndex == -1)
+            if (brushIndex == -1 || brushIndex >= dataBrushes.Count)
                 return;
             if (this.colorDialog.ShowDialog() == DialogResult.OK)
             {
@@ -301,5 +325,16 @@ namespace SONStock
         {
             this.Refresh();
         }
+
+        /*public void SetEstimatedValuesCount(int estValues)
+        {
+            if (estValues >= 0)
+                this.estimatedValues = estValues;
+        }*/
+        /*public int EstimatedValues
+        {
+            get { return estimatedValues; }
+            set { estimatedValues = value; }
+        }*/
     }
 }

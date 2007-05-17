@@ -88,8 +88,14 @@ namespace SONStock
                 MessageBox.Show("Wczytaj zestaw ucz¹cy");
                 return;
             }
-
+            if (data.Count < Properties.Settings.Default.entryLayerSize)
+            {
+                MessageBox.Show("Wczytany zestaw ucz¹cy zawiera zbyt ma³o danych.\nWczytaj wiêcej danych lub zmieñ ustawienia sieci.");
+                return;
+            }
+            
             this.elmanNet = this.data.Learn(this.elmanNet);
+
             if (data != null && elmanNet != null && data.Count >= elmanNet.NumberOfEntryNeurons)
             {
                 this.performEstimationToolStripMenuItem.Enabled = true;
@@ -174,11 +180,11 @@ namespace SONStock
 //TODO
             if (this.data.Count > 0)
                 this.addDataToExistingToolStripMenuItem.Enabled = true;
-            if (elmanNet != null && data != null && data.Count >= elmanNet.NumberOfEntryNeurons)
-            {
-                this.performEstimationToolStripMenuItem.Enabled = true;
+            if (elmanNet != null && data != null)
                 this.UpdateDataGraph();
-            }
+
+            if (elmanNet != null && data != null && data.Count >= elmanNet.NumberOfEntryNeurons)
+                this.performEstimationToolStripMenuItem.Enabled = true;
         }
 
         private void loadDataFromManyFilesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -205,18 +211,18 @@ namespace SONStock
                     DateTime dt = (DateTime)enumerator.Current;
                     values[counter++] = d[dt];
                 }
-                
+
                 double[] entryValues = new double[elmanNet.NumberOfEntryNeurons];
                 for (int i = 0; i < entryValues.Length; i++)
                     entryValues[i] = values[values.Length - elmanNet.NumberOfEntryNeurons + i];
-                
+
                 double oMin, oMax;
                 this.data.Normalize(ref entryValues, out oMin, out oMax);
-                
+
                 double[] exit = elmanNet.ComputeExitValues(entryValues);
                 this.data.DeNormalize(ref exit, oMin, oMax);
                 this.exitValuesMatrixPreview.BuildControl(exit);
-                
+
                 this.dataGraph1.ClearData();
                 List<double> v = this.data.ListDoubleData;
                 v.AddRange(exit);
@@ -224,8 +230,13 @@ namespace SONStock
                 this.dataGraph1.AddDataSeries(v.ToArray());
 
                 this.exitValuesMatrixPreview.Visible = true;
+
+                this.dataGraph1.AddEstimatedDataMarker(this.dataGraph1.XValuesCounter - elmanNet.NumberOfExitNeurons - 1);
+                //this.dataGraph1.SetEstimatedValuesCount(elmanNet.NumberOfExitNeurons);
                 this.dataGraph1.Refresh();
             }
+            else if (d.Count < elmanNet.NumberOfEntryNeurons)
+                MessageBox.Show("Podany zestaw zawiera zbyt ma³o danych historycznych");
         }
 
         private void clearDataToolStripMenuItem_Click(object sender, EventArgs e)
