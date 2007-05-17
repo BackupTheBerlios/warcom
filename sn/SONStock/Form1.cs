@@ -235,8 +235,10 @@ namespace SONStock
                 //this.dataGraph1.SetEstimatedValuesCount(elmanNet.NumberOfExitNeurons);
                 this.dataGraph1.Refresh();
             }
+            else if(elmanNet == null)
+                MessageBox.Show("Brak nauczonej sieci o podanych parametrach.");
             else if (d.Count < elmanNet.NumberOfEntryNeurons)
-                MessageBox.Show("Podany zestaw zawiera zbyt ma³o danych historycznych");
+                MessageBox.Show("Podany zestaw zawiera zbyt ma³o danych historycznych.");
         }
 
         private void clearDataToolStripMenuItem_Click(object sender, EventArgs e)

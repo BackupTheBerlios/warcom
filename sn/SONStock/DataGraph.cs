@@ -317,6 +317,8 @@ namespace SONStock
             this.dataSeriesComboBox.SelectedIndex = -1;
             this.dataSeriesComboBox.Text = "Seria";
             this.dataSeriesComboBox.Items.Clear();
+
+            this.estimatedValueMarker = -1;
             
             this.Refresh();
         }
