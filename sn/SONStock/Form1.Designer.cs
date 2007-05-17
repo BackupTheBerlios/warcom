@@ -30,11 +30,13 @@ namespace SONStock
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.networkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.networkMatrixPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.shrinkLearninDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.learnNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.modifyNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,8 +54,8 @@ namespace SONStock
             this.errorLabel = new System.Windows.Forms.Label();
             this.dataGraph1 = new SONStock.DataGraph();
             this.exitValuesMatrixPreview = new SONStock.MatrixPreview();
-            this.shrinkLearninDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newNetworkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.elmanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.garchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.elmanNetErrorPanel.SuspendLayout();
             this.SuspendLayout();
@@ -87,6 +89,13 @@ namespace SONStock
             this.networkToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
             this.networkToolStripMenuItem.Text = "&Sieæ";
             // 
+            // newNetworkToolStripMenuItem
+            // 
+            this.newNetworkToolStripMenuItem.Name = "newNetworkToolStripMenuItem";
+            this.newNetworkToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.newNetworkToolStripMenuItem.Text = "Nowa sieæ";
+            this.newNetworkToolStripMenuItem.Click += new System.EventHandler(this.newNetworkToolStripMenuItem_Click);
+            // 
             // saveNetworkToolStripMenuItem
             // 
             this.saveNetworkToolStripMenuItem.Name = "saveNetworkToolStripMenuItem";
@@ -117,6 +126,13 @@ namespace SONStock
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(197, 6);
+            // 
+            // shrinkLearninDataToolStripMenuItem
+            // 
+            this.shrinkLearninDataToolStripMenuItem.Name = "shrinkLearninDataToolStripMenuItem";
+            this.shrinkLearninDataToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.shrinkLearninDataToolStripMenuItem.Text = "Ogranicz zestaw ucz¹cy";
+            this.shrinkLearninDataToolStripMenuItem.Click += new System.EventHandler(this.shrinkLearninDataToolStripMenuItem_Click);
             // 
             // learnNetworkToolStripMenuItem
             // 
@@ -200,10 +216,12 @@ namespace SONStock
             // 
             // settingsToolStripMenuItem
             // 
+            this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.elmanToolStripMenuItem,
+            this.garchToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.settingsToolStripMenuItem.Text = "&Ustawienia";
-            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
             // elmanNetErrorTextBox
             // 
@@ -253,19 +271,19 @@ namespace SONStock
             this.exitValuesMatrixPreview.Title = "Przewidywane wartoœci";
             this.exitValuesMatrixPreview.Visible = false;
             // 
-            // shrinkLearninDataToolStripMenuItem
+            // elmanToolStripMenuItem
             // 
-            this.shrinkLearninDataToolStripMenuItem.Name = "shrinkLearninDataToolStripMenuItem";
-            this.shrinkLearninDataToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.shrinkLearninDataToolStripMenuItem.Text = "Ogranicz zestaw ucz¹cy";
-            this.shrinkLearninDataToolStripMenuItem.Click += new System.EventHandler(this.shrinkLearninDataToolStripMenuItem_Click);
+            this.elmanToolStripMenuItem.Name = "elmanToolStripMenuItem";
+            this.elmanToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.elmanToolStripMenuItem.Text = "Elman";
+            this.elmanToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
-            // newNetworkToolStripMenuItem
+            // garchToolStripMenuItem
             // 
-            this.newNetworkToolStripMenuItem.Name = "newNetworkToolStripMenuItem";
-            this.newNetworkToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.newNetworkToolStripMenuItem.Text = "Nowa sieæ";
-            this.newNetworkToolStripMenuItem.Click += new System.EventHandler(this.newNetworkToolStripMenuItem_Click);
+            this.garchToolStripMenuItem.Name = "garchToolStripMenuItem";
+            this.garchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.garchToolStripMenuItem.Text = "Garch";
+            this.garchToolStripMenuItem.Click += new System.EventHandler(this.garchToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -320,6 +338,8 @@ namespace SONStock
         private System.Windows.Forms.ToolStripMenuItem modifyNetworkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newNetworkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shrinkLearninDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem elmanToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem garchToolStripMenuItem;
     }
 }
 

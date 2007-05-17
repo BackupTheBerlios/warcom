@@ -257,5 +257,35 @@ namespace SONStock
         }
         #endregion
 
+        private void garchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GarchSettingsForm g = new GarchSettingsForm();
+            if (g.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    Garch.GarchModel garch = new Garch.GarchModel(g.P, g.Q, g.Gamma);
+                    garch.Theta = g.Theta;
+                    double[] test = this.data.ListDoubleData.ToArray();
+                    double min, max;
+                    this.dataGraph1.ClearData();
+                    List<double> v = new List<double>();
+                    v.AddRange(test);
+                    this.data.Normalize(ref test, out min, out max);
+                    double[] exit = garch.ComputeGarchModel(test, Properties.Settings.Default.estimationTime);
+                    this.data.DeNormalize(ref exit, min, max);
+
+                    v.AddRange(exit);
+                    this.dataGraph1.XValuesCounter = 15;
+                    this.dataGraph1.AddDataSeries(v.ToArray());
+
+                    this.exitValuesMatrixPreview.Visible = true;
+                    this.dataGraph1.Refresh();
+                }
+                catch (Exception) { }
+
+            }
+        }
+
     }
 }

@@ -18,6 +18,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +59,13 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GarchModel.cs" />
+    <Compile Include="GarchSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GarchSettingsForm.Designer.cs">
+      <DependentUpon>GarchSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MatrixPreview.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -76,6 +84,8 @@
     <Compile Include="ModifyNetworkForm.Designer.cs">
       <DependentUpon>ModifyNetworkForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="NagCFunctionsAPI.cs" />
+    <Compile Include="NetRandom.cs" />
     <Compile Include="OpenDirectoryDialog.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -90,6 +100,10 @@
     <EmbeddedResource Include="Form1.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GarchSettingsForm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>GarchSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MatrixPreview.resx">
       <SubType>Designer</SubType>
