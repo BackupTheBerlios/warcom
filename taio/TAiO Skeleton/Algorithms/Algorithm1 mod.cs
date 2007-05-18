@@ -96,7 +96,8 @@ namespace Taio.Algorithms
                 rc.InsertRectangle(startRect);
                 startRect = rc.MaxCorrectRect;
             }
-            rectangle = startRect;
+            if(IsShapeConditionValid(startRect.SideA, startRect.SideB))
+                rectangle = startRect;
             if (bigestSingleRect != null)
                 if (bigestSingleRect.Area >= rectangle.Area) 
                     rectangle = bigestSingleRect;
