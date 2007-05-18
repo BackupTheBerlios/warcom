@@ -8,10 +8,10 @@ namespace LinZadNajmnKwadr
     {
         static void Main(string[] args)
         {
-            MGSOrtogonalizationTest();
+            //MGSOrtogonalizationTest();
             //Console.WriteLine("--------------------------");
             //HouseholderOrtogonalizationTest();
-            //LLSTest();
+            LLSTest();
         }
         
         private static void LLSTest()
@@ -40,38 +40,42 @@ namespace LinZadNajmnKwadr
             LinearLeastSquares lls = new LinearLeastSquares(A,b, LinearLeastSquares.Method.MGS);
             lls.Solve();
             Console.WriteLine("x:");
-            Console.WriteLine(lls.X.ToString(4));
+            Console.WriteLine(lls.X);
+            Console.WriteLine("r:");
+            Console.WriteLine(lls.ResidualVector);
 
             lls = new LinearLeastSquares(A, b, LinearLeastSquares.Method.Householder);
             lls.Solve();
             Console.WriteLine("x:");
             Console.WriteLine(lls.X);
+            Console.WriteLine("r:");
+            Console.WriteLine(lls.ResidualVector);
         }
 
         private static void MGSOrtogonalizationTest()
         {
+            //przyklad 1
             double[] tab = new double[]{1,-2,3,
                                        3,1,4,
                                         2,5,1};
-            //double[] tabb= new double[]{-7,5,18};//przyklad 1
 
-
+            //przyklad 2
             double[] tab1 = new double[]{1,2,3,
                                         2,5,8,
                                         3,8,14};
-            //double[] tabb1= new double[]{4,9,11};//przyklad 2
 
+            //przyklad 3
             double[] tab2 = new double[]{1,2,-1,0,
                                         4,8,-7,1,
                                         1,2,-1,1,
                                         -1,1,4,6};
-            //double[] tabb2= new double[]{0,1,1,0};//przyklad 3
 
+            //przyklad 4
             double[] tab3 = new double[]{2,1,-1,1,
                                         3,-2,2,-3,
                                         5,1,-1,2,
                                         2,-1,1,-3};
-            //double[] tabb3 = new double[] { 1, 2, -1, 4 };//przyklad 4
+            
 
             MGS[] mgs = new MGS[] {new MGS(new Matrix(tab, 3, 3)),
                                     new MGS(new Matrix(tab1,3,3)),
@@ -87,10 +91,10 @@ namespace LinZadNajmnKwadr
                 Console.WriteLine(mgs[i].Q.ToString(4));
                 Console.WriteLine("R:");
                 Console.WriteLine(mgs[i].R.ToString(4));
-                Console.WriteLine("spr");
-                //Console.WriteLine("X");
+                Console.WriteLine("spr:");
+                Console.WriteLine("Q*R");
                 Console.WriteLine((mgs[i].Q * mgs[i].R).ToString(4));
-                Console.WriteLine("Q'*Q");
+                Console.WriteLine("Q.Transposition()*Q");
                 Console.WriteLine((mgs[i].Q.Transposition() * mgs[i].Q).ToString(4));
             }
         }
