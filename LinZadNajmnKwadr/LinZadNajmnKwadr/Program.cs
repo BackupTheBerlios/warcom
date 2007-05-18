@@ -8,10 +8,10 @@ namespace LinZadNajmnKwadr
     {
         static void Main(string[] args)
         {
-            //MGSOrtogonalizationTest();
+            MGSOrtogonalizationTest();
             //Console.WriteLine("--------------------------");
             //HouseholderOrtogonalizationTest();
-            LLSTest();
+            //LLSTest();
         }
         
         private static void LLSTest()
@@ -33,14 +33,14 @@ namespace LinZadNajmnKwadr
             Matrix b = new Matrix(tabb, 4, 1); */
 
             Console.WriteLine("A:");
-            Console.WriteLine(A);
+            Console.WriteLine(A.ToString(4));
             Console.WriteLine("b:");
-            Console.WriteLine(b);
+            Console.WriteLine(b.ToString(4));
 
             LinearLeastSquares lls = new LinearLeastSquares(A,b, LinearLeastSquares.Method.MGS);
             lls.Solve();
             Console.WriteLine("x:");
-            Console.WriteLine(lls.X);
+            Console.WriteLine(lls.X.ToString(4));
 
             lls = new LinearLeastSquares(A, b, LinearLeastSquares.Method.Householder);
             lls.Solve();
@@ -82,15 +82,16 @@ namespace LinZadNajmnKwadr
             {
                 mgs[i].Orthogonalization();
                 Console.WriteLine("A:");
-                Console.WriteLine(mgs[i].A);
+                Console.WriteLine(mgs[i].A.ToString(4));
                 Console.WriteLine("Q:");
-                Console.WriteLine(mgs[i].Q);
+                Console.WriteLine(mgs[i].Q.ToString(4));
                 Console.WriteLine("R:");
-                Console.WriteLine(mgs[i].R);
+                Console.WriteLine(mgs[i].R.ToString(4));
                 Console.WriteLine("spr");
-                Console.WriteLine("X");
-               
-                Console.WriteLine(mgs[i].Q * mgs[i].R);
+                //Console.WriteLine("X");
+                Console.WriteLine((mgs[i].Q * mgs[i].R).ToString(4));
+                Console.WriteLine("Q'*Q");
+                Console.WriteLine((mgs[i].Q.Transposition() * mgs[i].Q).ToString(4));
             }
         }
 
