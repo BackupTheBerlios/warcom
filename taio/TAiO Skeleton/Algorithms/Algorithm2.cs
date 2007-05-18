@@ -38,7 +38,6 @@ namespace Taio.Algorithms
                 throw new ArgumentException("Empty rectangles list");
 
             k =  (int)(rectanglesList.Count * 0.75);
-            //k = rectanglesList.Count;
 
             RectangleContainer container = new RectangleContainer();
             rects = new RectanglesList(rectanglesList);
@@ -85,7 +84,6 @@ namespace Taio.Algorithms
 
                 //k = rectanglesList.Count;
 
-                //zalepianie bêdzie k-krokowe (k jak kiedyœ)
                 //k-ty krok to SimpleMend czyli proste zalepianie (³atanie)
                 //w kazdym kroku powinien byæ chyba tylko jeden emptyField?
                 int pathWidth = n.ShorterSide;
@@ -136,14 +134,30 @@ namespace Taio.Algorithms
                     break;
             }
 
-            //sprawdzaæ jeszcze warunek poprawnoœci (mo¿e nowy prostok¹t - ostatni, który spe³nia³ warunki)
             rectangle = container.MaxCorrectRect;
 
             if (!IsShapeConditionValid(rectangle.SideA, rectangle.SideB))
             {
-                Console.WriteLine("Najlepsze znalezione rozwi¹zanie " + rectangle + " nie spe³nia warunku 2:1");
+                //Console.WriteLine("Najlepsze znalezione rozwi¹zanie " + rectangle + " nie spe³nia warunku 2:1");
+                if (bestWithShapeCondition == null)
+                {
+                    int bestIndex = -1, largestArea = 0; int i = 0;
+                    foreach (Rectangle rec in rectanglesList)
+                    {
+                        if (IsShapeConditionValid(rec.SideA, rec.SideB) && largestArea < rec.Area)
+                        {
+                            bestIndex = i;
+                            largestArea = rec.Area;
+                        }
+                        i++;
+                    }
+
+                    if (bestIndex > 0)
+                        bestWithShapeCondition = rectanglesList[bestIndex];
+                }
+
                 rectangle = bestWithShapeCondition;
-                Console.WriteLine("Za rozwi¹zanie przyjmujê " + rectangle);
+                //Console.WriteLine("Za rozwi¹zanie przyjmujê " + rectangle);
             }
             //rectangle = resultRectangle;
 
