@@ -103,7 +103,7 @@ namespace Taio.Algorithms
             // inicjalizacja danych
             Rectangle result = null;
             Rectangle maxRectangle = findMaxAreaRectangle(correctRects);
-            Rectangle rectToFill = findMaxRectangle(correctRects);
+            Rectangle rectToFill = findAnyMaxRectangle(correctRects);
             Hole hole = null;
             List<Rectangle> rects = new List<Rectangle>();
             List<OutRect> outsRight = new List<OutRect>();
@@ -111,13 +111,7 @@ namespace Taio.Algorithms
             List<Hole> holesRight = new List<Hole>();
             List<Hole> holesDown = new List<Hole>();
 
-            // do testów
-            //hole = new Hole(1, 4, new Point(0, 0));
-            //hole.OrientRight = true;
-            //rectToFill = findRectangle(correctRects, hole, true);
-
-            correctRects.Remove(rectToFill);            
-           
+            correctRects.Remove(rectToFill);                       
             rectToFill.Move(new Point(0, 0));
             rects.Add(rectToFill);
             Min_X = Max_X = rectToFill.RightDown.X;
@@ -131,9 +125,7 @@ namespace Taio.Algorithms
 
                 hole = findHole(holesRight, holesDown, out rightSide);
                 rectToFill = findRectangle(correctRects, hole, rightSide);
-                //Console.WriteLine("#" + rectToFill.Number + "rect[" + rectToFill.SideA + ", " + rectToFill.SideB + "]");
-
-                               
+                                              
                 if (hole != null)
                     fillHole(outsRight, outsDown, holesRight, holesDown, rectToFill, hole, rightSide);
                 else
@@ -143,10 +135,17 @@ namespace Taio.Algorithms
                 rects.Add(rectToFill);
                 correctRects.Remove(rectToFill);
 
-                //counter++;
+                if (holesRight.Count == 0 && outsRight.Count > 0)
+                {
+                    updateOutsRight(outsRight);
+                    updateHolesRight(outsRight, outsDown, holesRight, holesDown);
+                }
+                if (holesDown.Count == 0 && outsDown.Count > 0)
+                {
+                    updateOutsDown(outsDown);
+                    updateHolesDown(outsRight, outsDown, holesRight, holesDown);
+                }
             }
-
-            //Console.WriteLine("po pêtli.");
 
             result = maxCorrectRectangle(rects);
             if (result != null)
@@ -283,8 +282,6 @@ namespace Taio.Algorithms
                             List<Hole> holesRight, List<Hole> holesDown, Rectangle rect,
                             Hole hole, bool rightSide)
         {
-            //Console.WriteLine("fillHole");
-
             Hole newHole;
             OutRect outRect, or;
             List<OutRect> outRects;
@@ -316,11 +313,11 @@ namespace Taio.Algorithms
 
             if (hole.OrientDown && hole.OrientRight && result == 0)
             {
-                if(rect.RightDown.X > Min_X)
+                if(rect.RightDown.X > Min_X && !rightSide)
                     outsRight.Add(new OutRect(rect.RightDown.X - Min_X, rect.SideB,
                                     new Point(Min_X, rect.LeftTop.Y)));
 
-                if (rect.RightDown.Y > Min_Y)
+                if (rect.RightDown.Y > Min_Y && rightSide)
                     outsDown.Add(new OutRect(rect.SideA, rect.RightDown.Y - Min_Y,
                                     new Point(rect.LeftTop.X, Min_Y)));
 
@@ -549,6 +546,27 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        private Rectangle findAnyMaxRectangle(List<Rectangle> rectangles)
+        {
+            Rectangle rect = null;
+
+            if (rectangles == null || rectangles.Count == 0)
+                return rect;
+
+            foreach (Rectangle rc in rectangles)
+            {
+                if (rect == null)
+                    rect = rc;
+                else if (rc.LongerSide > rect.LongerSide)
+                    rect = rc;
+                else if (rc.LongerSide == rect.LongerSide && rc.Area > rect.Area)
+                        rect = rc;                
+            }
+
+            return rect;
+        }
+
+
         private Rectangle findMinRectangle(List<Rectangle> rectangles)
         {
             Rectangle rect = null;
@@ -712,7 +730,7 @@ namespace Taio.Algorithms
             }
             else
             {
-                rect = findMaxRectangle(rectangles);
+                rect = findAnyMaxRectangle(rectangles);
 
                 if (rightSide && rect.SideB != rect.LongerSide)
                     rect.Rotate();
@@ -727,8 +745,7 @@ namespace Taio.Algorithms
         {
             Rectangle rect = null;
             int sideA, sideB, min, minTemp;
-            //bool rotate = false;
-
+            
             if (rectangles == null || rectangles.Count == 0)
                     return rect;
 
@@ -766,9 +783,9 @@ namespace Taio.Algorithms
                 }
                 else 
                 {
-                    minTemp = Math.Max(sideA, sideB);
+                    minTemp = Math.Min(sideA, sideB);
 
-                    if(min > minTemp)
+                    if(min > minTemp && minTemp >= 0)
                     {
                         min = minTemp;
                         rect = rc;
@@ -792,16 +809,31 @@ namespace Taio.Algorithms
         private void updateHoles(List<OutRect> outsRight, List<OutRect> outsDown, List<Hole> holesRight,
                                     List<Hole> holesDown)
         {
-            //Console.WriteLine("updateHoles");
             ///TODO - poprawiæ tutaj
             int min_x = minHoles_X(holesRight, outsRight);
-            int min_y = minHoles_Y(holesDown, outsDown);            
+            int min_y = minHoles_Y(holesDown, outsDown);
+            OutRect tempRight = null;
+            OutRect tempDown = null;
+
+            if (outsRight.Count > 0)
+                tempRight = outsRight[outsRight.Count - 1].copy();
+            if (outsDown.Count > 0)
+                tempDown = outsDown[outsDown.Count - 1].copy();
 
             if (min_x > Min_X)
             {
                 Min_X = min_x;
                 updateOutsRight(outsRight);
                 updateHolesRight(outsRight, outsDown, holesRight, holesDown);
+
+                if (holesRight.Count > 0 && tempRight != null && holesRight[holesRight.Count - 1].OrientDown
+                    && tempRight.RightDown.Y > Min_Y && holesRight[holesRight.Count - 1].Rect.LeftTop.Y >= Min_Y)
+                {
+                    holesRight.RemoveAt(holesRight.Count-1);
+                    outsDown.Add(tempRight);
+                    updateOutsDown(outsDown);
+                    updateHolesDown(outsRight, outsDown, holesRight, holesDown);
+                }
             }
 
             if (min_y > Min_Y)
@@ -809,13 +841,20 @@ namespace Taio.Algorithms
                 Min_Y = min_y;
                 updateOutsDown(outsDown);
                 updateHolesDown(outsRight, outsDown, holesRight, holesDown);
+
+                if (holesDown.Count > 0 && tempDown != null && holesDown[holesDown.Count - 1].OrientRight
+                    && tempDown.RightDown.X > Min_X && holesDown[holesDown.Count - 1].Rect.LeftTop.X >= Min_X)
+                {
+                    holesDown.RemoveAt(holesDown.Count - 1);
+                    outsRight.Add(tempDown);
+                    updateOutsRight(outsRight);
+                    updateHolesRight(outsRight, outsDown, holesRight, holesDown);
+                }
             }
         }
 
         private void updateOutsRight(List<OutRect> outsRight)
         {
-            //Console.WriteLine("updateOutsRight");
-
             List<OutRect> outsToRemove = new List<OutRect>();
 
             foreach (OutRect or in outsRight)
@@ -830,8 +869,6 @@ namespace Taio.Algorithms
 
         private void updateOutsDown(List<OutRect> outsDown)
         {
-            //Console.WriteLine("updateOutsDown");
-
             List<OutRect> outsToRemove = new List<OutRect>();
 
             foreach (OutRect or in outsDown)
@@ -846,61 +883,55 @@ namespace Taio.Algorithms
 
         private int minHoles_X(List<Hole> holesRight, List<OutRect> outsRight)
         {
-            //Console.WriteLine("minHoles_X");
-
             if(holesRight == null || holesRight.Count==0)
                 return minOutsRight(outsRight);
 
-            //Console.WriteLine("minHoles_X: " + holesRight.Count);
-
-            int result = holesRight[0].Rect.LeftTop.X;
+            int result = -1;
 
             foreach (Hole hl in holesRight)
             {
-                //Console.WriteLine("in loopX");
-                
-
-                if (result > hl.Rect.LeftTop.X && hl.Rect.LeftTop.Y < Min_Y)
+                if (result == -1 && hl.Rect.LeftTop.Y < Min_Y)
                     result = hl.Rect.LeftTop.X;
-
-                //Console.WriteLine("in loopX");
+                if (result > hl.Rect.LeftTop.X && hl.Rect.LeftTop.Y < Min_Y)
+                    result = hl.Rect.LeftTop.X;                
             }
+
+            if (result == -1)
+                result = Min_X;
+
+            result = Math.Min(result, minOutsRight(outsRight));
 
             return result;
         }
 
         private int minHoles_Y(List<Hole> holesDown, List<OutRect> outsDown)
         {
-            //Console.WriteLine("minHoles_Y");
-
             if(holesDown == null || holesDown.Count==0)
                 return minOutsDown(outsDown);
-
-            //Console.WriteLine("minHoles_Y: " + holesDown.Count);
-
-            int result = holesDown[0].Rect.LeftTop.Y;
+            
+            int result = -1;
 
             foreach (Hole hl in holesDown)
             {
-                //Console.WriteLine("in loopY");
+                if (result == -1 && hl.Rect.LeftTop.X < Min_X)
+                    result = hl.Rect.LeftTop.Y;
                 if (result > hl.Rect.LeftTop.Y && hl.Rect.LeftTop.X < Min_X)
                     result = hl.Rect.LeftTop.Y;
-
-                //Console.WriteLine("in loopY2");
             }
-            
+
+            if (result == -1)
+                result = Min_Y;
+
+            result = Math.Min(result, minOutsDown(outsDown));
+
             return result;
         }
 
         private int minOutsRight(List<OutRect> outsRight)
         {
-            //Console.WriteLine("minOutsRight");
-
             if (outsRight == null || outsRight.Count == 0)
                 return Min_X;
-
-            //Console.WriteLine("minOutsRight " + outsRight.Count);
-
+                        
             int result = outsRight[0].RightDown.X;
             int yPos = 0;
             OutRect last = outsRight[0];
@@ -924,12 +955,8 @@ namespace Taio.Algorithms
 
         private int minOutsDown(List<OutRect> outsDown)
         {
-            //Console.WriteLine("minOutsDown");
-
             if (outsDown == null || outsDown.Count == 0)
                 return Min_Y;
-
-            //Console.WriteLine("minOutsDown: " + outsDown.Count);
 
             int result = outsDown[0].RightDown.Y;
             int xPos = 0;
@@ -1009,14 +1036,18 @@ namespace Taio.Algorithms
                 hole.OrientRight = true;
                 hole.NeighbourOne = orOld;
 
-                if(!isCornerHole(holesDown))
+                if (!isCornerHole(holesDown))
                 {
                     hole.Corner = true;
-                    if(outsDown.Count > 0)
+                    if (outsDown.Count > 0)
                         hole.NeighbourSecond = outsDown[outsDown.Count - 1];
                 }
                 else
-                    hole.saveResize(hole.Rect.SideA, Min_Y - orOld.RightDown.Y);
+                {
+                    if (holesDown.Count > 0)
+                        hole.saveResize(hole.Rect.SideA, 
+                            holesDown[holesDown.Count -1 ].Rect.LeftTop.Y - orOld.RightDown.Y);                    
+                }
 
                 holesRight.Add(hole);
             }
@@ -1065,14 +1096,18 @@ namespace Taio.Algorithms
                 hole.OrientRight = true;
                 hole.NeighbourOne = orOld;
 
-                if(!isCornerHole(holesRight))
+                if (!isCornerHole(holesRight))
                 {
                     hole.Corner = true;
-                    if(outsRight.Count > 0)
+                    if (outsRight.Count > 0)
                         hole.NeighbourSecond = outsRight[outsRight.Count - 1];
                 }
                 else
-                    hole.saveResize(Min_X - orOld.RightDown.X, orOld.SideB);
+                {
+                    if(holesRight.Count > 0)
+                        hole.saveResize(holesRight[holesRight.Count - 1].Rect.LeftTop.X - orOld.RightDown.X,
+                                            hole.Rect.SideB);
+                }
 
                 holesDown.Add(hole);
             }
@@ -1138,6 +1173,11 @@ namespace Taio.Algorithms
                 get { return _removed; }
                 set { _removed = value; }
             }
+
+            public OutRect copy()
+            {
+                return new OutRect(SideA, SideB, new Point(leftTop.X, leftTop.Y));
+            }
         }
 
         private class Hole 
@@ -1196,6 +1236,8 @@ namespace Taio.Algorithms
                         if (_corner)
                         {
                             _corner = false;
+                            newHole.OrientRight = true;
+                            newHole.OrientDown = true;
                             newHole.Corner = true;
                         }
                     }
