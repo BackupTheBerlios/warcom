@@ -214,9 +214,8 @@ namespace SONStock
             bool useTechnicalAnalysis = Properties.Settings.Default.useTechnicalAnalysis;
 
             if (elmanNet == null ||
-                elmanNet.NumberOfEntryNeurons != entryLayerSize ||
-                elmanNet.NumberOfExitNeurons != exitLayerSize)
-                elmanNet = new ElmansNetwork(entryLayerSize, hiddenLayerSize, exitLayerSize, useTechnicalAnalysis);
+                elmanNet.NumberOfEntryNeurons != entryLayerSize)
+                elmanNet = new ElmansNetwork(entryLayerSize, hiddenLayerSize, 1, useTechnicalAnalysis);
 
             double[] val = new double[entryLayerSize];
             double[] correct = new double[exitLayerSize];
@@ -233,7 +232,15 @@ namespace SONStock
                 }
                 double oMin, oMax;
                 this.Normalize( ref val, ref correct, out oMin, out oMax);
-                elmanNet.Learn(val, correct);
+                for (int k = 0; k < exitLayerSize; k++)
+                {
+                    double[] temp = new double[1];
+                    temp[0] = correct[k];
+                    elmanNet.Learn(val, temp);
+                    for (int l = 1; l < entryLayerSize; l++)
+                        val[l - 1] = val[l];
+                    val[entryLayerSize - 1] = correct[k];
+                }
             }
             return elmanNet;
         }

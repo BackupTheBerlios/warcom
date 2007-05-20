@@ -218,8 +218,16 @@ namespace SONStock
 
                 double oMin, oMax;
                 this.data.Normalize(ref entryValues, out oMin, out oMax);
-
-                double[] exit = elmanNet.ComputeExitValues(entryValues);
+                double[] exit = new double[Properties.Settings.Default.estimationTime];
+                for (int k = 0; k < exit.Length; k++)
+                {
+                    double singleExit = elmanNet.ComputeExitValues(entryValues)[0];
+                    for (int l = 1; l < entryValues.Length; l++)
+                        entryValues[l - 1] = entryValues[l];
+                    entryValues[entryValues.Length - 1] = singleExit;
+                    exit[k] = singleExit;
+                }
+                
                 this.data.DeNormalize(ref exit, oMin, oMax);
                 this.exitValuesMatrixPreview.BuildControl(exit);
 

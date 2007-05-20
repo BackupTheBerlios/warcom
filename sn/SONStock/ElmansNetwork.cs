@@ -8,9 +8,13 @@ namespace SONStock
     [Serializable]
     class ElmansNetwork
     {
+        //neurony wejsciowe
         private double[] entryValues;
+        //neurony warstwy contekstowej
         private double[] contextValues;
+        //neurony warstwy ukrytej
         private double[] hiddenValues;
+        //neurony warstwy wyjsciowej
         private double[] exitValues;
         private double[,] entryHiddenWeights;
         private double[,] contextHiddenWeights;
