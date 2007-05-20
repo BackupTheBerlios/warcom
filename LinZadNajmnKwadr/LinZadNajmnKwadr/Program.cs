@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace LinZadNajmnKwadr
 {
@@ -11,9 +12,9 @@ namespace LinZadNajmnKwadr
             //MGSOrtogonalizationTest();
             //Console.WriteLine("--------------------------");
             //HouseholderOrtogonalizationTest();
-            LLSTest();
+            LLSTest();         
         }
-        
+
         private static void LLSTest()
         {
             /*double[] tab = new double[]{1, 2, 3,
@@ -24,19 +25,30 @@ namespace LinZadNajmnKwadr
             Matrix A = new Matrix(tab, 4, 3);
             Matrix b = new Matrix(tabb, 4, 1); */                //rozw [-0.25 0 0.25]
 
+            int an = 4, am = 4, bm = 4;
             double[] tab = new double[]{1, 2, -1, 0,
                                         4, 8, -7, 1,
                                         1, 2, -1, 1,
                                         -1,1, 4, 6};
+            /*double[] tab = new double[]{1, 1, 1, 1, 1,
+                                        0.000001, 0, 0, 0, 0,
+                                        0, 0.000001, 0, 0, 0,
+                                        0, 0, 0, 0.000001, 0,
+                                        0, 0, 0, 0, 0.000001};*/
             double[] tabb = new double[] { 0, 1, 1, 0 };        // rozw [4 -2 0 1]
-            Matrix A = new Matrix(tab, 4, 4);
-            Matrix b = new Matrix(tabb, 4, 1);
+            //double[] tabb = new double[] { 0, 1, 1, 0, 1 };
+            
+            
+            
+            Matrix A = new Matrix(tab, an, am);
+            Matrix b = new Matrix(tabb, bm, 1);
 
             Console.WriteLine("A:");
             Console.WriteLine(A.ToString(4));
             Console.WriteLine("b:");
             Console.WriteLine(b.ToString(4));
 
+            Console.WriteLine("MGS");
             LinearLeastSquares lls = new LinearLeastSquares(A,b, LinearLeastSquares.Method.MGS);
             lls.Solve();
             Console.WriteLine("x:");
@@ -44,6 +56,7 @@ namespace LinZadNajmnKwadr
             Console.WriteLine("r:");
             Console.WriteLine(lls.ResidualVector);
 
+            Console.WriteLine("Hosueholder");
             lls = new LinearLeastSquares(A, b, LinearLeastSquares.Method.Householder);
             lls.Solve();
             Console.WriteLine("x:");
