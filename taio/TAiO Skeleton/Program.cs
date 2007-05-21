@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Taio
 {
@@ -17,7 +18,7 @@ namespace Taio
             //IntersectionTest();
             //SubtractTest();
             //SortingTest();
-
+            CompareWithBest();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
@@ -26,6 +27,29 @@ namespace Taio
         
 
         #region Tests
+        public static void CompareWithBest()
+        {
+            string path = @"C:\Documents and Settings\Marcin\Pulpit\tests\3x5";
+            string[] files = Directory.GetFiles(path);
+            List<Rectangle> rects = new List<Rectangle>();
+            List<Solution> sols = new List<Solution>();
+            Algorithms.Algorithm1Mod alg = new Taio.Algorithms.Algorithm1Mod();
+            TextWriter tw = new StreamWriter(path + "\\result.csv", true);
+            for (int i = 0; i < files.Length; i++)
+            {
+                DataLoader dl = new DataLoader();
+                dl.LoadSolutions(files[i], ref sols, ref rects);
+                int bestArea = sols[0].Rectangle.Area;
+                Rectangle rect = alg.ComputeMaximumRectangle(rects);
+                int apsArea = 0;
+                if (rect != null)
+                    apsArea = rect.Area;
+                tw.WriteLine(bestArea + ";" + apsArea);
+
+            }
+            tw.Close();
+        }
+
         public static void IntersectionTest()
         {
             Rectangle testRect = new Rectangle(new Point(4,3), new Point(7,6));
