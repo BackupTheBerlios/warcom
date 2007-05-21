@@ -99,7 +99,7 @@ namespace Taio.Algorithms
             if(IsShapeConditionValid(startRect.SideA, startRect.SideB))
                 rectangle = startRect;
             if (bigestSingleRect != null)
-                if (bigestSingleRect.Area >= rectangle.Area) 
+                if (bigestSingleRect.Area >= startRect.Area) 
                     rectangle = bigestSingleRect;
             return rectangle;
         }
