@@ -71,7 +71,7 @@ namespace Taio
             }
         }
 
-        private void LoadSolutions(string fileName, ref List<Solution> solutions, ref  List<Rectangle> rectangles)
+        public void LoadSolutions(string fileName, ref List<Solution> solutions, ref  List<Rectangle> rectangles)
         {
             String str = null;
             using (TextReader rd = new StreamReader(fileName))

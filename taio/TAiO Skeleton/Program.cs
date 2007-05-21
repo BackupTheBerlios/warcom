@@ -18,7 +18,7 @@ namespace Taio
             //IntersectionTest();
             //SubtractTest();
             //SortingTest();
-            CompareWithBest();
+            //CompareWithBest();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainWindow());
