@@ -1,11 +1,13 @@
 #ifndef LOCALQSORTER_H_
 #define LOCALQSORTER_H_
 #include<iostream>
+#include "../Tools/Utils.h"
 
 //#define ASCENDING true
 //#define DESCENDING false
 
 using namespace std;
+using namespace tools;
 
 
 namespace sorting

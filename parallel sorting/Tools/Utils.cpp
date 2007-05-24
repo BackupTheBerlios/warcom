@@ -79,5 +79,18 @@ int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
 	return buffer;
 }
 
+int Utils::compare(int a, int b)
+{
+	struct timespec ts;
+	ts.tv_sec = 0;
+    ts.tv_nsec = COMPARE_SLEEP_NS;
+    nanosleep (&ts, NULL);
+	
+	if(a < b)
+		return 1;
+	else
+		return 0;
+}
+
 }
     

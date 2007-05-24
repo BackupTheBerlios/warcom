@@ -16,7 +16,7 @@ namespace sorting
 	{
 		int piv;
 
-		if( first < last ) {
+		if( Utils::compare(first, last)) {
 			piv = pivot( first, last, dir );
 			quicksort( first, piv-1, dir );
 			quicksort( piv+1, last, dir );
