@@ -239,7 +239,9 @@ namespace SONStock
 
                 this.exitValuesMatrixPreview.Visible = true;
 
-                this.dataGraph1.AddEstimatedDataMarker(this.dataGraph1.XValuesCounter - elmanNet.NumberOfExitNeurons - 1);
+                //this.dataGraph1.AddEstimatedDataMarker(this.dataGraph1.XValuesCounter - elmanNet.NumberOfExitNeurons - 1);
+                //int markPosComp = (v.Count < this.dataGraph1.XValuesCounter) ? v.Count - 1 : this.dataGraph1.XValuesCounter;
+                //this.dataGraph1.AddEstimatedDataMarker(markPosComp - elmanNet.NumberOfExitNeurons - 1);
                 //this.dataGraph1.SetEstimatedValuesCount(elmanNet.NumberOfExitNeurons);
                 this.dataGraph1.Refresh();
             }

@@ -49,13 +49,13 @@ namespace SONStock
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.wyczyœæDaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.elmanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.garchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.elmanNetErrorTextBox = new System.Windows.Forms.TextBox();
             this.elmanNetErrorPanel = new System.Windows.Forms.Panel();
             this.errorLabel = new System.Windows.Forms.Label();
             this.dataGraph1 = new SONStock.DataGraph();
             this.exitValuesMatrixPreview = new SONStock.MatrixPreview();
-            this.elmanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.garchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.elmanNetErrorPanel.SuspendLayout();
             this.SuspendLayout();
@@ -223,6 +223,20 @@ namespace SONStock
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.settingsToolStripMenuItem.Text = "&Ustawienia";
             // 
+            // elmanToolStripMenuItem
+            // 
+            this.elmanToolStripMenuItem.Name = "elmanToolStripMenuItem";
+            this.elmanToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.elmanToolStripMenuItem.Text = "&Ogólne";
+            this.elmanToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
+            // garchToolStripMenuItem
+            // 
+            this.garchToolStripMenuItem.Name = "garchToolStripMenuItem";
+            this.garchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.garchToolStripMenuItem.Text = "&Garch";
+            this.garchToolStripMenuItem.Click += new System.EventHandler(this.garchToolStripMenuItem_Click);
+            // 
             // elmanNetErrorTextBox
             // 
             this.elmanNetErrorTextBox.Location = new System.Drawing.Point(13, 16);
@@ -270,20 +284,6 @@ namespace SONStock
             this.exitValuesMatrixPreview.TabIndex = 5;
             this.exitValuesMatrixPreview.Title = "Przewidywane wartoœci";
             this.exitValuesMatrixPreview.Visible = false;
-            // 
-            // elmanToolStripMenuItem
-            // 
-            this.elmanToolStripMenuItem.Name = "elmanToolStripMenuItem";
-            this.elmanToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.elmanToolStripMenuItem.Text = "Elman";
-            this.elmanToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
-            // 
-            // garchToolStripMenuItem
-            // 
-            this.garchToolStripMenuItem.Name = "garchToolStripMenuItem";
-            this.garchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.garchToolStripMenuItem.Text = "Garch";
-            this.garchToolStripMenuItem.Click += new System.EventHandler(this.garchToolStripMenuItem_Click);
             // 
             // Form1
             // 
