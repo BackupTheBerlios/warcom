@@ -55,6 +55,7 @@ namespace SONStock
             if(this.data != null)
                 this.data.ClearData();
             this.dataGraph1.ClearData();
+            this.dataGraph1.Refresh();
             this.elmanNet = null;
             this.elmanNetErrorPanel.Visible = false;
             this.exitValuesMatrixPreview.Visible = false;
@@ -255,6 +256,7 @@ namespace SONStock
         {
             data.ClearData();
             this.performEstimationToolStripMenuItem.Enabled = false;
+            this.dataGraph1.Refresh();
         }
 
         private void UpdateDataGraph()
