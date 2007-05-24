@@ -4,6 +4,9 @@ using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using System.Drawing;
+using System.ComponentModel;
+using System.IO;
+using System.Windows.Forms;
 
 namespace Taio.Algorithms
 {
@@ -13,13 +16,30 @@ namespace Taio.Algorithms
         private Rectangle rect;
         private bool stop;
 
+
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rectangles)
         {
             try
             {
+                Console.WriteLine("Alg0v2");
                 this.rect = this.ComputeRectangles(rectangles);
+                if (this.rect != null &&
+                    (this.rect.ContainedRectangles == null || this.rect.ContainedRectangles.Count == 0))
+                {
+                    RectangleContainer rectC = new RectangleContainer();
+                    rectC.InsertRectangle(this.rect);
+                    if (rectC.IsCorrectRectangle && rectC.MaxCorrectRect.Area == this.rect.Area)
+                        this.rect = rectC.MaxCorrectRect;
+                }
             }
-            catch (Exception) { }
+            catch (OutOfMemoryException)
+            {
+                MessageBox.Show("Zg³oszono wyj¹tek OutOfMemoryException");
+            }
+            catch (Exception)
+            {
+
+            }
             return this.rect;
         }
 
@@ -80,7 +100,7 @@ namespace Taio.Algorithms
                     }
                 }
                 else
-                    if(this.rect!=null)
+                    if (this.rect != null)
                         return this.rect;
             }
             return this.rect;
@@ -90,7 +110,7 @@ namespace Taio.Algorithms
             AlgRectangleContaioner arc)
         {
             List<RectangleData> rds = new List<RectangleData>();
-            for (int i = 0; i < rects.Count; ++i)
+            for (int i = 0; i < rects.Count && !this.stop; ++i)
             {
                 rects[i] = rects[i].Move(new Point(0, 0));
                 if (rects[i].SideA < rects[i].SideB)
@@ -106,12 +126,12 @@ namespace Taio.Algorithms
         {
             for (int i = rds.Count - 2; i >= 0; --i)
             {
-                if(i==2 && rds[i].Point.Y == 3)
-                    i =2;
+                if (i == 2 && rds[i].Point.Y == 3)
+                    i = 2;
                 arc.Remove(rds[i + 1]);
                 if (!arc.Move(rds[i]))
                     continue;
-                
+
                 for (int j = i + 1; j < rds.Count; ++j)
                 {
                     rds[j].Point = new Point(0, 0);
@@ -170,7 +190,7 @@ namespace Taio.Algorithms
         {
             List<SetCoverEntry> tab = new List<SetCoverEntry>();
             bool flag = true;
-            while (flag)
+            while (flag && !this.stop)
             {
                 int maxSide = (int)Math.Sqrt(2 * maxArea);
                 for (int i = 0; i < rects.Count; ++i)
@@ -228,15 +248,15 @@ namespace Taio.Algorithms
             int max;
             List<IntPair> tab = this.ComputeFactors(maxArea, out max);
             int maxSide = (int)Math.Sqrt(2 * maxArea), minSide = (int)Math.Sqrt(((double)maxArea) / 2.0);
-            for (int i = (int)Math.Pow(2, tab.Count - 1) - 1; i >= 0; --i)
+            for (int i = (int)Math.Pow(2, tab.Count - 1) - 1; i >= 0 && !this.stop; --i)
             {
                 int fact = tab[tab.Count - 1].First;
                 for (int j = 0; j < tab.Count - 1; ++j)
                     if ((i >> j & 1) == 1)
                         fact *= tab[j].First;
-                if (fact >= minSide && fact <= maxSide && 
-                    (((double)fact*fact)/maxArea)<=2.0 &&
-                    ((double)maxArea/(fact*fact))<=2.0 )
+                if (fact >= minSide && fact <= maxSide &&
+                    (((double)fact * fact) / maxArea) <= 2.0 &&
+                    ((double)maxArea / (fact * fact)) <= 2.0)
                     sides.Add(new SetCoverEntry(fact, maxArea / fact));
             }
             for (int i = 0; i < sides.Count; ++i)
@@ -251,7 +271,7 @@ namespace Taio.Algorithms
             p = 2;
             int g = (int)Math.Sqrt(n);
             List<IntPair> tab = new List<IntPair>();
-            while (p <= g)
+            while (p <= g && !this.stop)
             {
                 //if (n % p == 0)
                 //    tab.Add(new IntPair(p, 0));
@@ -549,7 +569,7 @@ namespace Taio.Algorithms
 
             public bool InsertRectangle(List<RectangleData> rects)
             {
-                bool flag =true;
+                bool flag = true;
                 for (int i = 0; i < rects.Count; ++i)
                     if (!(rects[i].Used = this.InsertRectangle(rects[i])))
                         flag = false;
@@ -592,7 +612,7 @@ namespace Taio.Algorithms
             public bool Move(RectangleData rect)
             {
                 this.Remove(rect);
-                if (rect.Rot && rect.Rect.SideA!=rect.Rect.SideB)
+                if (rect.Rot && rect.Rect.SideA != rect.Rect.SideB)
                 {
                     rect.Rect = rect.Rect.Rotate();
                     rect.Rot = false;
@@ -604,7 +624,7 @@ namespace Taio.Algorithms
                     rect.Point = new Point(rect.Point.X + 1, rect.Point.Y);
                     if (rect.Rect.SideA < rect.Rect.SideB)
                         rect.Rect = rect.Rect.Rotate();
-                    if(this.InsertInGoodPosition(rect))
+                    if (this.InsertInGoodPosition(rect))
                     {
                         rect.Rot = true;
                         return true;

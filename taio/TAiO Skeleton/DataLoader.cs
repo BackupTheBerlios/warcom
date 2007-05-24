@@ -17,7 +17,7 @@ namespace Taio
 
 
         #region File operation
-        public void SaveData(List<Solution> solutions, List<Rectangle> rectangles)
+        public void SaveData(List<Solution> solutions, List<Rectangle> rectangles, bool badFormat)
         {
             this.log = new StringBuilder();
             SaveFileDialog sfd = new SaveFileDialog();
@@ -29,7 +29,7 @@ namespace Taio
                 {
                     List<Solution> s = new List<Solution>();
                     List<Rectangle> r = new List<Rectangle>();
-                    this.LoadSolutions(sfd.FileName, ref s, ref  r);
+                    this.LoadSolutions(sfd.FileName, ref s, ref  r, badFormat);
                     if (!this.CheckData(r, rectangles))
                     {
                         if (MessageBox.Show("Dane wejœciowe z programu oraz dane z pliku nie s¹ identyczne" +
@@ -47,15 +47,16 @@ namespace Taio
                     else
                     {
                         this.DeleteOldSolutions(sfd.FileName, solutions);
-                        this.AppendSolutions(sfd.FileName, solutions);
+                        this.AppendSolutions(sfd.FileName, solutions, badFormat);
                         return;
                     }
                 }
-                this.AppendSolutions(sfd.FileName, solutions, rectangles);
+                this.AppendSolutions(sfd.FileName, solutions, rectangles, badFormat);
             }
         }
 
-        public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles, out bool clearLists)
+        public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles, out bool clearLists,
+            bool badFormat)
         {
             this.log = new StringBuilder();
             clearLists = false;
@@ -67,11 +68,12 @@ namespace Taio
                 clearLists = true;
                 rectangles.Clear();
                 solutions.Clear();
-                this.LoadSolutions(ofd.FileName, ref solutions, ref  rectangles);
+                this.LoadSolutions(ofd.FileName, ref solutions, ref  rectangles, badFormat);
             }
         }
 
-        public void LoadSolutions(string fileName, ref List<Solution> solutions, ref  List<Rectangle> rectangles)
+        public void LoadSolutions(string fileName, ref List<Solution> solutions, ref  List<Rectangle> rectangles,
+            bool badFormat)
         {
             String str = null;
             using (TextReader rd = new StreamReader(fileName))
@@ -91,7 +93,7 @@ namespace Taio
                             CaptureCollection result = elem.Groups["result"].Captures;
                             string input = elem.Groups["input"].Value;
                             rectangles = this.ReadInput(input);
-                            solutions = this.ReadResult(result);
+                            solutions = this.ReadResult(result, badFormat);
                             if (!this.CheckCorrect(ref solutions, rectangles))
                             {
                                 this.log.AppendLine("Wczytane rozwi¹zania nie s¹ poprawne");
@@ -190,7 +192,7 @@ namespace Taio
             return rectangles;
         }
 
-        private List<Solution> ReadResult(CaptureCollection result)
+        private List<Solution> ReadResult(CaptureCollection result, bool badFormat)
         {
             List<Solution> solutions = new List<Solution>();
             string wzorzec = "(?<tag>.{0,4}?)\r\n((?<x1>([0-9]*)?),(?<y1>([0-9]*)?),(?<x2>([0-9]*)?),(?<y2>([0-9]*)?)(\r\n)?)*";
@@ -220,8 +222,11 @@ namespace Taio
                                 Int32.Parse(y1[i].Value) : Int32.Parse(y2[i].Value);
                             int g = Int32.Parse(y1[i].Value) <= Int32.Parse(y2[i].Value) ?
                                 Int32.Parse(y2[i].Value) : Int32.Parse(y1[i].Value);
-                            //g += d;
-                            //rt += l;
+                            if (badFormat)
+                            {
+                                g += d;
+                                rt += l;
+                            }
                             Rectangle rect = new Rectangle(new Point(l, d), new Point(rt, g));
                             if (rects.Count == 0 ||
                                     rect.LeftTop.X <= rects[0].LeftTop.X && rect.LeftTop.Y <= rects[0].LeftTop.Y)
@@ -255,19 +260,23 @@ namespace Taio
         #endregion
 
         #region append data to file
-        private void AppendRectangle(Rectangle rect, TextWriter wr)
+        private void AppendRectangle(Rectangle rect, TextWriter wr, bool badFormat)
         {
             if (rect.ContainedRectangles == null || rect.ContainedRectangles.Count == 0)
-                wr.WriteLine(rect.LeftTop.X + "," + rect.LeftTop.Y + "," +
-                    rect.RightDown.X + "," + rect.RightDown.Y);
+            {
+                int x2 = badFormat ? rect.SideA : rect.RightDown.X;
+                int y2 = badFormat ? rect.SideB : rect.RightDown.Y;
+                wr.WriteLine(rect.LeftTop.X + "," + rect.LeftTop.Y + "," + x2 + "," + y2);
+            }
             else
             {
                 for (int i = 0; i < rect.ContainedRectangles.Count; ++i)
-                    this.AppendRectangle(rect.ContainedRectangles[i], wr);
+                    this.AppendRectangle(rect.ContainedRectangles[i], wr, badFormat);
             }
         }
 
-        public void AppendSolutions(string fileName, List<Solution> solutions, List<Rectangle> rectangles)
+        public void AppendSolutions(string fileName, List<Solution> solutions, List<Rectangle> rectangles,
+            bool badFormat)
         {
             using (TextWriter wr = new StreamWriter(fileName))
             {
@@ -285,10 +294,10 @@ namespace Taio
                     wr.WriteLine(rectangles[i].SideA + "," + rectangles[i].SideB);
                 wr.WriteLine("##");
             }
-            this.AppendSolutions(fileName, solutions);
+            this.AppendSolutions(fileName, solutions, badFormat);
         }
 
-        private void AppendSolutions(string fileName, List<Solution> solutions)
+        private void AppendSolutions(string fileName, List<Solution> solutions, bool badFormat)
         {
             using (TextWriter wr = new StreamWriter(fileName, true))
             {
@@ -296,7 +305,7 @@ namespace Taio
                 {
                     Solution s = solutions[i];
                     wr.WriteLine("#" + s.Tag);
-                    this.AppendRectangle(s.Rectangle, wr);
+                    this.AppendRectangle(s.Rectangle, wr, badFormat);
                 }
             }
         }

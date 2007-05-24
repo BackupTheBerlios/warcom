@@ -38,7 +38,7 @@ namespace Taio
             for (int i = 0; i < files.Length; i++)
             {
                 DataLoader dl = new DataLoader();
-                dl.LoadSolutions(files[i], ref sols, ref rects);
+                dl.LoadSolutions(files[i], ref sols, ref rects, false);
                 int bestArea = sols[0].Rectangle.Area;
                 Rectangle rect = alg.ComputeMaximumRectangle(rects);
                 int apsArea = 0;
