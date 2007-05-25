@@ -149,7 +149,7 @@ namespace Taio
             this.Opacity = 0.9;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "ArgumentDialog";
+            this.Text = "Generownie losowe prostok¹tów";
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
