@@ -10,13 +10,30 @@ using System.Windows.Forms;
 
 namespace Taio.Algorithms
 {
+    /// <summary>
+    /// Algorytm dok³adny - idea omówiona w raporcie
+    /// </summary>
     class Algorithm0v2 : IAlgorithm
     {
+        /// <summary>
+        /// tag
+        /// </summary>
         private string tag = "AW02";
+        /// <summary>
+        /// wyliczony prostokat
+        /// </summary>
         private Rectangle rect;
+        /// <summary>
+        /// jest true to przerwij obliczenia
+        /// </summary>
         private bool stop;
 
-
+        /// <summary>
+        /// Metoda budujê prostok¹t o maksymalnym polu spoœród prostok¹tów znajduj¹cych siê 
+        /// na liœcie.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <returns>maksymalny prostok¹t jaki da siê zbudowaæ za pomoc¹ tego algorytmu</returns>
         public Rectangle ComputeMaximumRectangle(List<Rectangle> rectangles)
         {
             try
@@ -43,6 +60,12 @@ namespace Taio.Algorithms
             return this.rect;
         }
 
+        /// <summary>
+        /// Metoda budujê prostok¹t o maksymalnym polu spoœród prostok¹tów znajduj¹cych siê 
+        /// na liœcie.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <returns>maksymalny prostok¹t jaki da siê zbudowaæ za pomoc¹ tego algorytmu</returns>
         private Rectangle ComputeRectangles(List<Rectangle> rectangles)
         {
             if (rectangles == null)
@@ -74,8 +97,10 @@ namespace Taio.Algorithms
             this.rect = maxRect;
             return this.rect;
         }
-
-        //Tutaj wielka dupa wydajnoœciowa:)
+        #region pokrycie prostokata innymi prostokatami
+        /// <summary>
+        /// tworzy pokrycie dla prostokata axb z prostokatow z rects
+        /// </summary>
         private Rectangle SetCover(int a, int b, List<Rectangle> rects)
         {
             Rectangle.RectangleComparer comp = new Rectangle.RectangleComparer();
@@ -106,6 +131,10 @@ namespace Taio.Algorithms
             return this.rect;
         }
 
+        /// <summary>
+        /// tworzy pierwsza startowa sekwencje ustawiajac odpowiednio prostokaty
+        /// oraz zmienne rotate czy ld
+        /// </summary>
         private List<RectangleData> StartSequence(List<Rectangle> rects, int a, int b,
             AlgRectangleContaioner arc)
         {
@@ -121,6 +150,12 @@ namespace Taio.Algorithms
             return rds;
         }
 
+        /// <summary>
+        /// tworzy nowa startowa sekwencje ustawiajac odpowiednio prostokaty
+        /// oraz zmienne rotate czy ld
+        /// zwraca true jesli istnieje nowa sekwencja
+        /// wpp zwraca false == nie udalo sie pokryc danymi prostokatami axb
+        /// </summary>
         private bool NewSequence(List<RectangleData> rds,
             AlgRectangleContaioner arc, int a, int b)
         {
@@ -144,6 +179,10 @@ namespace Taio.Algorithms
             return false;
         }
 
+        /// <summary>
+        ///sprawdza czy udalo sie juz ulozyc z danej sekwencji rozwiazanie, jesli 
+        /// zwroci !=null => udalo sie i to jest rozwiazanie wpp zwraca null => szukaj dalej
+        /// </summary>
         private Rectangle CheckEnd(List<RectangleData> rds, int area, AlgRectangleContaioner arc)
         {
             if (arc.EmptyField > 0)
@@ -167,6 +206,10 @@ namespace Taio.Algorithms
             return null;
         }
 
+        /// <summary>
+        /// sprawdza czy dany prostokat znajdujacy sie w rd.Rect nie wystaje poza a i b
+        /// jesli tak to go "wciska"
+        /// </summary>
         private RectangleData CheckOutOfBand(RectangleData rd, int a, int b)
         {
             try
@@ -184,8 +227,16 @@ namespace Taio.Algorithms
             rd.Used = true;
             return rd;
         }
+#endregion
 
         #region zmniejszenie rozmiarów zadania
+        /// <summary>
+        /// zmniejsza rozmiary zadania, zmieniajac ewentulanie maxArea
+        /// decyzje podejmuje na podstawie rozkladu aktualnego maxArea oraz
+        /// prostokatow z listy rects
+        /// zwraca liste SetCoverEntry, dla ktorych mozna ulozyc rozwiazanie dla
+        /// danych rects oraz danego maxArea
+        /// </summary>
         private List<SetCoverEntry> ReductionTask(ref int maxArea, List<Rectangle> rects)
         {
             List<SetCoverEntry> tab = new List<SetCoverEntry>();
@@ -234,6 +285,10 @@ namespace Taio.Algorithms
             return tab;
         }
 
+        /// <summary>
+        /// zwraca liste SetCoverEntry, dla ktorych mozna ulozyc rozwiazanie dla
+        /// danego maxArea => rozklada na dwa czynniki maxArea
+        /// </summary>
         private List<SetCoverEntry> ComputeSides(int maxArea)
         {
             List<SetCoverEntry> sides = new List<SetCoverEntry>();
@@ -266,6 +321,12 @@ namespace Taio.Algorithms
             return sides;
         }
 
+
+        /// <summary>
+        /// rozklada na dwa czynniki liczbe n zwracajac pary intow => 
+        /// numer inta oraz ile razy wystepuje w rozkladzie
+        /// p jest najwiekszym dzielnikiem n
+        /// </summary>
         private List<IntPair> ComputeFactors(int n, out int p)
         {
             p = 2;
@@ -295,6 +356,9 @@ namespace Taio.Algorithms
         }
         #endregion
 
+        /// <summary>
+        /// liczy maksymalne pole jakie moze otrzymac algorytm => sumuje pola z listy rects
+        /// </summary>
         private int ComputeMaximumArea(List<Rectangle> rects)
         {
             int area = 0;
@@ -303,6 +367,10 @@ namespace Taio.Algorithms
             return area;
         }
 
+        /// <summary>
+        /// znajduje maksymalny prostokat z listy rects spelanijacy warunki 2:1
+        /// jesli nie znajdzie zadnego zwraca null
+        /// </summary>
         private Rectangle FindGoodRectangleWithMaxArea(List<Rectangle> rects)
         {
             int max = -1;
@@ -321,10 +389,19 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        /// <summary>
+        /// przerywa dzialanie algorytmu
+        /// </summary>
         public void StopThread()
         { stop = true; }
+        /// <summary>
+        /// zwraca stworzony prostokat
+        /// </summary>
         public Rectangle GetRectangle()
         { return rect; }
+        /// <summary>
+        /// zwraca tag
+        /// </summary>
         public string GetTag()
         { return tag; }
 
@@ -332,6 +409,9 @@ namespace Taio.Algorithms
 
 
         #region IntPair Class
+        /// <summary>
+        /// klasa ktora zawiera dwa inty jako jeden obiekt
+        /// </summary>
         private class IntPair
         {
             int first;
@@ -364,11 +444,29 @@ namespace Taio.Algorithms
         #endregion
 
         #region SetCoverEntry Class
+        /// <summary>
+        /// klasa SetCoverEntry
+        /// zawiera boki z jakich nalezy ulozyc prostokat wynikowy
+        /// jego pole
+        /// oraz prostokaty ktorymi nalezy wypelniac wynikowy
+        /// </summary>
         private class SetCoverEntry
         {
+            /// <summary>
+            /// bok a prostokata
+            /// </summary>
             private int a;
+            /// <summary>
+            /// bok b prostokata
+            /// </summary>
             private int b;
+            /// <summary>
+            /// pole prostokata
+            /// </summary>
             private int tmpArea;
+            /// <summary>
+            /// lista prostokatow, ktorymi nalezy pokryc prostokat axb
+            /// </summary>
             private List<Rectangle> rects = new List<Rectangle>();
 
             public SetCoverEntry()
@@ -424,11 +522,28 @@ namespace Taio.Algorithms
         #endregion
 
         #region RectangleData Class
+        /// <summary>
+        /// klasa danych o prostokacie wykorzystywanych przy algorytmie
+        /// </summary>
         private class RectangleData
         {
+            /// <summary>
+            /// czy nastapila juz rotacja (obrot) 
+            /// jesli true to nie nastapila
+            /// </summary>
             private bool rot = true;
+            /// <summary>
+            /// czy dany prostokat jest uzywany w obecnej sekwencji
+            /// </summary>
             private bool used;
+            /// <summary>
+            /// punkt przebiegu prostokata po polach prostokata wynikowe
+            /// na ktorym ostatnim polu rozpatrywalismy prostokat
+            /// </summary>
             private Point point = new Point(0, 0);
+            /// <summary>
+            /// rozpatrywany prostokat
+            /// </summary>
             private Rectangle rect;
 
             public RectangleData(Rectangle rect)
@@ -489,7 +604,7 @@ namespace Taio.Algorithms
         }
         #endregion
 
-        #region Inna wersja:)
+        #region Inna wersja:) - tzn kod nieuzywany
         /*
         #region AlgRectangle Class
         private class AlgRectangle : Rectangle
@@ -554,11 +669,26 @@ namespace Taio.Algorithms
         #endregion
 
         #region AlgRectangleContainer Class
+        /// <summary>
+        /// klasa pomocnicza - kontener ktory wie jak poruszac prostokaty
+        /// oraz wie czy juz zostal rozwiazany problem
+        /// </summary>
         private class AlgRectangleContaioner
         {
+            /// <summary>
+            /// tablica  pol prostokatow
+            /// jesli pole = 0 => jest puste
+            /// >0 oznacza ile prostokatow lezy na tym polu
+            /// </summary>
             private int[][] tab;
+            /// <summary>
+            /// liczba pustych pol => takich ktore maja tab[i][j]==0
+            /// </summary>
             private int emptyField;
 
+            /// <summary>
+            /// inicjalizuje klase
+            /// </summary>
             public AlgRectangleContaioner(int a, int b)
             {
                 this.tab = new int[b][];
@@ -567,6 +697,10 @@ namespace Taio.Algorithms
                 this.emptyField = a * b;
             }
 
+            /// <summary>
+            /// wstawia ciurkiem wszystkie prostokaty w dokladne ich pozycje
+            /// zwraca false jesli chociaz jeden jest nieuzywany
+            /// </summary>
             public bool InsertRectangle(List<RectangleData> rects)
             {
                 bool flag = true;
@@ -577,6 +711,14 @@ namespace Taio.Algorithms
                 return flag;
             }
 
+            /// <summary>
+            /// wstawia prostokat rect.Rect na jego pozycje docelowa
+            /// jednoczesnie dodajac wartosci tablicy pol prostokatow
+            /// od razu tak ustawia prostokat aby nie wystawal poza dlugosci tablic=>
+            /// poza dlugosci bokow prostokata wynikowego a i b
+            /// zwraca true jesli prostokat jest uzywany w nowej sekwencji wpp
+            /// zwraca false
+            /// </summary>
             public bool InsertRectangle(RectangleData rect)
             {
                 int row = rect.Point.Y + rect.Rect.SideB > tab.Length ?
@@ -609,6 +751,14 @@ namespace Taio.Algorithms
                 return true;
             }
 
+            /// <summary>
+            /// robi pojedynczy ruch na pierwsze wolne pole jesli rot==false
+            /// zas jesli rot==true to obraca go
+            /// do wstawiania wykorzystuje funkcjie InsertRectangle
+            /// wczesniej usuwa dany prostokat z tablic  korzystajac z  Remove
+            /// zwraca true jesli prostokat jest uzywany w nowej sekwencji wpp
+            /// zwraca false => trzeba wygenerowac nowa sekwencje dla poprzednikow prostokata
+            /// </summary>
             public bool Move(RectangleData rect)
             {
                 this.Remove(rect);
@@ -633,6 +783,11 @@ namespace Taio.Algorithms
                 }
             }
 
+            /// <summary>
+            /// wklada prostokat na pierwsze wolne pole
+            /// zwraca true jesli prostokat jest uzywany w nowej sekwencji wpp
+            /// zwraca false => trzeba wygenerowac nowa sekwencje dla poprzednikow prostokata
+            /// </summary>
             public bool InsertInGoodPosition(RectangleData rect)
             {
                 rect.Rot = true;
@@ -659,6 +814,13 @@ namespace Taio.Algorithms
                 }
             }
 
+
+            /// <summary>
+            /// usuwa prostokat z jego obecnego miejsca jesli byl uzywany,
+            /// jednoczesnie zmniejszajac wartosci pol tablicy
+            /// oraz podbijajac ewentualnie emptyField
+            /// zwraca true jesli sie udalo wpp false
+            /// </summary>
             public bool Remove(RectangleData rect)
             {
                 if (rect.Used)
@@ -680,6 +842,10 @@ namespace Taio.Algorithms
                 return true;
             }
 
+            /// <summary>
+            /// zwraca ilosc wolnych pol, ktore sam wylicza ustawiajac
+            /// emptyField
+            /// </summary>
             public int ComputeEmptyField()
             {
                 this.emptyField = 0;
@@ -689,7 +855,10 @@ namespace Taio.Algorithms
                             ++this.emptyField;
                 return this.emptyField;
             }
-
+            
+            /// <summary>
+            /// zwraca ilosc wolnych pol
+            /// </summary>
             public int EmptyField
             {
                 get { return emptyField; }
