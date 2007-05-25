@@ -29,8 +29,8 @@ namespace Taio
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Prostok¹ty");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Rozwi¹zania");
+            Taio.MainWindow.RectTreeNode rectTreeNode1 = new Taio.MainWindow.RectTreeNode("Prostok¹ty");
+            Taio.MainWindow.RectTreeNode rectTreeNode2 = new Taio.MainWindow.RectTreeNode("Rozwi¹zania");
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.stopAlgorithm = new System.Windows.Forms.Button();
             this.rectanglesTreeView = new System.Windows.Forms.TreeView();
@@ -45,7 +45,9 @@ namespace Taio
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,11 +62,10 @@ namespace Taio
             this.algorithm3SolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.programHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colorChangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.changeColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeColorToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -89,39 +90,41 @@ namespace Taio
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(769, 414);
-            this.splitContainer1.SplitterDistance = 254;
+            this.splitContainer1.Size = new System.Drawing.Size(807, 414);
+            this.splitContainer1.SplitterDistance = 219;
             this.splitContainer1.TabIndex = 1;
             // 
             // stopAlgorithm
             // 
-            this.stopAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.stopAlgorithm.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.stopAlgorithm.Location = new System.Drawing.Point(12, 379);
             this.stopAlgorithm.Name = "stopAlgorithm";
-            this.stopAlgorithm.Size = new System.Drawing.Size(59, 23);
+            this.stopAlgorithm.Size = new System.Drawing.Size(91, 23);
             this.stopAlgorithm.TabIndex = 2;
-            this.stopAlgorithm.Text = "Stop";
+            this.stopAlgorithm.Text = "Stop algorytmu";
             this.stopAlgorithm.UseVisualStyleBackColor = true;
             this.stopAlgorithm.Click += new System.EventHandler(this.stopAlgorithm_Click);
             // 
             // rectanglesTreeView
             // 
-            this.rectanglesTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.rectanglesTreeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.rectanglesTreeView.ContextMenuStrip = this.rectanglesContextMenuStrip;
             this.rectanglesTreeView.Location = new System.Drawing.Point(0, 0);
             this.rectanglesTreeView.Name = "rectanglesTreeView";
-            treeNode3.Name = "Rectangles";
-            treeNode3.Text = "Prostok¹ty";
-            treeNode3.ToolTipText = "Lista prostok¹tów";
-            treeNode4.Name = "Solutions";
-            treeNode4.Text = "Rozwi¹zania";
-            treeNode4.ToolTipText = "Lista rozwi¹zañ";
+            rectTreeNode1.InfoOutput = "";
+            rectTreeNode1.Name = "Rectangles";
+            rectTreeNode1.Text = "Prostok¹ty";
+            rectTreeNode1.ToolTipText = "Lista prostok¹tów";
+            rectTreeNode2.InfoOutput = "";
+            rectTreeNode2.Name = "Solutions";
+            rectTreeNode2.Text = "Rozwi¹zania";
+            rectTreeNode2.ToolTipText = "Lista rozwi¹zañ";
             this.rectanglesTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
-            this.rectanglesTreeView.Size = new System.Drawing.Size(255, 324);
+            rectTreeNode1,
+            rectTreeNode2});
+            this.rectanglesTreeView.Size = new System.Drawing.Size(217, 324);
             this.rectanglesTreeView.TabIndex = 0;
             this.toolTip.SetToolTip(this.rectanglesTreeView, "Lista prostok¹tów i rozwi¹zañ");
             this.rectanglesTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.rectanglesTreeView_NodeMouseClick);
@@ -164,7 +167,7 @@ namespace Taio
             this.splitContainer2.Panel2.Controls.Add(this.output);
             this.splitContainer2.Panel2.Controls.Add(this.acceptChangebutton);
             this.splitContainer2.Panel2.Controls.Add(this.addRectbutton);
-            this.splitContainer2.Size = new System.Drawing.Size(511, 414);
+            this.splitContainer2.Size = new System.Drawing.Size(584, 414);
             this.splitContainer2.SplitterDistance = 324;
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 1;
@@ -178,7 +181,7 @@ namespace Taio
             this.rectangleViewer.Location = new System.Drawing.Point(0, 0);
             this.rectangleViewer.MinimumSize = new System.Drawing.Size(50, 50);
             this.rectangleViewer.Name = "rectangleViewer";
-            this.rectangleViewer.Size = new System.Drawing.Size(511, 324);
+            this.rectangleViewer.Size = new System.Drawing.Size(584, 324);
             this.rectangleViewer.TabIndex = 0;
             this.rectangleViewer.XBorder = 5;
             this.rectangleViewer.YBorder = 5;
@@ -195,28 +198,28 @@ namespace Taio
             this.output.Multiline = true;
             this.output.Name = "output";
             this.output.ReadOnly = true;
-            this.output.Size = new System.Drawing.Size(369, 81);
+            this.output.Size = new System.Drawing.Size(424, 81);
             this.output.TabIndex = 2;
             // 
             // acceptChangebutton
             // 
             this.acceptChangebutton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.acceptChangebutton.Location = new System.Drawing.Point(386, 3);
+            this.acceptChangebutton.Location = new System.Drawing.Point(430, 3);
             this.acceptChangebutton.Name = "acceptChangebutton";
-            this.acceptChangebutton.Size = new System.Drawing.Size(113, 23);
+            this.acceptChangebutton.Size = new System.Drawing.Size(151, 23);
             this.acceptChangebutton.TabIndex = 1;
-            this.acceptChangebutton.Text = "Akceptuj zmiany";
+            this.acceptChangebutton.Text = "Akceptuj zmiany prostok¹ta";
             this.acceptChangebutton.UseVisualStyleBackColor = true;
             this.acceptChangebutton.Click += new System.EventHandler(this.acceptChangebutton_Click);
             // 
             // addRectbutton
             // 
             this.addRectbutton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.addRectbutton.Location = new System.Drawing.Point(386, 32);
+            this.addRectbutton.Location = new System.Drawing.Point(430, 32);
             this.addRectbutton.Name = "addRectbutton";
-            this.addRectbutton.Size = new System.Drawing.Size(108, 23);
+            this.addRectbutton.Size = new System.Drawing.Size(151, 23);
             this.addRectbutton.TabIndex = 0;
-            this.addRectbutton.Text = "Dodaj do listy";
+            this.addRectbutton.Text = "Dodaj prostok¹t do listy";
             this.addRectbutton.UseVisualStyleBackColor = true;
             this.addRectbutton.Click += new System.EventHandler(this.addRectangleToolStripMenuItem_Click);
             // 
@@ -241,36 +244,50 @@ namespace Taio
             // 
             this.newFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
-            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
             this.newFileToolStripMenuItem.Text = "Nowy";
             this.newFileToolStripMenuItem.Click += new System.EventHandler(this.newFileToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(231, 22);
+            this.toolStripMenuItem1.Text = "Otwórz zgodnie z formatem";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.openFileToolStripMenuItem.Text = "Otwórz niezgodnie";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.openFileToolStripMenuItem.Text = "Otwórz niezgodnie z formatem";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(231, 22);
+            this.toolStripMenuItem2.Text = "Zapisz zgodnie z formatem";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
             // 
             // saveFileToolStripMenuItem
             // 
             this.saveFileToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
-            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.saveFileToolStripMenuItem.Text = "Zapisz niezgodnie";
+            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
+            this.saveFileToolStripMenuItem.Text = " Zapisz niezgodnie z formatem";
             this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(214, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(228, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(231, 22);
             this.exitToolStripMenuItem.Text = "Wyjœcie";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -350,8 +367,7 @@ namespace Taio
             // 
             this.helpToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.programHelpToolStripMenuItem,
-            this.colorChangeToolStripMenuItem});
+            this.programHelpToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.helpToolStripMenuItem.Text = "Pomoc";
@@ -359,16 +375,9 @@ namespace Taio
             // programHelpToolStripMenuItem
             // 
             this.programHelpToolStripMenuItem.Name = "programHelpToolStripMenuItem";
-            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.programHelpToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.programHelpToolStripMenuItem.Text = "Plik pomocy";
             this.programHelpToolStripMenuItem.Click += new System.EventHandler(this.programHelpToolStripMenuItem_Click);
-            // 
-            // colorChangeToolStripMenuItem
-            // 
-            this.colorChangeToolStripMenuItem.Name = "colorChangeToolStripMenuItem";
-            this.colorChangeToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
-            this.colorChangeToolStripMenuItem.Text = "Zmiana koloru";
-            this.colorChangeToolStripMenuItem.Click += new System.EventHandler(this.colorChangeToolStripMenuItem_Click);
             // 
             // menuStrip1
             // 
@@ -376,40 +385,42 @@ namespace Taio
             this.fileMenuItem,
             this.rectanglesToolStripMenuItem,
             this.solutionToolStripMenuItem,
+            this.changeColorToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuStrip1.Size = new System.Drawing.Size(769, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(807, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // toolStripMenuItem1
+            // changeColorToolStripMenuItem
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(217, 22);
-            this.toolStripMenuItem1.Text = "Otwórz zgodnie z formatem";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.changeColorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.changeColorToolStripMenuItem1});
+            this.changeColorToolStripMenuItem.Name = "changeColorToolStripMenuItem";
+            this.changeColorToolStripMenuItem.ShowShortcutKeys = false;
+            this.changeColorToolStripMenuItem.Size = new System.Drawing.Size(85, 20);
+            this.changeColorToolStripMenuItem.Text = "Zmiana koloru";
             // 
-            // toolStripMenuItem2
+            // changeColorToolStripMenuItem1
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(217, 22);
-            this.toolStripMenuItem2.Text = "Zapisz zgodnie z formatem";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            this.changeColorToolStripMenuItem1.Name = "changeColorToolStripMenuItem1";
+            this.changeColorToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.changeColorToolStripMenuItem1.Text = "Zmiana koloru";
+            this.changeColorToolStripMenuItem1.Click += new System.EventHandler(this.colorChangeToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DodgerBlue;
-            this.ClientSize = new System.Drawing.Size(769, 438);
+            this.ClientSize = new System.Drawing.Size(807, 438);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
             this.Name = "MainWindow";
             this.Text = "TAiO prostok¹ty";
             this.toolTip.SetToolTip(this, "toolTip");
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
@@ -456,10 +467,11 @@ namespace Taio
         private System.Windows.Forms.ToolStripMenuItem programHelpToolStripMenuItem;
         private System.Windows.Forms.Button stopAlgorithm;
         private System.Windows.Forms.ToolStripMenuItem randomAddRectanglesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem colorChangeToolStripMenuItem;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.TextBox output;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem changeColorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeColorToolStripMenuItem1;
     }
 }
