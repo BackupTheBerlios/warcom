@@ -212,7 +212,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Dane wczytywane niezgodnie z formatem.
+        /// Dane wczytywane zgodnie z formatem.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -231,7 +231,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Dane zapisywane niezgodnie z formatem.
+        /// Dane zapisywane zgodnie z formatem.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -241,7 +241,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Dane wczytywane zgodnie z formatem.
+        /// Dane wczytywane niezgodnie z formatem.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -260,7 +260,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Dane zapisywane zgodnie z formatem.
+        /// Dane zapisywane niezgodnie z formatem.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
