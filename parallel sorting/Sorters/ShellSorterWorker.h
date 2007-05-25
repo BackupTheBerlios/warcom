@@ -3,6 +3,7 @@
 #include<mpi.h>
 #include<iostream>
 #include "../Tools/DataLoader.h"
+#include "../Tools/DataCollector.h"
 #include "ShellSorter.h"
 using namespace MPI;
 using namespace std;

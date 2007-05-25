@@ -4,5 +4,5 @@ clean:
 	-rm -f fgen
 
 fgen: fgenerator.cpp
-	g++ -o2 -Wall fgenerator.cpp myio.cpp myio.h -o fgen
+	g++ -o2 -Wall fgenerator.cpp ../Tools/myio.cpp ../Tools/myio.h -o fgen
 	

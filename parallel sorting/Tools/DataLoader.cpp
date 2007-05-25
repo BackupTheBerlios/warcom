@@ -64,7 +64,6 @@ namespace tools
 			cout<<buffer[j]<<" ";
 		cout<<endl;*/ 
 		
-		//TODO obmyślic jak przydzielac pamiec bufora (nie mozna chyba do tego samego - czekanie zmarnuje asynchr) i co zwracac
 		return buffer[bufferNo];
 	}
 	
@@ -106,7 +105,6 @@ namespace tools
 			}
 		}
 		
-		//do kazdego senda jakis test?
 		return 0;
 	}
 

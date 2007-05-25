@@ -26,30 +26,8 @@ void ShellSorterWorker::sort()
    	{
    		DataLoader dl(inFile, numprocs);
 		dl.loadAndSendData();
-		
-		//bufSize = dl.getBufferSize();
-		//buffer = dl.loadPrimeProcessData();
-		
-		//buffer = Utils::recv_init_buffer(bufSize, myrank, mpi_status);
-		
-//		if(buffer != NULL)
-//		{
-//			cout<<"Process #"<<myrank<<": Buffer received"<<endl;
-//			displayBuffer("Buffer received");
-//			
-//			//TODO potem normalny udział w sortowaniu
-//			
-//			ShellSorter* shells = new ShellSorter();
-//			if(buffer != NULL)
-//				shells->sort(buffer, bufSize);
-//			
-//			if(buffer != NULL)
-//				delete(buffer);
-//		}
-//		else
-//			cout << "!!! Process #"<<myrank<<": Buffer receiving error!"<<endl;
-
-		//MPI_Barrier(MPI_COMM_WORLD);
+		DataCollector dc(outFile, numprocs,dl.getBufferSize());
+		dc.collectData();
    	}
    	else
    	{
@@ -66,6 +44,7 @@ void ShellSorterWorker::sort()
 			buffer = shells->sort(buffer, bufSize);
 		
 		//wysłać procesowi głownemu
+		MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
 		
 		if(buffer != NULL)
 			delete(buffer);

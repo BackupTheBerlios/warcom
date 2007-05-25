@@ -4,6 +4,7 @@
 #include "Sorters/ShellSorterWorker.h"
 #include "Sorters/ParalBSorter.h"
 #include "Sorters/BSorter.h"
+#include "Sorters/ShellLocalSorter.h"
 #include "Tools/FDataLoader.h"
 #include "Tools/TaskTimer.h"
 using namespace std; 
@@ -15,6 +16,7 @@ bool oem = false;
 bool shell = false;
 bool oemlocal = false;
 bool bitoniclocal = false;
+bool shelllocal = false;
 string inputFile;
 string outputFile;
 
@@ -22,7 +24,7 @@ string outputFile;
 void showUsage()
 {
 	cout<<"Invalid entry"<<endl;
-	cout<<"psort inputFile outputFile -b -oem -s -oeml"<<endl;
+	cout<<"psort inputFile outputFile -b -oem -s -bl -oeml -sl"<<endl;
 }
 
 void showAuthors()
@@ -57,8 +59,10 @@ bool checkInput(char* args[], int argc)
 			oemlocal = true;
 		else if(!temp.compare("-bl"))
 			bitoniclocal = true;
+		else if(!temp.compare("-sl"))
+			shelllocal = true;
 	}
-	return bitonic||oem||shell||oemlocal||bitoniclocal;
+	return bitonic||oem||shell||oemlocal||bitoniclocal||shelllocal;
 }
 
 int main(int argc, char* args[])
@@ -108,7 +112,25 @@ int main(int argc, char* args[])
 			for(int i=0;i<bufferSize;i++)
 				cout<<buffer[i]<<" ";
 			cout<<endl;
-		}	
+		}
+		if(shelllocal)
+		{
+			TaskTimer* tt = new TaskTimer();
+			tt->startTask("load");
+			FDataLoader* fdl = new FDataLoader(inputFile); 
+			int* buffer = fdl->getBuffer();
+			int bufferSize = fdl->getBufferSize();
+			tt->endTask("load", 1);
+			tt->startTask("sort");
+			ShellLocalSorter* shlocs = new ShellLocalSorter();
+			shlocs->sort(buffer, bufferSize);
+			tt->endTask("sort", 1);
+			tt->startTask("display");
+			for(int i=0;i<bufferSize;i++)
+				cout<<buffer[i]<<" ";
+			cout<<endl;
+			tt->endTask("display",1);
+		}
 	}
 	else
 	{
