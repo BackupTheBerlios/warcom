@@ -4,13 +4,20 @@ using System.Text;
 
 namespace Taio
 {
+    //klasa ktora przechowuje rozwiazania
     class Solution
     {
+        //prostokat bedacy rozwiazaniem
         private Rectangle rectangle;
+        //tag rozwiazania
         private string tag ="";
+        //czy ten prostokat jest prawidlowym prostokatem
         private bool correct;
+        //informacje zaczytane z pliku
         private string info=null;
+        //czas wykonania algorytmu - ustawiane przez program
         private TimeSpan ts;
+        //informacje o rozwiazaniu
         private String solutionInfo;
 
         public TimeSpan Ts

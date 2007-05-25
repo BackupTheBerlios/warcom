@@ -17,6 +17,13 @@ namespace Taio
 
 
         #region File operation
+        //odpowiada za zapis danych do pliku
+        //solutions - lista rozwiazan
+        //rectangles - lista wejsciowych prostokatow
+        //badFormat - jesli ustawiony to zapisuje w zlym formacie
+        //funkcja sprawdza czy dane w wybranym pliku (o ile taki istnial) sa zgodne z danymi rectangles
+        //jesli nie sa to pyta sie uzytkownika czy nadpisac je, jesli sa to dopisuje tylko rozwiazania
+        //jesli badFormat==true => niezgodny wpp =>zgodny z formatem
         public void SaveData(List<Solution> solutions, List<Rectangle> rectangles, bool badFormat)
         {
             this.log = new StringBuilder();
@@ -55,6 +62,10 @@ namespace Taio
             }
         }
 
+        //odpowiada za odczyt danych do pliku
+        //solutions - lista rozwiazan zaczytanych
+        //rectangles - lista wejsciowych prostokatow zaczytanych
+        //badFormat - jesli ustawiony to odczytuje w zlym formacie
         public void OpenData(ref List<Solution> solutions, ref  List<Rectangle> rectangles, out bool clearLists,
             bool badFormat)
         {
@@ -72,6 +83,14 @@ namespace Taio
             }
         }
 
+        //odpowiada za odczyt danych do pliku
+        //solutions - lista rozwiazan zaczytanych
+        //rectangles - lista wejsciowych prostokatow zaczytanych
+        //badFormat - jesli ustawiony to odczytuje w zlym formacie
+        //wyrazeniem regularnym parsuje dane i tworzy z nich prostokaty oraz rozwiazania, przy okazji
+        //sprawdzajac poprawnosc tak stworzonych prostokatow
+        //jesli nie udaje sie stworzyc z danych z pliku fileName prostokatow to dany solutions nie jest
+        //zaczytywany
         public void LoadSolutions(string fileName, ref List<Solution> solutions, ref  List<Rectangle> rectangles,
             bool badFormat)
         {
@@ -117,6 +136,8 @@ namespace Taio
             }
         }
 
+        //kasuje z pliku filename roziwania ktore istnieja na liscie solutions
+        //by za chwile zapisac je od nowa (byc moze poprawione)
         private void DeleteOldSolutions(string filename, List<Solution> solutions)
         {
             if (solutions.Count == 0)
@@ -152,7 +173,7 @@ namespace Taio
             }
             this.WriteString(filename, strbld.ToString());
         }
-
+        //zapisuje do pliku filename dane data
         private void WriteString(string filename, string data)
         {
             using (TextWriter wr = new StreamWriter(filename))
@@ -163,6 +184,8 @@ namespace Taio
         #endregion
 
         #region read data from strings
+        //zwraca prostokaty wejsciowe z drugiej sekcji pliku
+        //input jest sparsowanym wyrazniem, w ktorym maja byc tylko prostokaty
         private List<Rectangle> ReadInput(string input)
         {
             List<Rectangle> rectangles = new List<Rectangle>();
@@ -191,7 +214,9 @@ namespace Taio
             }
             return rectangles;
         }
-
+        //zwraca zaczytane rozwiazania z trzeciej sekcji pliku
+        //result jest sparsowana trzecia czescia pliku, tworzy z niej rozwiazania i zwraca je
+        //badFormat odpowiada czy dane maja byc czytane zgodnie czy tez nie z formatem pliku
         private List<Solution> ReadResult(CaptureCollection result, bool badFormat)
         {
             List<Solution> solutions = new List<Solution>();
@@ -260,6 +285,9 @@ namespace Taio
         #endregion
 
         #region append data to file
+        //dodaje nowy prostokat z rozwiazania do listy
+        //rect - jest prostokatym ktory moze zawieraca inne prostokaty na liscie,
+        //wr jest otwartym polaczeniem pliku, zas badFormat odpowiada o zgodnosc danych z formatem
         private void AppendRectangle(Rectangle rect, TextWriter wr, bool badFormat)
         {
             if (rect.ContainedRectangles == null || rect.ContainedRectangles.Count == 0)
@@ -275,6 +303,9 @@ namespace Taio
             }
         }
 
+
+        //zapisuje rozwiazania solutions oraz prostokaty wejsciowe rectangles do pliku fileName
+        //uwzgledniacjac przy tym czy dane maja byc czy tez moze nie maja byc zgodne z formatem
         public void AppendSolutions(string fileName, List<Solution> solutions, List<Rectangle> rectangles,
             bool badFormat)
         {
@@ -296,7 +327,8 @@ namespace Taio
             }
             this.AppendSolutions(fileName, solutions, badFormat);
         }
-
+        //zapisuje juz konkretne rozwiazania soltutions do pliku dopisujac jedynie na samym koncu wartosci
+        //zgodnie z tym jaki ma byc format zapisu
         private void AppendSolutions(string fileName, List<Solution> solutions, bool badFormat)
         {
             using (TextWriter wr = new StreamWriter(fileName, true))
@@ -312,6 +344,9 @@ namespace Taio
         #endregion
 
         #region is data correct?
+        //sprawdza czy na obu listach sa takie same prostokaty i jest ich taka sama ilosc
+        //porownuje jedynie wielkosci bokow, a nie ulozenie czy numer prostokata
+        //jesli sa zwraca true wpp false
         private bool CheckData(List<Rectangle> r1, List<Rectangle> r2)
         {
             if (r1 == null || r2 == null || r1.Count != r2.Count)
@@ -332,7 +367,8 @@ namespace Taio
             }
             return flag;
         }
-
+        //sprawdza czy prostokaty z solutions sa w prostokatach wejsciowych rectangles
+        //jesli sa zwraca true wpp false
         private bool CheckCorrect(ref List<Solution> solutions, List<Rectangle> rectangles)
         {
             bool flag = true;
@@ -347,7 +383,10 @@ namespace Taio
             }
             return flag;
         }
-
+        //sprawdza czy prostokaty zawrate na liscie rect.ContainedRectangles wystepuja na liscie rectangles
+        //jesli lista rect.ContainedRectangles jest pusta to sprawdza czy rect jest na tej liscie
+        //zaznacza przy okazji wykorzystane prostokaty z listy rectangles w flags, by dwa razy nie wykorzystac
+        //tego samego dla roznych z listy
         private bool CheckCorrect(Rectangle rect, List<Rectangle> rectangles, ref bool[] flags)
         {
             if (rect == null)
@@ -374,7 +413,10 @@ namespace Taio
             return true;
         }
         #endregion
-
+        //losuje nowe prostokaty zogdnie z parametrami
+        //count - ilosc prostokatow do wylsoowania
+        //maxSide - maksymalna dlugosc boku prostokata wylosowanego
+        //minSide - minimalna dlugosc boku prostokata wylosowanego
         public List<Rectangle> RandomRectangles(int count, int maxSide, int minSide)
         {
             if (minSide < 1)
@@ -395,7 +437,7 @@ namespace Taio
                     rectangles.Add(new Rectangle(minSide, minSide));
             return rectangles;
         }
-
+        //zwraca logi dotyczace zapisu i odczytu
         public string GetLog
         {
             get { return this.log == null ? "" : this.log.ToString(); }
