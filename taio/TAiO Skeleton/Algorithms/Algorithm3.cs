@@ -11,17 +11,43 @@ namespace Taio.Algorithms
     class Algorithm3 : IAlgorithm
     {
         #region Zmienne klasy
-        private int sideMax = 0;        // maksymalna d³ugoœæ d³u¿szego boku
+        /// <summary>
+        /// maksymalna d³ugoœc d³u¿szego boku
+        /// </summary>
+        private int sideMax = 0;            
+        /// <summary>
+        /// zmienna mówi, czy algorytm ma byæ dalej wykonywany
+        /// </summary>
         private bool running = true;
+        /// <summary>
+        /// wyliczany prostok¹t
+        /// </summary>
         private Rectangle rectangle;
+        /// <summary>
+        /// identyfikator algorytmu
+        /// </summary>
         private string tag = "AW3";
-        private double ratio = 2.0;         // maksymalny stosunek d³u¿szego boku do krótszego
+        /// <summary>
+        /// maksymalny stosunek d³u¿szego boku do krótszego
+        /// </summary>
+        private double ratio = 2.0;         
 
+        /// <summary>
+        /// szerokoœæ prostok¹ta, który mo¿na zbudowaæ
+        /// </summary>
         private int Min_X;
+        /// <summary>
+        /// wysokoœæ prostok¹ta, który mo¿na zbudowaæ
+        /// </summary>
         private int Min_Y;
+        /// <summary>
+        /// szerokoœæ docelowego prostok¹ta
+        /// </summary>
         private int Max_X;
-        private int Max_Y;
-        //int counter;
+        /// <summary>
+        /// wysokoœæ docelowego prostok¹ta
+        /// </summary>
+        private int Max_Y;        
         #endregion
 
         #region Metody podstawowe
@@ -90,8 +116,6 @@ namespace Taio.Algorithms
         /// <returns>maksymalny prostok¹t, jaki da siê zbudowaæ za pomoc¹ tego algorytmu</returns>
         private Rectangle computeRectangles(List<Rectangle> rectangles)
         {
-            //counter = 0;
-
             int maxArea = computeMaximumArea(rectangles);
             setMaximumSides(maxArea);
             List<Rectangle> correctRects = removeTooBigRectangles(rectangles);
@@ -120,7 +144,6 @@ namespace Taio.Algorithms
             // dopóki s¹ jakieœ prostok¹ty do wykorzystania oraz algorytm nie zosta³ przerwany
             while (running && correctRects.Count > 0)
             {
-                
                 bool rightSide;
 
                 hole = findHole(holesRight, holesDown, out rightSide);
@@ -147,6 +170,7 @@ namespace Taio.Algorithms
                 }
             }
 
+            // wybierany maksymalny prostok¹t spe³niaj¹cy warunki zadania
             result = maxCorrectRectangle(rects);
             if (result != null)
             {
@@ -161,6 +185,11 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Metoda sprawdza czy dany prostok¹t spe³nia warunki zadania
+        /// </summary>
+        /// <param name="rect">sprawdzany prostok¹t</param>
+        /// <returns>czy dany prostok¹t spe³nia warunki zadania</returns>
         private bool correctRectangleFound(Rectangle rect)
         {
             if (rect == null)
@@ -172,6 +201,15 @@ namespace Taio.Algorithms
             return true;
         }
 
+        /// <summary>
+        /// Prostok¹t do³¹czany do boku budowanego prostak¹ta.
+        /// </summary>
+        /// <param name="outsRight">lista prostok¹tów na brzegu z prawej strony</param>
+        /// <param name="outsDown">lista prostok¹tów na brzegu z do³u</param>
+        /// <param name="holesRight">lista dziur z prawej strony</param>
+        /// <param name="holesDown">lista dziur z do³u</param>
+        /// <param name="rect">do³¹czany prostok¹t</param>
+        /// <param name="rightSide">czy prostok¹t ma byæ do³¹czany z prawej czy z do³u</param>
         private void stickRectangle(List<OutRect> outsRight, List<OutRect> outsDown, 
                             List<Hole> holesRight, List<Hole> holesDown, Rectangle rect,
                             bool rightSide)
@@ -182,6 +220,14 @@ namespace Taio.Algorithms
                 stickRectangleDown(outsRight, outsDown, holesRight, holesDown, rect);
         }
 
+        /// <summary>
+        /// Prostok¹t do³¹czany do boku budowanego prostak¹ta z prawej strony.
+        /// </summary>
+        /// <param name="outsRight">lista prostok¹tów na brzegu z prawej strony</param>
+        /// <param name="outsDown">lista prostok¹tów na brzegu z do³u</param>
+        /// <param name="holesRight">lista dziur z prawej strony</param>
+        /// <param name="holesDown">lista dziur z do³u</param>
+        /// <param name="rect">do³¹czany prostok¹t</param>        
         private void stickRectangleRight(List<OutRect> outsRight, List<OutRect> outsDown, 
                             List<Hole> holesRight, List<Hole> holesDown, Rectangle rect)
         {
@@ -230,6 +276,14 @@ namespace Taio.Algorithms
             }
         }
 
+        /// <summary>
+        /// Prostok¹t do³¹czany do boku budowanego prostak¹ta z do³u.
+        /// </summary>
+        /// <param name="outsRight">lista prostok¹tów na brzegu z prawej strony</param>
+        /// <param name="outsDown">lista prostok¹tów na brzegu z do³u</param>
+        /// <param name="holesRight">lista dziur z prawej strony</param>
+        /// <param name="holesDown">lista dziur z do³u</param>
+        /// <param name="rect">do³¹czany prostok¹t</param>        
         private void stickRectangleDown(List<OutRect> outsRight, List<OutRect> outsDown, 
                             List<Hole> holesRight, List<Hole> holesDown, Rectangle rect)
         {
@@ -278,6 +332,16 @@ namespace Taio.Algorithms
             }
         }
 
+        /// <summary>
+        /// Prostok¹t ma wype³niæ dan¹ dziurê.
+        /// </summary>
+        /// <param name="outsRight">lista prostok¹tów na brzegu z prawej strony</param>
+        /// <param name="outsDown">lista prostok¹tów na brzegu z do³u</param>
+        /// <param name="holesRight">dziury z prawej strony</param>
+        /// <param name="holesDown">dziury z do³u</param>
+        /// <param name="rect">do³¹czany prostok¹t</param>
+        /// <param name="hole">dziura do wype³nienia</param>
+        /// <param name="rightSide">czy dziura jest z prawej strony czy z do³u</param>
         private void fillHole(List<OutRect> outsRight, List<OutRect> outsDown,
                             List<Hole> holesRight, List<Hole> holesDown, Rectangle rect,
                             Hole hole, bool rightSide)
@@ -311,6 +375,7 @@ namespace Taio.Algorithms
             outRects.Insert(index + 1, outRect);
             hole.NeighbourOne = outRect;
 
+            // dziura jest na rogu i prostok¹t w ca³oœci j¹ wepe³ni
             if (hole.OrientDown && hole.OrientRight && result == 0)
             {
                 if(rect.RightDown.X > Min_X && !rightSide)
@@ -322,6 +387,7 @@ namespace Taio.Algorithms
                                     new Point(rect.LeftTop.X, Min_Y)));
 
             }
+            // dziura na rogu wype³niona czêœciowo - powstaje nowa dziura
             if (hole.OrientDown && hole.OrientRight && result > 0 && newHole != null)
             {
                 
@@ -381,7 +447,7 @@ namespace Taio.Algorithms
         }
 
         /// <summary>
-        /// Odrzucana prostok¹ty o zbyt du¿ym wiêkszym boku (one nigdy nie wejd¹ w sk³ad
+        /// Odrzucane prostok¹ty o zbyt du¿ym wiêkszym boku (one nigdy nie wejd¹ w sk³ad
         /// wyjœciowego prostok¹ta).
         /// </summary>
         /// <param name="rects">prostok¹ty wejœciowe</param>
@@ -399,6 +465,13 @@ namespace Taio.Algorithms
             return correctRects;
         }
 
+        /// <summary>
+        /// Znajdowana dziura do wype³nienia
+        /// </summary>
+        /// <param name="holesRight">dziury po prawej stronie</param>
+        /// <param name="holesDown">dziury z do³u</param>
+        /// <param name="rightSide">czy dziura zostanie znaleziona z prawej strony czy z do³u</param>
+        /// <returns></returns>
         private Hole findHole(List<Hole> holesRight, List<Hole> holesDown, out bool rightSide)
         {
             int rightCount;
@@ -448,6 +521,12 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Dziura znajdowana z prawej strony.
+        /// </summary>
+        /// <param name="holesRight">dziury z prawej strony</param>
+        /// <param name="holesCount">iloœæ dziur po prawej stronie</param>
+        /// <returns>znaleziona dziura</returns>
         private Hole findHoleRight(List<Hole> holesRight, out int holesCount)
         {
             Hole result = null;
@@ -477,6 +556,12 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Dziura znajdowana z do³u.
+        /// </summary>
+        /// <param name="holesRight">dziury z do³u</param>
+        /// <param name="holesCount">iloœæ dziur z do³u</param>
+        /// <returns>znaleziona dziura</returns>
         private Hole findHoleDown(List<Hole> holesDown, out int holesCount)
         {
             Hole result = null;
@@ -506,6 +591,11 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Znajdowany prostok¹t o maksymalnym polu.
+        /// </summary>
+        /// <param name="rectangles">Lista prostok¹tów</param>
+        /// <returns>maksymalny prostok¹t</returns>
         private Rectangle findMaxAreaRectangle(List<Rectangle> rectangles)
         {
             Rectangle rect = null;
@@ -523,6 +613,12 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        /// <summary>
+        /// Znajdowany prostok¹t o najd³u¿szym boku i mo¿liwie najwiêkszym polu
+        /// spe³niaj¹cy warunki zadania.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <returns>znaleziony prostok¹t</returns>
         private Rectangle findMaxRectangle(List<Rectangle> rectangles)
         {
             Rectangle rect = null;
@@ -546,6 +642,11 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        /// <summary>
+        /// Znajdowany prostok¹t o najd³u¿szym boku i mo¿liwie najwiêkszym polu.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <returns>znaleziony prostok¹t</returns>
         private Rectangle findAnyMaxRectangle(List<Rectangle> rectangles)
         {
             Rectangle rect = null;
@@ -566,7 +667,11 @@ namespace Taio.Algorithms
             return rect;
         }
 
-
+        /// <summary>
+        /// Znajdowany prostok¹t o najmniejszym boku i mo¿liwie najwiêkszym polu.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <returns>znaleziony prostok¹t</returns>
         private Rectangle findMinRectangle(List<Rectangle> rectangles)
         {
             Rectangle rect = null;
@@ -586,6 +691,12 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        /// <summary>
+        /// Metoda zwraca prostok¹t o maksymalnym polu, spe³niaj¹cy warunki zadania, 
+        /// zbudowany z listy prostok¹tów.
+        /// </summary>
+        /// <param name="rectangles">lista prostokatów do budowy</param>
+        /// <returns>maksymalny prostok¹t</returns>
         private Rectangle maxCorrectRectangle(List<Rectangle> rectangles)
         {
             Rectangle result = null;
@@ -602,83 +713,12 @@ namespace Taio.Algorithms
             result = rc.MaxCorrectRect;           
 
             return result;
-        }
-
-        private Rectangle correctMaxRectangle(List<Rectangle> rects)
-        {
-            Rectangle result = null, rectX, rectY;
-            List<Rectangle> rectsX, rectsY;
-            bool ok = false;
-
-            if(rects == null || rects.Count == 0)
-                return result;
-
-            while(!ok)
-            {
-                RectangleContainer rc = new RectangleContainer();
-                rc.InsertRectangles(rects);
-
-                if(rc.IsCorrectRectangle)
-                    return rc.MaxCorrectRect;
-                
-                rectsX = copyRectangles(rects);
-                if(Min_X > 0)
-                    Min_X--;
-                else
-                    return result;
-                correctRectangles(rectsX);
-                RectangleContainer rc1 = new RectangleContainer();
-                rc1.InsertRectangles(rectsX);
-                rectX = rc1.MaxCorrectRect;
-
-                rectsY = copyRectangles(rects);
-                if(Min_Y > 0)
-                    Min_Y--;
-                else
-                    return result;
-                Min_X++;
-                correctRectangles(rectsY);
-                RectangleContainer rc2 = new RectangleContainer();
-                rc2.InsertRectangles(rectsY);
-                rectY = rc2.MaxCorrectRect;
-
-                if (rc1.IsCorrectRectangle && rc2.IsCorrectRectangle)
-                {
-                    if (rectX.Area > rectY.Area)
-                        return rectX;
-                    else
-                        return rectY;
-                }
-                else if (rc1.IsCorrectRectangle)
-                    return rectX;
-                else if (rc2.IsCorrectRectangle)
-                    return rectY;
-
-
-                Min_X--;
-            } 
-
-            return result;
-        }
-
-        private List<Rectangle> copyRectangles(List<Rectangle> rects)
-        {
-            List<Rectangle> newRects;
-
-            if (rects == null)
-                return null;
-
-            newRects = new List<Rectangle>();
-            foreach (Rectangle rc in rects)
-            {
-                Rectangle t = new Rectangle(rc.SideA, rc.SideB, rc.LeftTop);
-                t.Number = rc.Number;
-                newRects.Add(t);
-            }
-
-            return newRects;
-        }
-
+        }        
+        
+        /// <summary>
+        /// Usuwane prostok¹ty, z których nie da siê zbudowaæ wyjœciowego prostok¹ta.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
         private void correctRectangles(List<Rectangle> rectangles)
         {
             foreach(Rectangle rect in rectangles)
@@ -692,6 +732,13 @@ namespace Taio.Algorithms
             }
         }
 
+        /// <summary>
+        /// Znajdowany prostok¹t, który wype³ni dziurê. 
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <param name="hole">dana dziura</param>
+        /// <param name="rightSide">czy prostok¹t ma byæ dodany z prawej strony  czy z do³u</param>
+        /// <returns>znaleziony prostok¹t</returns>
         private Rectangle findRectangle(List<Rectangle> rectangles, Hole hole, bool rightSide)
         {
             Rectangle rect = null;
@@ -741,6 +788,12 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        /// <summary>
+        /// Znajdowany prostok¹t, który najlepiej by pasowa³ do danego boku.
+        /// </summary>
+        /// <param name="rectangles">lista prostok¹tów</param>
+        /// <param name="side">dany bok</param>
+        /// <returns>znaleziony prostok¹t</returns>
         private Rectangle findRectangle(List<Rectangle> rectangles, int side)
         {
             Rectangle rect = null;
@@ -798,6 +851,10 @@ namespace Taio.Algorithms
             return rect;
         }
 
+        /// <summary>
+        /// Aktualizowane boki prostok¹ta docelowego.
+        /// </summary>
+        /// <param name="rect">dodawany prostok¹t</param>
         private void updateMaxValues(Rectangle rect)
         {
             if (rect.RightDown.X > Max_X)
@@ -806,10 +863,16 @@ namespace Taio.Algorithms
                 Max_Y = rect.RightDown.Y;
         }
 
+        /// <summary>
+        /// Aktualizowane dziury
+        /// </summary>
+        /// <param name="outsRight">prostok¹ty na brzegu z prawej strony</param>
+        /// <param name="outsDown">prostok¹ty na brzegu z do³u</param>
+        /// <param name="holesRight">dziury z prawej strony</param>
+        /// <param name="holesDown">dziury z do³u</param>
         private void updateHoles(List<OutRect> outsRight, List<OutRect> outsDown, List<Hole> holesRight,
                                     List<Hole> holesDown)
         {
-            ///TODO - poprawiæ tutaj
             int min_x = minHoles_X(holesRight, outsRight);
             int min_y = minHoles_Y(holesDown, outsDown);
             OutRect tempRight = null;
@@ -820,6 +883,7 @@ namespace Taio.Algorithms
             if (outsDown.Count > 0)
                 tempDown = outsDown[outsDown.Count - 1].copy();
 
+            // nale¿y zaktualizowaæ dziury i prostok¹ty na brzegu z prawej strony
             if (min_x > Min_X)
             {
                 Min_X = min_x;
@@ -836,6 +900,7 @@ namespace Taio.Algorithms
                 }
             }
 
+            // nale¿y zaktualizowaæ dziury i prostok¹ty na brzegu z do³u
             if (min_y > Min_Y)
             {
                 Min_Y = min_y;
@@ -853,6 +918,10 @@ namespace Taio.Algorithms
             }
         }
 
+        /// <summary>
+        /// Aktualizacja prostok¹tów na brzegu z prawej strony.
+        /// </summary>
+        /// <param name="outsRight">prostok¹ty na brzegu z prawej strony</param>
         private void updateOutsRight(List<OutRect> outsRight)
         {
             List<OutRect> outsToRemove = new List<OutRect>();
@@ -863,10 +932,15 @@ namespace Taio.Algorithms
                     outsToRemove.Add(or);
             }
 
+            // usuwane zbêdne prostok¹ty
             foreach (OutRect or in outsToRemove)
                 outsRight.Remove(or);
         }
 
+        /// <summary>
+        /// Aktualizacja prostok¹tów na brzegu z do³u.
+        /// </summary>
+        /// <param name="outsRight">prostok¹ty na brzegu z do³u</param>
         private void updateOutsDown(List<OutRect> outsDown)
         {
             List<OutRect> outsToRemove = new List<OutRect>();
@@ -877,10 +951,18 @@ namespace Taio.Algorithms
                     outsToRemove.Add(or);
             }
 
+            // usuwane zbêdne prostok¹ty
             foreach (OutRect or in outsToRemove)
                 outsDown.Remove(or);
         }
 
+        /// <summary>
+        /// Znajdowana minimalna wspó³rzêdna x dziury z prawej strony lub prost¹k¹ta na brzegu
+        /// (jeœli nie ma ¿adnej dziury).
+        /// </summary>
+        /// <param name="holesRight">dziury z prawej strony</param>
+        /// <param name="outsRight">prostok¹ty na brzegu z prawej strony</param>
+        /// <returns>znaleziona wspó³rzêdna x</returns>
         private int minHoles_X(List<Hole> holesRight, List<OutRect> outsRight)
         {
             if(holesRight == null || holesRight.Count==0)
@@ -904,6 +986,13 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Znajdowana minimalna wspó³rzêdna y dziury z do³u lub prost¹k¹ta na brzegu
+        /// (jeœli nie ma ¿adnej dziury).
+        /// </summary>
+        /// <param name="holesDown">dziury z do³u</param>
+        /// <param name="outsDown">prostok¹ty na brzegu z do³u</param>
+        /// <returns>znaleziona wspó³rzêdna y</returns>
         private int minHoles_Y(List<Hole> holesDown, List<OutRect> outsDown)
         {
             if(holesDown == null || holesDown.Count==0)
@@ -927,6 +1016,12 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Znajdowana minimalna wspó³rzêdna x prostok¹ta na brzegu z prawej strony. 
+        /// Jeœli ¿adnego nie ma, to zwracana jest Min_X.
+        /// </summary>
+        /// <param name="outsRight">prostok¹ty na brzegu z prawej strony</param>
+        /// <returns>znaleziona wspó³rzêdna x</returns>
         private int minOutsRight(List<OutRect> outsRight)
         {
             if (outsRight == null || outsRight.Count == 0)
@@ -953,6 +1048,12 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Znajdowana minimalna wspó³rzêdna y prostok¹ta na brzegu z do³u. 
+        /// Jeœli ¿adnego nie ma, to zwracana jest Min_Y.
+        /// </summary>
+        /// <param name="outsDown">prostok¹ty na brzegu z do³u</param>
+        /// <returns>znaleziona wspó³rzêdna y</returns>
         private int minOutsDown(List<OutRect> outsDown)
         {
             if (outsDown == null || outsDown.Count == 0)
@@ -979,9 +1080,13 @@ namespace Taio.Algorithms
             return result;
         }
 
+        /// <summary>
+        /// Metoda sprawdza czy na liœcie jest dziura naro¿na.
+        /// </summary>
+        /// <param name="holes">lista dziur</param>
+        /// <returns>czy jest dziura naro¿na</returns>
         private bool isCornerHole(List<Hole> holes)
         {
-            ///TODO - sprawdziæ czy dziury s¹ zawsze w dobrej kolejnoœci
             foreach (Hole hl in holes)
             {
                 if (hl.Corner)
@@ -994,6 +1099,13 @@ namespace Taio.Algorithms
             return false;
         }
 
+        /// <summary>
+        /// Aktualizacja dziur z prawej strony.
+        /// </summary>
+        /// <param name="outsRight">prostok¹ty na brzegu z prawej strony</param>
+        /// <param name="outsDown">prostok¹ty na brzegu z do³u</param>
+        /// <param name="holesRight">dziury z prawej strony</param>
+        /// <param name="holesDown">dziury z do³u</param>
         private void updateHolesRight(List<OutRect> outsRight, List<OutRect> outsDown, List<Hole> holesRight,
                                     List<Hole> holesDown)
         {
@@ -1054,6 +1166,13 @@ namespace Taio.Algorithms
 
         }
 
+        /// <summary>
+        /// Aktualizacja dziur z do³u.
+        /// </summary>
+        /// <param name="outsRight">prostok¹ty na brzegu z prawej strony</param>
+        /// <param name="outsDown">prostok¹ty na brzegu z do³u</param>
+        /// <param name="holesRight">dziury z prawej strony</param>
+        /// <param name="holesDown">dziury z do³u</param>
         private void updateHolesDown(List<OutRect> outsRight, List<OutRect> outsDown, List<Hole> holesRight,
                                     List<Hole> holesDown)
         {
@@ -1116,19 +1235,43 @@ namespace Taio.Algorithms
         #endregion
 
         #region Klasy pomocnicze
+        /// <summary>
+        /// Klasa implementuj¹ca funkcjonalnoœæ prostok¹ta na brzegu
+        /// </summary>
         private class OutRect : Rectangle
         {
+            /// <summary>
+            /// Czy dany prostok¹t na brzegu jest do usuniêcia
+            /// </summary>
             private bool _removed;
 
+            /// <summary>
+            /// Konstruktor 2-parametrowy
+            /// </summary>
+            /// <param name="sideA">szerokoœæ</param>
+            /// <param name="sideB">wysokoœæ</param>
             public OutRect(int sideA, int sideB) : base(sideA, sideB) 
             {
                 _removed = false;
             }
+
+            /// <summary>
+            /// Konstruktor 3-parametrowy
+            /// </summary>
+            /// <param name="sideA">szerokoœæ</param>
+            /// <param name="sideB">wysokoœæ</param>
+            /// <param name="pt">punkt lewy-górny</param>
             public OutRect(int sideA, int sideB, Point pt) : base(sideA, sideB, pt) 
             {
                 _removed = false;
             }
 
+            /// <summary>
+            /// Bezpieczna zmiana rozmiaru.
+            /// </summary>
+            /// <param name="x">nowa szerokoœæ</param>
+            /// <param name="y">nowa wysokoœæ</param>
+            /// <returns>czy nast¹pi³a zmiana</returns>
             public bool saveResize(int x, int y)
             {
                 if (x <= 0 || y <= 0)
@@ -1140,55 +1283,99 @@ namespace Taio.Algorithms
                 return true;
             }
 
-            public bool updateX(int max_X)
+            /// <summary>
+            /// Aktualizacja szerokoœci prostok¹ta na brzegu.
+            /// </summary>
+            /// <param name="min_X">jaka mo¿e byæ minimalna wspó³rzêdna x prostok¹ta</param>
+            /// <returns>czy prostok¹t zmini³ rozmiar - jeœli nie, to trzeba go usun¹æ</returns>
+            public bool updateX(int min_X)
             {
                 int temp = rightDown.X;
 
-                if(max_X < 0 || max_X >= temp)
+                if (min_X < 0 || min_X >= temp)
                 {
                     _removed = true;
                     return false;
                 }
 
-                Move(new Point(max_X, leftTop.Y));
-                return saveResize(temp - max_X, SideB);
+                Move(new Point(min_X, leftTop.Y));
+                return saveResize(temp - min_X, SideB);
             }
 
-            public bool updateY(int max_Y)
+            /// <summary>
+            /// Aktualizacja wysokoœci prostok¹ta na brzegu.
+            /// </summary>
+            /// <param name="min_Y">jaka mo¿e byæ minimalna wspó³rzêdna y prostok¹ta</param>
+            /// <returns>czy prostok¹t zmini³ rozmiar - jeœli nie, to trzeba go usun¹æ</returns>
+            public bool updateY(int min_Y)
             {
                 int temp = rightDown.Y;
 
-                if (max_Y < 0 || max_Y >= temp)
+                if (min_Y < 0 || min_Y >= temp)
                 {
                     _removed = true;
                     return false;
                 }
 
-                Move(new Point(leftTop.X, max_Y));
-                return saveResize(SideA, temp - max_Y);
+                Move(new Point(leftTop.X, min_Y));
+                return saveResize(SideA, temp - min_Y);
             }
 
+            /// <summary>
+            /// Czy prostok¹t ma byæ usuniêty.
+            /// </summary>
             public bool Removed
             {
                 get { return _removed; }
                 set { _removed = value; }
             }
 
+            /// <summary>
+            /// Tworzony prostok¹t na brzegu bêd¹cy kopi¹ danego.
+            /// </summary>
+            /// <returns></returns>
             public OutRect copy()
             {
                 return new OutRect(SideA, SideB, new Point(leftTop.X, leftTop.Y));
             }
         }
 
+        /// <summary>
+        /// Klasa implementuje fukcjonalnoœæ dziury.
+        /// </summary>
         private class Hole 
         {
+            /// <summary>
+            /// dziura z prawej strony
+            /// </summary>
             private bool _orientRight;
+            /// <summary>
+            /// dziura z do³u
+            /// </summary>
             private bool _orientDown;
+            /// <summary>
+            /// dziura noro¿na
+            /// </summary>
             private bool _corner;
+            /// <summary>
+            /// wielkoœæ dziury
+            /// </summary>
             private Rectangle _rect;
+            /// <summary>
+            /// pierwszy s¹siad dziury - prostok¹t na brzegu
+            /// </summary>
             private OutRect _neighbourOne;
+            /// <summary>
+            /// drugi s¹siad dziury - prostok¹t na brzegu
+            /// </summary>
             private OutRect _neighbourSecond;            
 
+            /// <summary>
+            /// Konstruktor 3-parametrowy
+            /// </summary>
+            /// <param name="sideA">szerokoœæ</param>
+            /// <param name="sideB">wysokoœæ</param>
+            /// <param name="pt">puntk lewy-górny</param>
             public Hole(int sideA, int sideB, Point pt)
             {
                 _rect = new Rectangle(sideA, sideB, pt);
@@ -1196,6 +1383,12 @@ namespace Taio.Algorithms
                 _neighbourOne = _neighbourSecond = null;
             }
 
+            /// <summary>
+            /// Bezpieczna zmiana rozmiaru.
+            /// </summary>
+            /// <param name="x">nowa szerokoœæ</param>
+            /// <param name="y">nowa wysokoœæ</param>
+            /// <returns>czy nast¹pi³a zmina</returns>
             public bool saveResize(int x, int y)
             {
                 if (x <= 0 || y <= 0)
@@ -1207,6 +1400,16 @@ namespace Taio.Algorithms
                 return true;
             }
 
+            /// <summary>
+            /// Prostok¹t wype³nia na dan¹ dziurê. Ewentualnie mo¿e powstaæ nowa dziura.
+            /// </summary>
+            /// <param name="rect">dany prostok¹t</param>
+            /// <param name="newHole">powsta³a nowa dziura</param>
+            /// <returns>
+            /// 0 - prostok¹t w ca³oœci wype³ni³ dan¹ dziurê - dziura do usuniêcia
+            /// 1 - prostok¹t wype³ni³ czeœciowo dan¹ dziurê - mo¿liwa aktualizacja Min_X lub Min_Y
+            /// -1 - prostok¹t wype³ni³ czêœciowo dan¹ dziurê
+            /// </returns>
             public int filled(Rectangle rect, out Hole newHole)
             {
                 Point leftTop = new Point(_rect.LeftTop.X, _rect.LeftTop.Y);
@@ -1288,6 +1491,10 @@ namespace Taio.Algorithms
                 return result;
             }
 
+            /// <summary>
+            /// Metoda zwraca ilu jest s¹siadów danej dziury.
+            /// </summary>
+            /// <returns>iloœæ s¹siadów</returns>
             public int neighboursCount()
             {
                 int result = 0;
@@ -1300,18 +1507,27 @@ namespace Taio.Algorithms
                 return result;
             }
 
+            /// <summary>
+            /// Dziura z prawej strony.
+            /// </summary>
             public bool OrientRight
             {
                 get { return _orientRight; }
                 set { _orientRight = value; }
             }
 
+            /// <summary>
+            /// Dziura z do³u.
+            /// </summary>
             public bool OrientDown
             {
                 get { return _orientDown; }
                 set { _orientDown = value; }
             }
 
+            /// <summary>
+            /// Dziura noro¿na.
+            /// </summary>
             public bool Corner
             {
                 get { return _corner; }
@@ -1322,18 +1538,27 @@ namespace Taio.Algorithms
                 }
             }
 
+            /// <summary>
+            /// Rozmiar dziury.
+            /// </summary>
             public Rectangle Rect
             {
                 get { return _rect; }
                 set { _rect = value; }
             }
 
+            /// <summary>
+            /// Pierwszy s¹siad.
+            /// </summary>
             public OutRect NeighbourOne
             {
                 get { return _neighbourOne; }
                 set { _neighbourOne = value; }
             }
 
+            /// <summary>
+            /// Drugi s¹siad.
+            /// </summary>
             public OutRect NeighbourSecond
             {
                 get { return _neighbourSecond; }
