@@ -3,14 +3,12 @@
 namespace tools
 {
 
-DataCollector::DataCollector(string fileName, int pcsCount, int bufferSize, int maxElemSize)
+DataCollector::DataCollector(string fileName, int pcsCount, int bufferSize)
 {
 	this->fileName = fileName;
 	this->pcsCount = pcsCount;
 	this->bufferSize = bufferSize;
-	this->elemSize = elemSize;
-	this->buffer = new string[bufferSize];
-	fd = MyIO::my_open(fileName,O_RDWR);
+	fd = MyIO::my_open(fileName.c_str(),O_CREAT | O_TRUNC | O_WRONLY );
 	
 	
 }
@@ -18,6 +16,18 @@ DataCollector::DataCollector(string fileName, int pcsCount, int bufferSize, int 
 DataCollector::~DataCollector()
 {
 	MyIO::my_close(fd);
+}
+
+void DataCollector::collectData()
+{
+	int* buffer = new int[this->bufferSize];
+	MPI_Request request;
+	MPI_Status status; 
+	for(int i=1;i<pcsCount;i++)
+	{
+			MPI_Recv(buffer, bufferSize, MPI_INT, i, END_TAG, MPI_COMM_WORLD, &status);
+			MyIO::my_write(fd, buffer, bufferSize, ( i - 1 ) * bufferSize, 0);	
+	}
 }
 
 }

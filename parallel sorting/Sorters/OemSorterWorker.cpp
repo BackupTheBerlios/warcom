@@ -65,6 +65,8 @@ int OemSorterWorker::sort()
    	{
    		DataLoader dl(inFile, numprocs);
 		dl.loadAndSendData();
+		DataCollector dc(outFile, numprocs,dl.getBufferSize());
+		dc.collectData();
    	}
    	else
    	{
@@ -84,10 +86,7 @@ int OemSorterWorker::sort()
 						int partner = findPartner(myrank, i, j);
 						compareSplit(partner, myrank, buffer, bufSize);
 					}
-		cout<<"Moj bufor "<<myrank<<endl;
-		for(int i=0; i<bufSize; i++)
-			cout<<buffer[i]<<" ";
-		cout<<endl;
+		MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
 		if(buffer != NULL)
 			delete(buffer);
    	}

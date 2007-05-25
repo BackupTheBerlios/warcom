@@ -4,6 +4,7 @@
 #include<math.h>
 #include<iostream>
 #include "../Tools/DataLoader.h"
+#include "../Tools/DataCollector.h"
 #include "OemSorter.h"
 using namespace MPI;
 using namespace std;
