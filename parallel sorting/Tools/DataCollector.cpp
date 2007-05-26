@@ -29,9 +29,8 @@ void DataCollector::collectData()
 	for(int i=1;i<pcsCount;i++)
 	{
 			MPI_Recv(buffer, bufferSize, MPI_INT, i, END_TAG, MPI_COMM_WORLD, &status);
-			for(int j=0;j<bufferSize;j++)
-				cout<<buffer[j]<<" ";
-			MyIO::my_write(fd, buffer, bufferSize, ( i - 1 ) * bufferSize + start, SEEK_SET);	
+			MyIO::my_write(fd, buffer, bufferSize * sizeof(int), 
+				( i - 1 ) * bufferSize * sizeof(int) + start, SEEK_SET);	
 	}
 }
 

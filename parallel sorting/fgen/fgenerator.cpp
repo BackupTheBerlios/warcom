@@ -49,13 +49,13 @@ int main(int argc, char* argv[])
 			fd = MyIO::my_open(outputFile.c_str(), O_RDONLY);
 			if(fd == -1)
 				return 1;
-			int n, temp;
+			int n;
 			MyIO::my_read(fd, &n, sizeof(int), 0, SEEK_CUR);
+			int *buffer = new int[n];
+			MyIO::my_read(fd, buffer, sizeof(int) * n, 0, SEEK_CUR);
 			for(int i = 0; i < n; i++)
-			{
-				MyIO::my_read(fd, &temp, sizeof(int), 0, SEEK_CUR);
-				cout<<temp<<" ";
-			}
+				cout<<buffer[i]<<" ";
+			cout<<endl;
 			MyIO::my_close(fd);
 		}
 		else
