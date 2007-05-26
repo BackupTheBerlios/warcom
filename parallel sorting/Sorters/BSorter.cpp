@@ -11,27 +11,27 @@ int* BSorter::sort(int a[], int size)
 {	
 	this->a = a;
 	this->size = size;
-	bitonicSort(0, getValue(size),ASCENDING);
+	bitonicSort(0, size, ASCENDING);
 	return a;
 }
 
-int BSorter::getValue(int value)
+int BSorter::greatestPowerOfTwoLessThan(int n)
 {
-	int i=1;
-	while(i < value)
-		i *= 2;
-	return i;
+	int k=1;
+    while (k<n)
+        k=k<<1;
+    return k>>1;
 }
 
 void BSorter::bitonicMerge(int lo, int n, bool dir)
 {
 	if (n>1)
 	{
-		int m = n/2;
-		for (int i = lo; i< lo + m; ++i)
-			compare(i, i +m, dir);
+		int m = greatestPowerOfTwoLessThan(n);
+		for (int i = lo; i< lo +n-m; ++i)
+			compare(i, i+m, dir);
 		bitonicMerge(lo, m, dir);
-		bitonicMerge(lo+m, m, dir); 
+		bitonicMerge(lo+m, n-m, dir); 
 	}
 }
 
@@ -40,17 +40,16 @@ void BSorter::bitonicSort(int lo, int n, bool dir)
 	if (n > 1)
 	{
 		int m = n / 2;
-		bitonicSort(lo, m, ASCENDING);
-		bitonicSort(lo + m, m, DESCENDING);
+		bitonicSort(lo, m,!dir);			
+		bitonicSort(lo + m, n-m, dir);
 		bitonicMerge(lo, n, dir);
 	}
 }
 
 void BSorter::compare(int i, int j, bool dir)
 {
-	if(j < size && i < size)
-		if(dir == (a[i] > a[j]))
-			exchange(i, j);
+	if(dir == (a[i] > a[j]))
+		exchange(i, j);
 }
 
 void BSorter::exchange(int i, int j)

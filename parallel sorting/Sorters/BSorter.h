@@ -26,7 +26,7 @@ private:
 	void bitonicMerge(int lo, int n, bool dir);
 	void compare(int i, int j, bool dir);
 	void exchange(int i, int j);
-	int getValue(int value);
+	int greatestPowerOfTwoLessThan(int n);
 };
 
 }

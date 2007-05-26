@@ -81,8 +81,8 @@ int main(int argc, char* args[])
 		}	
 		if(bitonic)
 		{
-			ParalBSorter* pbs = new ParalBSorter(inputFile, outputFile);
-			pbs->sort();
+			BSorterWorker* bsw = new BSorterWorker(inputFile, outputFile);
+			bsw->sort();
 		}
 		if(oemlocal)
 		{
@@ -104,14 +104,21 @@ int main(int argc, char* args[])
 		}	
 		if(bitoniclocal)
 		{
+			TaskTimer* tt = new TaskTimer();
+			tt->startTask("load");
 			FDataLoader* fdl = new FDataLoader(inputFile); 
-			BSorter* os = new BSorter();
 			int* buffer = fdl->getBuffer();
 			int bufferSize = fdl->getBufferSize();
-			os->sort(buffer, bufferSize);
+			tt->endTask("load", 1);
+			tt->startTask("sort");			
+			BSorter* bs = new BSorter();
+			bs->sort(buffer, bufferSize);
+			tt->endTask("sort", 1);
+			tt->startTask("display");
 			for(int i=0;i<bufferSize;i++)
 				cout<<buffer[i]<<" ";
 			cout<<endl;
+			tt->endTask("display",1);
 		}
 		if(shelllocal)
 		{
