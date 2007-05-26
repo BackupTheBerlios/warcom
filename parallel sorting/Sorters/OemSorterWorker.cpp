@@ -63,10 +63,15 @@ int OemSorterWorker::sort()
    	int numprocs = COMM_WORLD.Get_size(); 
    	if(myrank == 0)
    	{
+   		TaskTimer* tt = new TaskTimer();
+   		tt->startTask("whole");
+		tt->startTask("load");
    		DataLoader dl(inFile, numprocs);
-		dl.loadAndSendData();
+   		dl.loadAndSendData();
+		tt->endTask("load",1);
 		DataCollector dc(outFile, numprocs,dl.getBufferSize());
 		dc.collectData();
+		tt->endTask("whole");
    	}
    	else
    	{

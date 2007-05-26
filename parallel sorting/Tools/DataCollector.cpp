@@ -27,7 +27,7 @@ void DataCollector::collectData()
 	MPI_Request request;
 	MPI_Status status; 
 	int firstTask = 1;
-	TaskTime *tt = new TaskTimer();
+	TaskTimeer *tt = new TaskTimer();
 	for(int i=1;i<pcsCount;i++)
 	{
 			MPI_Recv(buffer, bufferSize, MPI_INT, i, END_TAG, MPI_COMM_WORLD, &status);
