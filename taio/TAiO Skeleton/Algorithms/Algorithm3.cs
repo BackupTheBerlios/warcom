@@ -592,7 +592,7 @@ namespace Taio.Algorithms
         }
 
         /// <summary>
-        /// Znajdowany prostok¹t o maksymalnym polu.
+        /// Znajdowany prostok¹t o maksymalnym polu spe³niaj¹cy warunki zadania.
         /// </summary>
         /// <param name="rectangles">Lista prostok¹tów</param>
         /// <returns>maksymalny prostok¹t</returns>
@@ -603,10 +603,11 @@ namespace Taio.Algorithms
             if (rectangles == null || rectangles.Count == 0)
                 return rect;
 
-            rect = rectangles[0];
             foreach (Rectangle rc in rectangles)
             {
-                if(rc.Area > rect.Area)
+                if (rect == null && rc.LongerSide / rc.ShorterSide <= ratio)
+                    rect = rc;
+                if(rc.LongerSide/rc.ShorterSide <= ratio && rc.Area > rect.Area)
                     rect = rc;
             }
 
