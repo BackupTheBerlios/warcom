@@ -25,7 +25,7 @@ namespace tools
 			if(res==-1)
 			{
 				perror("read error");
-				return -1;
+				return (size_t)-1;
 			}
 			n-=res;
 		}while(res>0 && n>0);
@@ -50,7 +50,7 @@ namespace tools
 			if(res==-1)
 			{
 				perror("write error");
-				return -1;
+				return (size_t)-1;
 			}
 			n-=res;
 		}while(res>0 && n>0);
