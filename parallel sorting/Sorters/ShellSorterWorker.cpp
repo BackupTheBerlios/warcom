@@ -20,14 +20,27 @@ void ShellSorterWorker::sort()
    	MPI_Request request;
    	
    	int* buffer;
-   	int bufSize; 
+   	int bufSize;
    	
    	if(myrank == 0)
    	{
+   		TaskTimer* tt = new TaskTimer();
+   		tt->startTask("whole");
+		tt->startTask("load");
+		
    		DataLoader dl(inFile, numprocs);
 		dl.loadAndSendData();
+		tt->endTask("load",1);
+		
+		//in sorter - before entering 2nd phase
+		cout<<"Process #0 before msc barrier"<<endl;
+		MPI_Barrier(MPI_COMM_WORLD);
+		cout<<"Process #0 after msc barrier"<<endl;
+		manageStopCondition(numprocs);
+		
 		DataCollector dc(outFile, numprocs,dl.getBufferSize());
 		dc.collectData();
+		tt->endTask("whole",1);
    	}
    	else
    	{
@@ -35,9 +48,8 @@ void ShellSorterWorker::sort()
    		ShellSorter* shells = new ShellSorter(myrank, numprocs-1);
    		
 		buffer = Utils::recv_init_buffer(bufSize, myrank, mpi_status);
-		//cout<<"Process #"<<myrank<<": Buffer received"<<endl;
+		cout<<"Process #"<<myrank<<": Buffer received"<<endl;
 		//displayBuffer("Buffer received");
-		
 		
 		
 		if(buffer != NULL)
@@ -51,6 +63,48 @@ void ShellSorterWorker::sort()
    	}
    	
    	MPI::Finalize();
+}
+
+void ShellSorterWorker::manageStopCondition(int numprocs)
+{	
+	   	MPI_Status mpi_status;
+   		MPI_Request request;	
+	
+		bool done = false;
+		//while(!done)
+		for(int i=1; i<numprocs; i++)
+		{
+			int noChangesRes;
+			bool sortingDone = true;
+			
+			
+			
+			for(int i=1; i<numprocs; i++)
+			{
+				MPI_Recv(&noChangesRes, 1, MPI_INT, i, OE_RESULT, MPI_COMM_WORLD, &mpi_status);
+				cout<<"Changes report received from #"<<i<<endl;
+				if(noChangesRes == OE_CHANGED)
+					sortingDone = false;
+			}
+			
+			int res = OE_SORTING_UNDONE;
+			if(sortingDone)
+			{
+				done = true;
+				res = OE_SORTING_DONE;
+			}
+				
+			for(int i=1; i<numprocs; i++)
+			{
+				cout<<"Sending stop condition to #"<<i<<endl;			
+				MPI_Isend(&res, 1, MPI_INT, i, OE_STOP_CONDITION, MPI_COMM_WORLD, &request );
+			}
+			
+			if(done)
+				return;
+			
+			MPI_Barrier(MPI_COMM_WORLD);
+		}
 }
 
 void ShellSorterWorker::displayBuffer(int* buffer, int bufSize, string comment)

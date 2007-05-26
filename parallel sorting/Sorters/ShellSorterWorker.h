@@ -22,6 +22,7 @@ private:
 	string inFile;
 	string outFile; 
 	
+	void manageStopCondition(int numprocs);
 	void displayBuffer(int* buffer, int bufferSize, string comment);
 };
 }
