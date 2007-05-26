@@ -26,12 +26,20 @@ void DataCollector::collectData()
 	int start =(int)sizeof(int);
 	MPI_Request request;
 	MPI_Status status; 
+	int firstTask = 1;
+	TaskTime *tt = new TaskTimer();
 	for(int i=1;i<pcsCount;i++)
 	{
 			MPI_Recv(buffer, bufferSize, MPI_INT, i, END_TAG, MPI_COMM_WORLD, &status);
+			if(firstTask)
+			{
+				firsTask = 0;
+				tt->startTask("collect");
+			}
 			MyIO::my_write(fd, buffer, bufferSize * sizeof(int), 
 				( i - 1 ) * bufferSize * sizeof(int) + start, SEEK_SET);	
 	}
+	tt->endTask("collect",1);
 }
 
 }
