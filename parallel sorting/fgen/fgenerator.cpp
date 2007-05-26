@@ -8,6 +8,7 @@ string outputFile;
 int numbers;
 int minNumber = 0;
 int maxNumber = 100;
+int onlyDisplay = 0;
 
 void showUsage()
 {
@@ -18,10 +19,15 @@ void showUsage()
 
 bool checkInput(int argc, char* argv[])
 {	
-	if(argc < 3)
+	if(argc < 2)
 		return false;
 
 	outputFile = argv[1];
+	if(argc == 2)
+	{
+		onlyDisplay = 1;
+		return true;
+	}
 	numbers = atoi(argv[2]);
 	if(argc == 4)
 	{
@@ -38,24 +44,41 @@ int main(int argc, char* argv[])
 	int fd;
 	if(checkInput(argc, argv))
 	{
-		srand((unsigned)time(NULL));
-
-		fd = MyIO::my_open(outputFile.c_str(), O_CREAT);
-		MyIO::my_close(fd);
-		fd = MyIO::my_open(outputFile.c_str(), O_WRONLY);
-
-		if(fd == -1)
-			return 1;
-
-		MyIO::my_write(fd, &numbers, sizeof(int), 0, SEEK_CUR);
-		for(int i=0; i<numbers; i++)
+		if(onlyDisplay)
 		{
-			random=rand()%(maxNumber+1);
-			//cout<<random<<endl;
-			MyIO::my_write(fd, &random, sizeof(int), 0, SEEK_CUR);
+			fd = MyIO::my_open(outputFile.c_str(), O_RDONLY);
+			if(fd == -1)
+				return 1;
+			int n, temp;
+			MyIO::my_read(fd, &n, sizeof(int), 0, SEEK_CUR);
+			for(int i = 0; i < n; i++)
+			{
+				MyIO::my_read(fd, &temp, sizeof(int), 0, SEEK_CUR);
+				cout<<temp<<" ";
+			}
+			MyIO::my_close(fd);
 		}
-		MyIO::my_close(fd);
-		cout<<"File "<< outputFile << " with "<<numbers<<" integers (max = "<<maxNumber<<") to sort generated."<< endl;
+		else
+		{
+			srand((unsigned)time(NULL));
+	
+			fd = MyIO::my_open(outputFile.c_str(), O_CREAT);
+			MyIO::my_close(fd);
+			fd = MyIO::my_open(outputFile.c_str(), O_WRONLY);
+	
+			if(fd == -1)
+				return 1;	
+
+			MyIO::my_write(fd, &numbers, sizeof(int), 0, SEEK_CUR);
+			for(int i=0; i<numbers; i++)
+			{
+				random=rand()%(maxNumber+1);
+				//cout<<random<<endl;
+					MyIO::my_write(fd, &random, sizeof(int), 0, SEEK_CUR);
+			}
+			MyIO::my_close(fd);
+			cout<<"File "<< outputFile << " with "<<numbers<<" integers (max = "<<maxNumber<<") to sort generated."<< endl;
+		}
 	}
 	else
 	{
