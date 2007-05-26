@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Taio
 {
+    /// <summary>
+    /// Klasa reprezentuj¹ca prostok¹t
+    /// </summary>
     class Rectangle : IComparable<Rectangle>
     {
         protected Point leftTop;
@@ -21,11 +24,11 @@ namespace Taio
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="sideA">"Top/bottom" side's length</param>
-        /// <param name="sideB">"Left/right" side's length</param>
-        /// <param name="leftTop">Left-top rectangle's vertex</param>
-        /// <param name="number">Rectangle's number</param>
-        /// <param name="parentRectangle">Rectangle which contains new rectangle</param>
+        /// <param name="sideA">D³ugoœæ boku poziomego</param>
+        /// <param name="sideB">D³ugoœæ boku pionowego</param>
+        /// <param name="leftTop">Lewy górny wierzcho³ek</param>
+        /// <param name="number">Numer porz¹dkowy</param>
+        /// <param name="parentRectangle">Prostok¹t zawieraj¹cy nowo tworzony prostok¹t</param>
         public Rectangle(int sideA, int sideB, Point leftTop, int number, Rectangle parentRectangle)
         {
             if (sideA <= 0 || sideB <= 0)
@@ -42,10 +45,10 @@ namespace Taio
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="sideA">"Top/bottom" side's length</param>
-        /// <param name="sideB">"Left/right" side's length</param>
-        /// <param name="leftTop">Left-top rectangle's vertex</param>
-        /// <param name="number">Rectangle's number</param>
+        /// <param name="sideA">D³ugoœæ boku poziomego</param>
+        /// <param name="sideB">D³ugoœæ boku pionowego</param>
+        /// <param name="leftTop">Lewy górny wierzcho³ek</param>
+        /// <param name="number">Numer porz¹dkowy</param>
         public Rectangle(int sideA, int sideB, Point leftTop, int number)
             : this(sideA, sideB, leftTop, number, null) { }
 
@@ -53,9 +56,9 @@ namespace Taio
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="sideA">"Top/bottom" side's length</param>
-        /// <param name="sideB">"Left/right" side's length</param>
-        /// <param name="leftTop">LeftTop rectangle's vertex</param>
+        /// <param name="sideA">D³ugoœæ boku poziomego</param>
+        /// <param name="sideB">D³ugoœæ boku pionowego</param>
+        /// <param name="leftTop">Lewy górny wierzcho³ek</param>
         public Rectangle(int sideA, int sideB, Point leftTop)
             : this(sideA, sideB, leftTop, counter++) { }
 
@@ -63,18 +66,18 @@ namespace Taio
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="sideA">"Top/bottom" side's length</param>
-        /// <param name="sideB">"Left/right" side's length</param>
+        /// <param name="sideA">D³ugoœæ boku poziomego</param>
+        /// <param name="sideB">D³ugoœæ boku pionowego</param>
         public Rectangle(int sideA, int sideB)
             : this(sideA, sideB, new Point(0, 0)) { }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="leftTop">Left-top rectangle's vertex</param>
-        /// <param name="rightDown">Right-down rectangle's vertex</param>
-        /// <param name="number">Rectangle's number</param>
-        /// <param name="parentRectangle">Rectangle which contains new rectangle</param>
+        /// <param name="leftTop">Lewy górny wierzcho³ek</param>
+        /// <param name="rightDown">Prawy dolny wierzcho³ek</param>
+        /// <param name="number">Numer porz¹dkowy</param>
+        /// <param name="parentRectangle">Prostok¹t zawieraj¹cy nowo tworzony prostok¹t</param>
         public Rectangle(Point leftTop, Point rightDown, int number, Rectangle parentRectangle)
         {
             if (leftTop.X < 0 || leftTop.Y < 0)
@@ -96,27 +99,27 @@ namespace Taio
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="leftTop">Left-top rectangle's vertex</param>
-        /// <param name="rightDown">Right-down rectangle's vertex</param>
-        /// <param name="number">Rectangle's number</param>
+        /// <param name="leftTop">Lewy górny wierzcho³ek</param>
+        /// <param name="rightDown">Prawy dolny wierzcho³ek</param>
+        /// <param name="number">Numer porz¹dkowy</param>
         public Rectangle(Point leftTop, Point rightDown, int number)
             : this(leftTop, rightDown, number, null) { }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="leftTop">Left-top rectangle's vertex</param>
-        /// <param name="rightDown">Right-down rectangle's vertex</param>
+        /// <param name="leftTop">Lewy górny wierzcho³ek</param>
+        /// <param name="rightDown">Prawy dolny wierzcho³ek</param>
         public Rectangle(Point leftTop, Point rightDown)
             : this(leftTop, rightDown, counter++) { }
         #endregion
 
         #region Geometry
         /// <summary>
-        /// Whether rectangle covers the rectangle r
+        /// Czy prostok¹t pokrywa prostok¹t r
         /// </summary>
-        /// <param name="r">Rectangle to check</param>
-        /// <returns>True if the rectangle r is covered, else if it does not</returns>
+        /// <param name="r">/param>
+        /// <returns></returns>
         public bool Covers(Rectangle r)
         {
             if (r.LeftTop.X >= this.leftTop.X && r.RightDown.X <= this.rightDown.X &&
@@ -127,10 +130,10 @@ namespace Taio
         }
 
         /// <summary>
-        /// Find the intersection of two rectangles
+        /// Znajduje przeciêcie dwóch prostok¹tów
         /// </summary>
-        /// <param name="rect">Rectangle to intersect</param>
-        /// <returns>Intersection rectangle or null if intersection is empty</returns>
+        /// <param name="rect"></param>
+        /// <returns></returns>
         public Rectangle IntersectionRect(Rectangle rect)
         {
             if (rect == null)
@@ -184,10 +187,10 @@ namespace Taio
         }
 
         /// <summary>
-        /// Find the subtraction of two rectangles
+        /// Znajduje ró¿nicê prostok¹ta i prostok¹ta rect
         /// </summary>
-        /// <param name="rect">Rectangle to subtract</param>
-        /// <returns>List of rectangles from subtraction</returns>
+        /// <param name="rect"></param>
+        /// <returns></returns>
         public List<Rectangle> Subtract(Rectangle rect)
         {
             List<Rectangle> results = new List<Rectangle>();
@@ -241,10 +244,10 @@ namespace Taio
 
         #region Edition
         /// <summary>
-        /// Resize rectangle (move right-down vertex, left-top vertex remains unchanged)
+        /// Zmieñ rozmiary prostok¹ta (przesuñ prawy dolny wierzcho³ek, nie zmieniaj¹c lewego górnego)
         /// </summary>
-        /// <param name="rightDown">New right-down vertex coordinates</param>
-        /// <returns>Resized rectangle</returns>
+        /// <param name="rightDown"></param>
+        /// <returns></returns>
         public Rectangle Resize(Point rightDown)
         {
             if (rightDown.X < 0 || rightDown.Y < 0 || rightDown.X <= this.leftTop.X || rightDown.Y <= this.leftTop.Y)
@@ -256,10 +259,10 @@ namespace Taio
         }
 
         /// <summary>
-        /// Resize rectangle (move right-down vertex, left-top vertex remains unchanged)
+        /// Zmieñ rozmiary prostok¹ta (przesuñ prawy dolny wierzcho³ek, nie zmieniaj¹c lewego górnego)
         /// </summary>
-        /// <param name="sideA">New sideA length</param>
-        /// <param name="sideB">New sideB length</param>
+        /// <param name="sideA"></param>
+        /// <param name="sideB"></param>
         /// <returns>Resized rectangle</returns>
         private Rectangle Resize(int sideA, int sideB)
         {
@@ -274,7 +277,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rotate rectangle (swap sideA and sideB, leftTop remains unchanged)
+        /// Obróæ prostok¹t (zamieñ sideA i sideB, nie zmieniaj¹c lewego górnego wierzcho³ka)
         /// </summary>
         /// <returns>Rotated rectangle</returns>
         public Rectangle Rotate()
@@ -313,10 +316,10 @@ namespace Taio
         }
 
         /// <summary>
-        /// Moves rectangle so that the left-top vertices lay in the given leftTop
+        /// Przesuñ prostok¹t
         /// </summary>
-        /// <param name="leftTop">New leftTop position</param>
-        /// <returns>Moved rectangle</returns>
+        /// <param name="leftTop"></param>
+        /// <returns></returns>
         public Rectangle Move(Point leftTop)
         {
             if (leftTop.X < 0 || leftTop.Y < 0)
@@ -333,9 +336,9 @@ namespace Taio
         }
 
         /// <summary>
-        /// Set parent for the rectangle
+        /// Ustaw prostok¹t-rodzica
         /// </summary>
-        /// <param name="parentRectangle">New parentRectangle</param>
+        /// <param name="parentRectangle"></param>
         public void SetParentRectangle(Rectangle parentRectangle)
         {
             this.parentRectangle = parentRectangle;
@@ -345,7 +348,7 @@ namespace Taio
 
         #region Accessors
         /// <summary>
-        /// Rectangle's left-top vertex
+        /// Lewy górny wierzcho³ek
         /// </summary>
         public Point LeftTop
         {
@@ -354,7 +357,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's right-down vertex
+        /// Prawy dolny wierzcho³ek
         /// </summary>
         public Point RightDown
         {
@@ -363,7 +366,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's top/bottom side length
+        /// Bok "poziomy"
         /// </summary>
         public int SideA
         {
@@ -371,7 +374,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's left/right side length
+        /// Bok "pionowy"
         /// </summary>
         public int SideB
         {
@@ -379,7 +382,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's longer side length
+        /// D³u¿szy bok
         /// </summary>
         public int LongerSide
         {
@@ -393,7 +396,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's shorter side length
+        /// Krótszy bok
         /// </summary>
         public int ShorterSide
         {
@@ -407,7 +410,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle area
+        /// Pole
         /// </summary>
         public int Area
         {
@@ -415,7 +418,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Contained rectangles list
+        /// Zawierane prostok¹ty
         /// </summary>
         public List<Rectangle> ContainedRectangles
         {
@@ -423,7 +426,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle containing given rectangle
+        /// Prostok¹t-rodzic
         /// </summary>
         public Rectangle ParentRectangle
         {
@@ -431,7 +434,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's color
+        /// Kolor
         /// </summary>
         public Color Color
         {
@@ -440,7 +443,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's number
+        /// Numer
         /// </summary>
         public int Number
         {
@@ -534,16 +537,16 @@ namespace Taio
         }
 
         /// <summary>
-        /// Rectangle's orientation
+        /// Orientacja prostok¹ta
         /// </summary>
         public enum Orientation
         {
             /// <summary>
-            /// Rectangle's SideA is not shorten than SideB
+            /// SideA >= SideB
             /// </summary>
             Horizontal,
             /// <summary>
-            /// Rectangle's SideB is not shorten than SideB
+            /// SideB > SideB
             /// </summary>
             Vertical
         }

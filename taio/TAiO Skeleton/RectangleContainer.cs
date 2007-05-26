@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Taio
 {
+    /// <summary>
+    /// Klasa zapewniaj¹ca narzêdzia do tworzenia prostok¹ta z³o¿onego z innych prostok¹tów
+    /// </summary>
     class RectangleContainer
     {
         private List<Rectangle> rectangles;
@@ -26,7 +29,7 @@ namespace Taio
 
         #region Accessors
         /// <summary>
-        /// Contained rectangles list
+        /// Lista prostok¹tów w kontenerze
         /// </summary>
         public List<Rectangle> Rectangles
         {
@@ -34,7 +37,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// List of rectangles which should be filled in so as to build the largest possible rectangle
+        /// Lista prostok¹tnych pustych miejsc, które musz¹ byæ wype³nione, by utworzyæ MaxPossibleRect
         /// </summary>
         public List<Rectangle> EmptyFields
         {
@@ -42,7 +45,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// The largest correct rectangle which consists of rectangles in container
+        /// Najwiêkszy poprawny prostok¹t z³o¿ony z prostok¹tów w kontenerze
         /// </summary>
         public Rectangle MaxCorrectRect
         {
@@ -50,7 +53,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// The largest correct rectangle possible to construct when empty fields are filled in
+        /// Najwiêkszy poprawny prostok¹t mo¿liwy do osi¹gniêcia w przypadku wype³nienia pustych miejsc
         /// </summary>
         public Rectangle MaxPossibleRect
         {
@@ -58,7 +61,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Are all rectangles in container build correct rectangle
+        /// Czy wszystkie prostok¹ty w kontenerze tworz¹ prawid³owy prostok¹t
         /// </summary>
         public bool IsCorrectRectangle
         {
@@ -104,7 +107,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Area of all rectangles in container which should be filled in to build the largest possible rectangle
+        /// Suma pól wszystkich pustych obszarów
         /// </summary>
         public int EmptyFieldsArea
         {
@@ -122,9 +125,9 @@ namespace Taio
 
         #region Insert methods
         /// <summary>
-        /// Insert rectangles from rects to the container
+        /// Wstawia prostok¹ty z listy do kontenera
         /// </summary>
-        /// <param name="rects">Rectangles to insert</param>
+        /// <param name="rects">Prostok¹ty do wstawienia</param>
         public void InsertRectangles(List<Rectangle> rects)
         {
             if (rects == null)
@@ -140,29 +143,29 @@ namespace Taio
 
 
         /// <summary>
-        /// Insert rectangle using its properties to place it in container
+        /// Wstawia prostok¹t do kontenera
         /// </summary>
-        /// <param name="r">Rectangle to insert</param>
+        /// <param name="r">Prostok¹t do wstawienia</param>
         public void InsertRectangle(Rectangle r)
         {
             InsertRectangle(r, r.LeftTop);
         }
 
         /// <summary>
-        /// Insert rectangle to the container
+        /// Wstawia prostok¹t do kontenera
         /// </summary>
-        /// <param name="r">Rectangle to insert</param>
-        /// <param name="o">Inserted rectangle orientation</param>
+        /// <param name="r">Prostok¹t do wstawienia</param>
+        /// <param name="o">Orientacja prostok¹ta</param>
         public void InsertRectangle(Rectangle r, Rectangle.Orientation o)
         {
             InsertRectangle(r, new Point(0, 0), o);
         }
 
         /// <summary>
-        /// Insert rectangle to the container
+        /// Wstawia prostok¹t do kontenera
         /// </summary>
-        /// <param name="r">Rectangle to insert</param>
-        /// <param name="rLeftTop">Inserted rectangle left-top point</param>
+        /// <param name="r">Prostok¹t do wstawienia</param>
+        /// <param name="rLeftTop">Lewy górny wierzcho³ek prostok¹ta</param>
         public void InsertRectangle(Rectangle r, Point rLeftTop)
         {
             Rectangle.Orientation o;
@@ -175,11 +178,11 @@ namespace Taio
         }
 
         /// <summary>
-        /// Insert rectangle to the container
+        /// Wstawia prostok¹t do kontenera
         /// </summary>
-        /// <param name="r">Rectangle to insert</param>
-        /// <param name="rLeftTop">Inserted rectangle left-top point</param>
-        /// <param name="o">Inserted rectangle orientation</param>
+        /// <param name="r">Prostok¹t do wstawienia</param>
+        /// <param name="rLeftTop">Lewy górny wierzcho³ek prostok¹ta</param>
+        /// <param name="o">Orientacja prostok¹ta</param>
         public void InsertRectangle(Rectangle r, Point rLeftTop, Rectangle.Orientation o)
         {
             Console.WriteLine("insert rect[(" + r.LeftTop.X + ", " + r.LeftTop.Y + "), (" +
@@ -250,10 +253,10 @@ namespace Taio
 
         #region Auxiliary functions for Insert methods
         /// <summary>
-        /// Check InsertRectangle function parameters
+        ///Sprawdza parametry dla funkcji insert
         /// </summary>
-        /// <param name="r">Rectangle to insert</param>
-        /// <param name="rLeftTop">LeftTop coordinate for rectangle vertex</param>
+        /// <param name="r">Prostok¹t do wstawienia</param>
+        /// <param name="rLeftTop">Lewy górny wierzcho³ek prostok¹ta</param>
         private void InsertRectangleCheckParameters(Rectangle r, Point rLeftTop)
         {
             if (r == null)
@@ -264,9 +267,9 @@ namespace Taio
         }
 
         /// <summary>
-        /// Prepare first rectangle to insert into container
+        /// Przygotowuje pierwszy prostokat do wstawienia do kontenera
         /// </summary>
-        /// <param name="r">Rectangle to insert as a first one</param>
+        /// <param name="r">Prostok¹t do wstawienia jako pierwszy</param>
         private void FirstRectanglePreparation(Rectangle r)
         {
             r.Move(new Point(0, 0));
@@ -277,9 +280,9 @@ namespace Taio
         }
 
         /// <summary>
-        /// Update MaxCorrectRectangle and MaxPossibleRectangle when there were no EmptyFields
+        /// Uaktualnia MaxCorrectRectangle i MaxPossibleRectangle gdy nie ma EmptyFields
         /// </summary>
-        /// <param name="insertedRectangle">Currently inserted rectangle</param>
+        /// <param name="insertedRectangle">Wstawiany prostok¹t</param>
         private void UpdateMaxRectangles(Rectangle insertedRectangle)
         {
             maxCorrectRect.Resize(insertedRectangle.RightDown);
@@ -289,7 +292,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Update MaxCorrectRectangle after filling all EmptyFields from MaxPossibleRectangle
+        /// Uaktualnia MaxCorrectRectangle
         /// </summary>
         private void UpdateMaxCorrectAfterFillingAllEmpties()
         {
@@ -302,9 +305,9 @@ namespace Taio
         }
 
         /// <summary>
-        /// Update MaxPossibleRectangle after inserting insertedRectangle
+        /// Uaktualnia MaxCorrectRectangle
         /// </summary>
-        /// <param name="insertedRectangle">Currently inserted rectangle</param>
+        /// <param name="insertedRectangle">Wstawiany prostok¹t</param>
         private void UpdateMaxPossibleRectangle(Rectangle insertedRectangle)
         {
             Point newMaxPossibleRectangleRightDown = ComputeNewMaxPossibleRectangleRightDown(insertedRectangle);
@@ -312,7 +315,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Compute right-down vertex coordinate of MaxPossibleRectangle after inserting a rectangle
+        /// Oblicz prawy dolny wierzcholek MaxPossibleRectangle po wstawieniu prostok¹ta
         /// </summary>
         /// <param name="insertedRectangle"></param>
         /// <returns></returns>
@@ -325,9 +328,9 @@ namespace Taio
         }
 
         /// <summary>
-        /// Update container's EmptyFields list after inserting insertedRectangle
+        /// Uaktualnij EmptyFields
         /// </summary>
-        /// <param name="insertedRectangle">Currently inserted rectangle</param>
+        /// <param name="insertedRectangle">Wstawiany prostok¹t</param>
         private void UpdateEmptyFields(Rectangle insertedRectangle)
         {
             IEnumerator<Rectangle> enumerator = emptyFields.GetEnumerator();
@@ -382,7 +385,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Compute and add newly created empty fields after inserting a rectangle
+        /// Oblicz i dodaj nowe EmptyFields
         /// </summary>
         /// <param name="insertedRectangle">Currently inserted rectangle</param>
         private void AddNewEmptyFields(Rectangle insertedRectangle)
@@ -448,72 +451,3 @@ namespace Taio
     }
 
 }
-
-
-#region Arch
-/*public void AddRectangle(Rectangle r, Point rLeftTop, Rectangle.Orientation o)
-        {
-            if (r == null)
-                throw new ArgumentNullException();
-
-            if (rLeftTop.X < 0 || rLeftTop.Y < 0)
-                throw new ArgumentException("Incorrect leftTop coordinates");
-
-            if (rectangles.Count == 0)
-            {
-                //r.LeftTop = new Point(0,0);
-                r.Move(new Point(0, 0));
-                this.maxCorrectRect = r;
-                this.isCorrectRectangle = true;
-            }
-            else
-                r.Move(rLeftTop);
-                //r.LeftTop = rLeftTop;
-            
-            //if (o.Equals(Rectangle.Orientation.Horizontal))
-            //    r.RightDown = new Point(r.LeftTop.X + r.SideA, r.LeftTop.Y + r.SideB);
-            //else
-            //    r.RightDown = new Point(r.LeftTop.X + r.SideB, r.LeftTop.Y + r.SideA);
-            
-            if (o.Equals(Rectangle.Orientation.Horizontal) && r.SideA < r.SideB)
-                r.Rotate();
-            else if (o.Equals(Rectangle.Orientation.Vertical && r.SideA > r.SideB))
-                r.Rotate();
-            
-            rectangles.Add(r);
-
-
-            if (rectangles.Count > 1)
-            {
-                // spr. czy po dodaniu wciaz prawidlowy prostokat
-                if (isCorrectRectangle)
-                {
-                    if (r.LeftTop.X == maxCorrectRect.LeftTop.X &&
-                        r.RightDown.X == maxCorrectRect.RightDown.X &&
-                        r.LeftTop.Y <= maxCorrectRect.RightDown.Y) // przyp. a)
-                    {
-                    }
-                    else if (r.LeftTop.Y == maxCorrectRect.LeftTop.Y &&
-                        r.RightDown.Y == maxCorrectRect.RightDown.Y &&
-                        r.LeftTop.X <= maxCorrectRect.RightDown.X) // przyp. b)
-                    {
-                    }
-                    else if (maxCorrectRect.Covers(r)) // przyp. c)
-                    {
-                    }
-                    else
-                    {
-                        isCorrectRectangle = false;
-                        // tu obliczenie czego brakuje (emptyFields) aby prostokat maxPossibleRect byl poprawny
-                    }
-                }
-                else
-                {
-                    //sprawdzenie czy dodanie prostokata nie pokrylo calkowicie jakichs emptyFields
-                    //spr. czy przeciecia dodanego z empty sa niepuste (jesli tak - usuwamy odpow. empty z listy i wstawiamy zamiast niego empty-dodany)
-                    //spr. czy nie zmienil sie maxPossibleRect
-                }
-            }   
-        }*/
-
-#endregion
