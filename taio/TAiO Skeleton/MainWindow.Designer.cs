@@ -141,7 +141,7 @@ namespace Taio
             // 
             this.addRectangleToolStripMenuItem.Name = "addRectangleToolStripMenuItem";
             this.addRectangleToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
-            this.addRectangleToolStripMenuItem.Text = "Dodaj do listy";
+            this.addRectangleToolStripMenuItem.Text = "Dodaj prostok¹t do listy";
             this.addRectangleToolStripMenuItem.Click += new System.EventHandler(this.addRectangleToolStripMenuItem_Click);
             // 
             // removeRectangleToolStripMenuItem
