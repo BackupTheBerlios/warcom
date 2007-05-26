@@ -2,7 +2,9 @@
 #define SHELLLOCALSORTER_H_
 
 #include "Sorter.h"
+#include "../Tools/Utils.h"
 using namespace std;
+using namespace tools;
 
 namespace sorting
 {

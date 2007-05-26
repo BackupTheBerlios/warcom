@@ -18,7 +18,7 @@ void ShellLocalSorter::shellSortPhase(int a[], int length, int gap)
     {
         int value = a[i];
         int j;
-        for (j = i - gap; j >= 0 && a[j] > value; j -= gap) {
+        for (j = i - gap; j >= 0 && Utils::compare(value, a[j]); j -= gap) {
             a[j + gap] = a[j];
         }
         a[j + gap] = value;
