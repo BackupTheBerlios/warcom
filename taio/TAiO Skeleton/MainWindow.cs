@@ -226,7 +226,11 @@ namespace Taio
                 this.rectanglesTreeView.Nodes[1].Nodes.Clear();
                 addRectanglesOnlyToView();
                 addSolutionsOnlyToView();
-                viewRectangle(null, null);                                
+                viewRectangle(null, null);        
+                
+                // wypisywana informacja o ewentualnym b³êdzie
+                if(this.dataLoader.GetLog.Length > 0)
+                    MessageBox.Show(this.dataLoader.GetLog, "Informacja", MessageBoxButtons.OK);
             }
         }
 
@@ -255,7 +259,11 @@ namespace Taio
                 this.rectanglesTreeView.Nodes[1].Nodes.Clear();
                 addRectanglesOnlyToView();
                 addSolutionsOnlyToView();
-                viewRectangle(null, null);               
+                viewRectangle(null, null);
+
+                // wypisywana informacja o ewentualnym b³êdzie
+                if (this.dataLoader.GetLog.Length > 0)
+                    MessageBox.Show(this.dataLoader.GetLog, "Informacja", MessageBoxButtons.OK);
             }
         }
 

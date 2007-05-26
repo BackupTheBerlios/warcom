@@ -129,7 +129,7 @@ namespace Taio
                         }
                         else
                         {
-                            this.log.AppendLine("B³ad w danych w pliku - z³y format");
+                            this.log.AppendLine("B³¹d w danych w pliku - z³y format");
                             MessageBox.Show("B³¹d w danych w pliku - z³y format");
                         }
                     }
