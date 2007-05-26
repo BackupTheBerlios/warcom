@@ -71,7 +71,7 @@ int OemSorterWorker::sort()
 		tt->endTask("load",1);
 		DataCollector dc(outFile, numprocs,dl.getBufferSize());
 		dc.collectData();
-		tt->endTask("whole");
+		tt->endTask("whole",1);
    	}
    	else
    	{
