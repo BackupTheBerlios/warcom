@@ -27,8 +27,8 @@ private:
 	int canTransferInThisStep(int,int,int);
 	int findPartner(int, int,int);
 	int compareSplit(int idProces,int myId, int* buffer, int bufSize);
-	void supervisorAction(int numprocs);
-	
+	void supervisorAction(int numprocs);	
+	void slaveAction(int numprocs, int myrank);
 };
 }
 #endif /*OEMSORTERWORKER_H_*/

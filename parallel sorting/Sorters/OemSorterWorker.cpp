@@ -15,10 +15,10 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 	int* buffer2 = new int[bufSize*2];
 	MPI_Status status; 
 	OemSorter* sorter = new OemSorter();
-	MPI_Send( buffer, bufSize * sizeof(int), MPI_INT, idProcess,
-		WORK_TAG+50, MPI_COMM_WORLD);
-	MPI_Recv(buffer2, bufSize * sizeof(int), MPI_INT, idProcess,
-		WORK_TAG+50, MPI_COMM_WORLD, &status);	
+	if(Utils::mpi_send(buffer,bufSize,idProcess,WORK_TAG+50))
+		return 1;
+	if(Utils::mpi_recv(buffer2,bufSize,idProcess,WORK_TAG+50,&status))
+		return 1;
 	for(int i = 0; i<bufSize; ++i)
 		buffer2[i+bufSize] = buffer[i];
 	sorter->sort(buffer2, bufSize * 2);
@@ -68,6 +68,30 @@ void OemSorterWorker::supervisorAction(int numprocs)
 	tt->endTask("whole",1);
 }	
 
+void OemSorterWorker::slaveAction(int numprocs, int myrank)
+{
+	OemSorter* oem = new OemSorter();
+   	MPI_Status status;
+   	int bufSize, partner, *buffer;
+   	if(Utils::mpi_recv(&bufSize, 1, 0, BUFFER_SIZE_TAG, &status))
+   		Utils::exitWithError();
+   	buffer = new int[bufSize];
+   	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status))
+   		Utils::exitWithError(); 
+	oem->sort(buffer, bufSize);
+	for(int i=0;i<log2(numprocs - 1);i++)
+		for(int j=0;j<=i;j++)
+				if(canTransferInThisStep(myrank, i, j))
+				{
+					partner = findPartner(myrank, i, j);
+					if(compareSplit(partner, myrank, buffer, bufSize))
+						Utils::exitWithError();
+				}
+	if(Utils::mpi_send(buffer, bufSize, 0, END_TAG))
+		Utils::exitWithError();
+	if(buffer != NULL)
+		delete(buffer);
+}
 
 int OemSorterWorker::sort()
 {
@@ -77,25 +101,7 @@ int OemSorterWorker::sort()
    	if(myrank == 0)
    		supervisorAction(numprocs);
    	else
-   	{
-   		OemSorter* oem = new OemSorter();
-   		MPI_Status status;
-   		int bufSize, partner, *buffer;
-   		MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &status);
-   		buffer = new int[bufSize];
-		MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &status);
-		oem->sort(buffer, bufSize);
-		for(int i=0;i<log2(numprocs - 1);i++)
-			for(int j=0;j<=i;j++)
-					if(canTransferInThisStep(myrank, i, j))
-					{
-						partner = findPartner(myrank, i, j);
-						compareSplit(partner, myrank, buffer, bufSize);
-					}
-		MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
-		if(buffer != NULL)
-			delete(buffer);
-   	}
+   		slaveAction(numprocs, myrank);
    	MPI::Finalize();
    	return 0;
 }

@@ -41,6 +41,68 @@ void showAuthors()
 	cout<<"Piotr Olejnik"<<endl;
 }
 
+void localOem()
+{
+	TaskTimer* tt = new TaskTimer();
+	tt->startTask("load");
+	FDataLoader* fdl = new FDataLoader(inputFile); 
+	int* buffer = fdl->getBuffer();
+	int bufferSize = fdl->getBufferSize();
+	tt->endTask("load", 1);
+	tt->startTask("sort");
+	OemSorter* os = new OemSorter();
+	os->sort(buffer, bufferSize);
+	tt->endTask("sort", 1);
+	tt->startTask("display");
+	int fd = MyIO::my_open(outputFile.c_str(),O_CREAT | O_TRUNC | O_WRONLY );
+	if(fd != -1)
+	{
+		MyIO::my_write(fd, &bufferSize, sizeof(int), 0, SEEK_CUR);
+		MyIO::my_write(fd, buffer, bufferSize * sizeof(int), 
+			sizeof(int), SEEK_SET);
+		MyIO::my_close(fd);
+	}
+	tt->endTask("display",1);
+}
+
+void localBitonic()
+{
+	TaskTimer* tt = new TaskTimer();
+	tt->startTask("load");
+	FDataLoader* fdl = new FDataLoader(inputFile); 
+	int* buffer = fdl->getBuffer();
+	int bufferSize = fdl->getBufferSize();
+	tt->endTask("load", 1);
+	tt->startTask("sort");			
+	BSorter* bs = new BSorter();
+	bs->sort(buffer, bufferSize);
+	tt->endTask("sort", 1);
+	tt->startTask("display");
+	for(int i=0;i<bufferSize;i++)
+		cout<<buffer[i]<<" ";
+	cout<<endl;
+	tt->endTask("display",1);
+}
+
+void localShell()
+{
+	TaskTimer* tt = new TaskTimer();
+	tt->startTask("load");
+	FDataLoader* fdl = new FDataLoader(inputFile); 
+	int* buffer = fdl->getBuffer();
+	int bufferSize = fdl->getBufferSize();
+	tt->endTask("load", 1);
+	tt->startTask("sort");
+	ShellLocalSorter* shlocs = new ShellLocalSorter();
+	shlocs->sort(buffer, bufferSize);
+	tt->endTask("sort", 1);
+	tt->startTask("display");
+	for(int i=0;i<bufferSize;i++)
+		cout<<buffer[i]<<" ";
+	cout<<endl;
+	tt->endTask("display",1);
+}
+
 bool checkInput(char* args[], int argc)
 {
 	if(argc < 4)
@@ -86,59 +148,11 @@ int main(int argc, char* args[])
 			bsw->sort();
 		}
 		if(oemlocal)
-		{
-			TaskTimer* tt = new TaskTimer();
-			tt->startTask("load");
-			FDataLoader* fdl = new FDataLoader(inputFile); 
-			int* buffer = fdl->getBuffer();
-			int bufferSize = fdl->getBufferSize();
-			tt->endTask("load", 1);
-			tt->startTask("sort");
-			OemSorter* os = new OemSorter();
-			os->sort(buffer, bufferSize);
-			tt->endTask("sort", 1);
-			tt->startTask("display");
-			/*for(int i=0;i<bufferSize;i++)
-				cout<<buffer[i]<<" ";
-			cout<<endl;*/
-			tt->endTask("display",1);
-		}	
+			localOem();
 		if(bitoniclocal)
-		{
-			TaskTimer* tt = new TaskTimer();
-			tt->startTask("load");
-			FDataLoader* fdl = new FDataLoader(inputFile); 
-			int* buffer = fdl->getBuffer();
-			int bufferSize = fdl->getBufferSize();
-			tt->endTask("load", 1);
-			tt->startTask("sort");			
-			BSorter* bs = new BSorter();
-			bs->sort(buffer, bufferSize);
-			tt->endTask("sort", 1);
-			tt->startTask("display");
-			for(int i=0;i<bufferSize;i++)
-				cout<<buffer[i]<<" ";
-			cout<<endl;
-			tt->endTask("display",1);
-		}
+			localBitonic();
 		if(shelllocal)
-		{
-			TaskTimer* tt = new TaskTimer();
-			tt->startTask("load");
-			FDataLoader* fdl = new FDataLoader(inputFile); 
-			int* buffer = fdl->getBuffer();
-			int bufferSize = fdl->getBufferSize();
-			tt->endTask("load", 1);
-			tt->startTask("sort");
-			ShellLocalSorter* shlocs = new ShellLocalSorter();
-			shlocs->sort(buffer, bufferSize);
-			tt->endTask("sort", 1);
-			tt->startTask("display");
-			for(int i=0;i<bufferSize;i++)
-				cout<<buffer[i]<<" ";
-			cout<<endl;
-			tt->endTask("display",1);
-		}
+			localShell();
 	}
 	else
 	{
