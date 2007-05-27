@@ -425,7 +425,13 @@ namespace Taio
                 if (fileInfo.Exists)
                     System.Diagnostics.Process.Start("../../Resources/help.pdf");
                 else
-                    MessageBox.Show("Brak pliku pomocy help.pdf w katalogu Resources", "Informacja", MessageBoxButtons.OK);
+                {
+                    fileInfo = new FileInfo("help.pdf");
+                    if (fileInfo.Exists)
+                        System.Diagnostics.Process.Start("help.pdf");
+                    else
+                        MessageBox.Show("Brak pliku pomocy help.pdf w katalogu Resources i w bie¿¹cym katalogu", "Informacja", MessageBoxButtons.OK);
+                }
             }
         }
         #endregion
