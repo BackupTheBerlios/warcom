@@ -16,8 +16,8 @@ class Utils
 public:
 	Utils();
 	void example();
-	int mpi_send(int* buf, int count, int dest,int tag);
-	int mpi_recv(int* buf, int count, int source, int tag, MPI_Status *status);
+	static int mpi_send(int* buf, int count, int dest,int tag);
+	static int mpi_recv(int* buf, int count, int source, int tag, MPI_Status *status);
 	
 	
 	static int compare(int a, int b);

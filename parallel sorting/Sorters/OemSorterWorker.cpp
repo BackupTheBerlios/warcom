@@ -75,15 +75,12 @@ int OemSorterWorker::sort()
    	int myrank = COMM_WORLD.Get_rank(); 
    	int numprocs = COMM_WORLD.Get_size(); 
    	if(myrank == 0)
-   	{
    		supervisorAction(numprocs);
-   	}
    	else
    	{
    		OemSorter* oem = new OemSorter();
    		MPI_Status status;
-   		int bufSize;
-   		int* buffer;
+   		int bufSize, partner, *buffer;
    		MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &status);
    		buffer = new int[bufSize];
 		MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &status);
@@ -92,7 +89,7 @@ int OemSorterWorker::sort()
 			for(int j=0;j<=i;j++)
 					if(canTransferInThisStep(myrank, i, j))
 					{
-						int partner = findPartner(myrank, i, j);
+						partner = findPartner(myrank, i, j);
 						compareSplit(partner, myrank, buffer, bufSize);
 					}
 		MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
