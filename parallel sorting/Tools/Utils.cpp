@@ -60,7 +60,7 @@ int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
  	if(Utils::mpi_recv(&bufSize, 1, 0, BUFFER_SIZE_TAG, &mpi_status) != 0)
 	    Utils::exitWithError();
     
-    cout<<"Process #"<<myrank<<": I received bufferSize="<<bufSize<<endl;
+    //cout<<"Process #"<<myrank<<": I received bufferSize="<<bufSize<<endl;
     if(bufSize <= 0)
     	return NULL;
     	

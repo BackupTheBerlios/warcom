@@ -33,9 +33,9 @@ void ShellSorterWorker::sort()
 		tt->endTask("load",1);
 		
 		//in sorter - before entering 2nd phase
-		cout<<"Process #0 before msc barrier"<<endl;
+		//cout<<"Process #0 before msc barrier"<<endl;
 		MPI_Barrier(MPI_COMM_WORLD);
-		cout<<"Process #0 after msc barrier"<<endl;
+		//cout<<"Process #0 after msc barrier"<<endl;
 		manageStopCondition(numprocs);
 		
 		DataCollector dc(outFile, numprocs,dl.getBufferSize());
@@ -48,7 +48,7 @@ void ShellSorterWorker::sort()
    		ShellSorter* shells = new ShellSorter(myrank, numprocs-1);
    		
 		buffer = Utils::recv_init_buffer(bufSize, myrank, mpi_status);
-		cout<<"Process #"<<myrank<<": Buffer received"<<endl;
+		//cout<<"Process #"<<myrank<<": Buffer received"<<endl;
 		//displayBuffer("Buffer received");
 		
 		
@@ -86,7 +86,7 @@ void ShellSorterWorker::manageStopCondition(int numprocs)
 				//MPI_Recv(&noChangesRes, 1, MPI_INT, i, OE_RESULT, MPI_COMM_WORLD, &mpi_status);
 				if(Utils::mpi_recv(&noChangesRes, 1, i, OE_RESULT, &mpi_status)!= 0)
 						Utils::exitWithError();
-				cout<<"Changes report received from #"<<i<<endl;
+				//cout<<"Changes report received from #"<<i<<endl;
 				if(noChangesRes == OE_CHANGED)
 					sortingDone = false;
 			}
@@ -100,7 +100,7 @@ void ShellSorterWorker::manageStopCondition(int numprocs)
 				
 			for(int i=1; i<numprocs; i++)
 			{
-				cout<<"Sending stop condition to #"<<i<<endl;			
+				//cout<<"Sending stop condition to #"<<i<<endl;			
 				MPI_Isend(&res, 1, MPI_INT, i, OE_STOP_CONDITION, MPI_COMM_WORLD, &request );
 			}
 			

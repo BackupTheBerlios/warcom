@@ -16,11 +16,11 @@ namespace tools
 			
 		int setSize = 0;
 		MyIO::my_read(fileh, &setSize,  sizeof(int),  0,  SEEK_CUR);
-		cout<<"setSize: "<<setSize<<endl;
+		//cout<<"setSize: "<<setSize<<endl;
 		
 		//this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/pcsCount : setSize/(pcsCount-1);
 		this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/(pcsCount-1) + 1 : setSize/(pcsCount-1);
-		cout<<"bufferSize: "<<this->bufferSize<<endl;
+		//cout<<"bufferSize: "<<this->bufferSize<<endl;
 		
 		buffer = new int*[bufferSize];
 		for(int i=0; i< pcsCount; i++)
@@ -69,9 +69,9 @@ namespace tools
 				buffer[bufferNo][i] = -1; 
 		}
 		
-		for(int j=0; j< bufferSize; j++)
+		/*for(int j=0; j< bufferSize; j++)
 			cout<<buffer[bufferNo][j]<<" ";
-		cout<<endl; 
+		cout<<endl;*/ 
 		
 		return buffer[bufferNo];
 	}

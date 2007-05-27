@@ -29,19 +29,15 @@ int* ShellSorter::sort(int a[], int size)
 	for(int stage=1; stage<=stages; stage++)
 	{
 		int otherPId = getPIDForCompSplit(myId-1, allSortersCount, stage)+1;
-		//int otherPId = getPIDForCompSplit(myId, allSortersCount, stage);
-		cout<<"Process #"<<myId<<" before compareSplit with #"<<otherPId<<" at stage "<<stage<<endl;
-		//display();
-		//compareSplit(otherPId);
+		//cout<<"Process #"<<myId<<" before compareSplit with #"<<otherPId<<" at stage "<<stage<<endl;
 		compareSplit(otherPId, myId, a, size);
-		//cout<<"Process #"<<myId<<" after compareSplit at stage "<<stage<<endl;
-		//display();
+		//cout<<"Process #"<<myId<<" after compareSplit at stage "<<stage<<endl;;
 	}
 	
 	//in worker - before managing stop condition
-	cout<<"Process #"<<myId<<" before 2nd phase barrier"<<endl;
+	//cout<<"Process #"<<myId<<" before 2nd phase barrier"<<endl;
 	MPI_Barrier(MPI_COMM_WORLD);
-	cout<<"Process #"<<myId<<" after 2nd phase barrier"<<endl;
+	//cout<<"Process #"<<myId<<" after 2nd phase barrier"<<endl;
 	
 	//second phase - odd-even
 	//cout<<"odd-even phase started"<<endl;
@@ -54,13 +50,13 @@ int* ShellSorter::sort(int a[], int size)
 		{
 			if(myId%2 == 1 && myId+1 < allSortersCount+1) // gdy wszystkie sortują <allSortersCount
 			{
-				cout<<"Process #"<<myId<<" before odd with #"<<myId+1<<" at stage #"<<i<<endl;
+				//cout<<"Process #"<<myId<<" before odd with #"<<myId+1<<" at stage #"<<i<<endl;
 				//compareSplit(myId+1, myId, a, size);
 				compareSplit(myId+1, myId, a, size, changed);
 			}
 			else if (myId-1 > 0 /*&& myId!=allSortersCount*/) // gdy wszystkie sortują >=0
 			{
-				cout<<"Process #"<<myId<<" before odd with #"<<myId-1<<" at stage #"<<i<<endl;
+				//cout<<"Process #"<<myId<<" before odd with #"<<myId-1<<" at stage #"<<i<<endl;
 				//compareSplit(myId-1, myId, a, size);
 				compareSplit(myId-1, myId, a, size, changed);
 			}
@@ -69,19 +65,19 @@ int* ShellSorter::sort(int a[], int size)
 		{
 			if(myId%2 == 0 && myId+1 < allSortersCount+1) // gdy wszystkie sortują <allSortersCount
 			{
-				cout<<"Process #"<<myId<<" before even with #"<<myId+1<<" at stage #"<<i<<endl;
+				//cout<<"Process #"<<myId<<" before even with #"<<myId+1<<" at stage #"<<i<<endl;
 				//compareSplit(myId+1, myId, a, size);
 				compareSplit(myId+1, myId, a, size, changed);
 			}
 			else if (myId-1 > 0 && myId!=allSortersCount) // gdy wszystkie sortują >=0
 			{
-				cout<<"Process #"<<myId<<" before even with #"<<myId-1<<" at stage #"<<i<<endl;
+				//cout<<"Process #"<<myId<<" before even with #"<<myId-1<<" at stage #"<<i<<endl;
 				//compareSplit(myId-1, myId, a, size);
 				compareSplit(myId-1, myId, a, size, changed);
 			}
 		}
 		
-		cout<<"Process #"<<myId<<" localset changed = "<<changed<<endl;
+		//cout<<"Process #"<<myId<<" localset changed = "<<changed<<endl;
 		
 		sendLocalSetChanged(myId, changed);
 		int stopCond = receiveStopCondition(myId);
@@ -96,8 +92,8 @@ int* ShellSorter::sort(int a[], int size)
 		MPI_Barrier(MPI_COMM_WORLD);
 	}
 	
-	cout<<"Process #"<<myId<<" completed sorting. "<<endl;
-	display();
+	//cout<<"Process #"<<myId<<" completed sorting. "<<endl;
+	//display();
 	return a;
 }
 
@@ -116,93 +112,39 @@ void ShellSorter::sendLocalSetChanged(int myId, bool localSetChanged)
 {
 	int setChanged = OE_NO_CHANGES;
 	if(localSetChanged)
+	{
+		//cout<<"#"<<myId<<"changes reported"<<endl;
 		setChanged = OE_CHANGED;
+	}
+	//else
+	//	cout<<"#"<<myId<<"no changes reported"<<endl;
 		
 	//MPI_Send(&setChanged, 1, MPI_INT, 0, OE_RESULT, MPI_COMM_WORLD);
 	if(Utils::mpi_send(&setChanged, 1, 0, OE_RESULT)!=0)
 		Utils::exitWithError();
 		
-	cout<<"#"<<myId<<" changes report sent."<<endl;
+	//cout<<"#"<<myId<<" changes report sent."<<endl;
 }
 
 int ShellSorter::receiveStopCondition(int myId)
 {
 	MPI_Status mpi_status;
 	int stopCondition;
-	cout<<"Process #"<<myId<<" waiting for stop condition..."<<endl;
+	//cout<<"Process #"<<myId<<" waiting for stop condition..."<<endl;
 	
 //	MPI_Recv(&stopCondition, 1, MPI_INT, 0, OE_STOP_CONDITION, MPI_COMM_WORLD, &mpi_status);
 	if(Utils::mpi_recv(&stopCondition, 1, 0, OE_STOP_CONDITION, &mpi_status)!=0)
 		Utils::exitWithError();
 
-	if(stopCondition == OE_SORTING_DONE)
+	/*if(stopCondition == OE_SORTING_DONE)
 		cout<<"Process #"<<myId<<" received stop condition: OE_SORTING_DONE"<<endl;
 	else if(stopCondition == OE_SORTING_UNDONE)
 		cout<<"Process #"<<myId<<" received stop condition: OE_SORTING_UNDONE"<<endl;
 	else
-		if(stopCondition == OE_SORTING_DONE)
-		cout<<"Process #"<<myId<<" received stop condition: ERROR"<<endl;
+		cout<<"Process #"<<myId<<" received stop condition: ERROR"<<endl;*/
 	//cout<<"Process #"<<myId<<" received stop condition = "<<stopCondition<<endl;
 	return stopCondition;
 }
-
-//int ShellSorter::getPIDForCompSplit(int stage)
-//{
-//	int stageTabSize = allSortersCount/stage;
-//	int tabs = allSortersCount/(int)pow(2, stage - 1);
-//	
-//	int temp = stageTabSize, i;
-//
-//	for(i=0; i<=tabs; i++)
-//	{
-//		if(myId >= temp)
-//			temp+=stageTabSize;
-//		else
-//			break;
-//	}
-//	
-//	int tabStart = temp - stageTabSize;
-//	int myIdPosInStageTab = myId - tabStart;
-//	
-//	return stageTabSize - myIdPosInStageTab + tabStart - 1;
-//}
-
-// używać tylko gdy wszystkie procesy sortują
-//int ShellSorter::compareSplit(int otherPId)
-//{	
-//	MPI_Request request;
-//	MPI_Status status;
-//	
-//	bool getGreaterPart = (myId > otherPId) ? true : false;
-//	int* buffer2 = new int[size*2];
-//	
-//	LocalQSorter* lqs = new LocalQSorter(buffer2,size*2);
-//	
-//	MPI_Isend(a, size, MPI_INT, otherPId,
-//		COMPARE_SPLIT + myId, MPI_COMM_WORLD, &request );
-//	
-//	MPI_Recv(buffer2, size, MPI_INT, otherPId,
-//		COMPARE_SPLIT + otherPId, MPI_COMM_WORLD, &status);	
-//
-//	for(int i = 0; i<size; ++i)
-//		buffer2[i+size] = a[i];
-//	
-//	lqs->localSort(true);
-//	if(getGreaterPart)
-//	    for(int i = 0; i<size; ++i)
-//		    a[i] = buffer2[i+size];
-//	else
-//		for(int i = 0; i<size; ++i)
-//			a[i] = buffer2[i];
-//	
-//	/*cout<<"compsplit proces "<<myId<<": ";	
-//	for(int i = 0; i<size*2; ++i)
-//		cout<< buffer2[i]<<" ";
-//	cout<<endl;	*/		
-//	if(buffer2 != NULL)
-//			delete(buffer2);
-//	return 0;
-//}
 
 int ShellSorter::compareSplit(int otherPId, int myId, int* buffer, int bufferSize, bool& localSetChanged)
 {	
@@ -294,28 +236,6 @@ int ShellSorter::compareSplit(int otherPId, int myId, int* buffer, int bufferSiz
 			delete(buffer2);
 	return 0;
 }
-
-//int ShellSorter::getPIDForCompSplit(int myId, int sortPcsCount, int stage)
-//{
-//	int stageTabSize = sortPcsCount/stage;
-//	//int tabs = sortPcsCount/(int)pow(2, stage - 1);
-//	int tabs = (int)pow(2, stage - 1);
-//	
-//	int temp = stageTabSize, i;
-//
-//	for(i=0; i<=tabs; i++)
-//	{
-//		if(myId >= temp)
-//			temp+=stageTabSize;
-//		else
-//			break;
-//	}
-//	
-//	int tabStart = temp - stageTabSize;
-//	int myIdPosInStageTab = myId - tabStart;
-//	
-//	return stageTabSize - myIdPosInStageTab + tabStart - 1;
-//}
 
 int ShellSorter::getPIDForCompSplit(int myPId, int sortPcsCount, int stage)
 {
