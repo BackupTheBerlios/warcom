@@ -6,6 +6,7 @@
 #include "../Tools/DataLoader.h"
 #include "../Tools/DataCollector.h"
 #include "../Tools/TaskTimer.h"
+#include "../Tools/Utils.h"
 #include "OemSorter.h"
 using namespace MPI;
 using namespace std;
@@ -26,6 +27,7 @@ private:
 	int canTransferInThisStep(int,int,int);
 	int findPartner(int, int,int);
 	int compareSplit(int idProces,int myId, int* buffer, int bufSize);
+	void supervisorAction(int numprocs);
 	
 };
 }

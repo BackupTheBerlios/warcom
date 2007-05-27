@@ -4,6 +4,7 @@
 #include "Sorters/ShellSorterWorker.h"
 #include "Sorters/ParalBSorter.h"
 #include "Sorters/BSorter.h"
+#include "Sorters/BSorterWorker.h"
 #include "Sorters/ShellLocalSorter.h"
 #include "Tools/FDataLoader.h"
 #include "Tools/TaskTimer.h"

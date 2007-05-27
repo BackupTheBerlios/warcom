@@ -11,13 +11,13 @@ OemSorterWorker::OemSorterWorker(string inFile, string outFile)
 
 int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufSize)
 {	
+	
 	int* buffer2 = new int[bufSize*2];
-	MPI_Request request;
 	MPI_Status status; 
 	OemSorter* sorter = new OemSorter();
-	MPI_Isend( buffer, bufSize, MPI_INT, idProcess,
-		WORK_TAG+50, MPI_COMM_WORLD, &request );
-	MPI_Recv(buffer2, bufSize, MPI_INT, idProcess,
+	MPI_Send( buffer, bufSize * sizeof(int), MPI_INT, idProcess,
+		WORK_TAG+50, MPI_COMM_WORLD);
+	MPI_Recv(buffer2, bufSize * sizeof(int), MPI_INT, idProcess,
 		WORK_TAG+50, MPI_COMM_WORLD, &status);	
 	for(int i = 0; i<bufSize; ++i)
 		buffer2[i+bufSize] = buffer[i];
@@ -55,29 +55,33 @@ int OemSorterWorker::findPartner(int k , int i ,int j)
 	return partner;
 }
 
+void OemSorterWorker::supervisorAction(int numprocs)
+{
+	TaskTimer* tt = new TaskTimer();
+   	tt->startTask("whole");
+	tt->startTask("load");
+   	DataLoader dl(inFile, numprocs);
+   	dl.loadAndSendData();
+	tt->endTask("load",1);
+	DataCollector dc(outFile, numprocs,dl.getBufferSize());
+	dc.collectData();
+	tt->endTask("whole",1);
+}	
+
+
 int OemSorterWorker::sort()
 {
-	Status status; 
-   	MPI::Init();
+	MPI::Init();
    	int myrank = COMM_WORLD.Get_rank(); 
    	int numprocs = COMM_WORLD.Get_size(); 
    	if(myrank == 0)
    	{
-   		TaskTimer* tt = new TaskTimer();
-   		tt->startTask("whole");
-		tt->startTask("load");
-   		DataLoader dl(inFile, numprocs);
-   		dl.loadAndSendData();
-		tt->endTask("load",1);
-		DataCollector dc(outFile, numprocs,dl.getBufferSize());
-		dc.collectData();
-		tt->endTask("whole",1);
+   		supervisorAction(numprocs);
    	}
    	else
    	{
    		OemSorter* oem = new OemSorter();
    		MPI_Status status;
-   		MPI_Request request;
    		int bufSize;
    		int* buffer;
    		MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &status);

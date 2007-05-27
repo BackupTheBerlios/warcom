@@ -16,7 +16,7 @@ int* OemSorter::sort(int a[], int size)
 			for(int j = k % p; ( j + k ) < n; j += ( k + k ))
 				for(int i = 0; i < ( n - j - k ); i++)
 					if(((j + i) / ( p + p )) == (( j + i + k) / ( p + p)))	
-						if(a[j + i] > a[j + i + k])
+						if(!Utils::compare(a[j + i],a[j + i + k]))
 						{
 								temp = a[j + i];
 								a[j + i] = a[j + i + k];
