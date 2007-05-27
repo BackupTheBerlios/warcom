@@ -12,7 +12,10 @@ namespace tools
 		
 		fileh = MyIO::my_open(this->fileName.c_str(), O_RDONLY);
 		if(fileh == -1)
+		{
 			cout<<"File error"<<endl;
+			Utils::exitWithError();
+		}
 			
 		int setSize = 0;
 		MyIO::my_read(fileh, &setSize,  sizeof(int),  0,  SEEK_CUR);
