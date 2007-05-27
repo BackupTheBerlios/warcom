@@ -23,6 +23,7 @@ private:
 	int pcsCount;
 	int bufferSize;
 	int fd;
+	int removeGuars(int* buffer, int size);
 };
 
 }

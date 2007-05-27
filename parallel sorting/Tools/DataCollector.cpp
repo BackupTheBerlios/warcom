@@ -20,6 +20,15 @@ DataCollector::~DataCollector()
 	MyIO::my_close(fd);
 }
 
+int DataCollector::removeGuars(int *buffer, int size)
+{
+	int newSize = size;
+	for(int i = 0; i < size; i++)
+		if(buffer[i] == -1)
+			newSize--;
+	return size - newSize;
+}
+
 void DataCollector::collectData()
 {
 	int* buffer = new int[this->bufferSize];
@@ -27,6 +36,7 @@ void DataCollector::collectData()
 	MPI_Request request;
 	MPI_Status status; 
 	int firstTask = 1;
+	int allVal = 0;
 	TaskTimer *tt = new TaskTimer();
 	for(int i=1;i<pcsCount;i++)
 	{
@@ -36,8 +46,10 @@ void DataCollector::collectData()
 				firstTask = 0;
 				tt->startTask("collect");
 			}
-			MyIO::my_write(fd, buffer, bufferSize * sizeof(int), 
-				( i - 1 ) * bufferSize * sizeof(int) + start, SEEK_SET);	
+			int val = removeGuars(buffer, bufferSize);
+			allVal += val;
+			MyIO::my_write(fd, buffer + val, (bufferSize - val) * sizeof(int), 
+				( i - 1 ) * (bufferSize - allVal) * sizeof(int) + start, SEEK_SET);	
 	}
 	tt->endTask("collect",1);
 }
