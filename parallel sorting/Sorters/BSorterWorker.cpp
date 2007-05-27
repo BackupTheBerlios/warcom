@@ -2,7 +2,61 @@
 
 namespace sorting
 {
+
+void BSorterWorker:: supervisorAction(int numprocs)
+{
+	TaskTimer* tt = new TaskTimer();
+   	tt->startTask("whole");
+	tt->startTask("load");
+	DataLoader dl(inFile, numprocs);
+   	dl.loadAndSendData();
+	tt->endTask("load",1);
+	DataCollector dc(outFile, numprocs,dl.getBufferSize());
+	dc.collectData();
+	tt->endTask("whole",1);	
+}	
+void BSorterWorker:: slaveAction(int numprocs, int myrank)
+{
+	MPI_Status status;
+	MPI_Request request;
+   	int bufSize,idProces,*buffer;
+	bool direction;
 	
+   	if(Utils::mpi_recv(&bufSize, 1, 0, BUFFER_SIZE_TAG, &status))
+   		Utils::exitWithError();
+	buffer = new int[bufSize]; //Utils::init_recv
+	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status))
+   		Utils::exitWithError(); 
+	//
+	cout<<"Process #"<<myrank<<" My buffer: ";		
+	for(int i=0; i<bufSize; i++)
+		cout<<buffer[i]<<" ";
+	cout<<endl;		
+	//
+	for(int i=0; i<log2(numprocs-1); ++i)
+	{
+		for(int j=i; j>=0; --j)
+		{
+			getIdToCompSplit(j,myrank,numprocs-1,&idProces);
+			getDirectionToCompSplit(i,myrank,numprocs-1,
+			&direction,idProces);
+			if(compareSplit(idProces, myrank, direction, buffer, bufSize))
+				Utils::exitWithError(); 
+		}			
+	}
+//	
+	cout<<"Sorted proces #: "<<myrank<<": ";
+	for(int i = 0; i<bufSize; ++i)
+		cout<< buffer[i]<<" ";
+	cout<<endl;	
+//
+	if(Utils::mpi_send(buffer, bufSize, 0, END_TAG))
+		Utils::exitWithError();	
+	if(buffer != NULL)
+		delete(buffer);
+	
+}
+
 BSorterWorker::BSorterWorker(string inFile, string outFile)
 {
 	this->inFile = inFile;
@@ -19,61 +73,25 @@ int BSorterWorker::sort()
    	int myrank = COMM_WORLD.Get_rank(); 
    	int numprocs = COMM_WORLD.Get_size(); 
    	if(myrank == 0)
-   	{
-   		DataLoader dl(inFile, numprocs);
-		dl.loadAndSendData();
-		DataCollector dc(outFile, numprocs,dl.getBufferSize());
-		dc.collectData();		
-   	}
+		supervisorAction(numprocs);
    	else
-   	{
-   		MPI_Status status;
-   		MPI_Request request;
-   		int bufSize;
-   		int* buffer;
-		bool direction;
-		int idProces;
-		
-   		MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &status);
-   		buffer = new int[bufSize];
-		MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &status);
-		
-		cout<<"Process #"<<myrank<<" My buffer: ";		
-		for(int i=0; i<bufSize; i++)
-			cout<<buffer[i]<<" ";
-		cout<<endl;		
-		for(int i=0; i<log2(numprocs-1); ++i)
-		{
-			for(int j=i; j>=0; --j)
-			{
-				getIdToCompSplit(j,myrank,numprocs-1,&idProces);
-				getDirectionToCompSplit(i,myrank,numprocs-1,
-			&direction,idProces);
-				compareSplit(idProces, myrank, direction, buffer, bufSize);
-			}			
-		}		
-		cout<<"Sorted proces #: "<<myrank<<": ";
-		for(int i = 0; i<bufSize; ++i)
-			cout<< buffer[i]<<" ";
-		MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
-		cout<<endl;	
-		if(buffer != NULL)
-			delete(buffer);
-   	}
+		slaveAction(numprocs,myrank);
    	MPI::Finalize();
+	return 0;
 }
+
 
 int BSorterWorker:: compareSplit(int idProces, int myId, bool direction, int* buffer, int bufSize)
 {	
-	int* buffer2 = new int[bufSize*2];
 	MPI_Request request;
 	MPI_Status status; 
+	int* buffer2 = new int[bufSize*2];
 	LocalQSorter* lqs = new LocalQSorter(buffer2,bufSize*2);
-	
-	MPI_Isend( buffer, bufSize, MPI_INT, idProces,
-		WORK_TAG+50, MPI_COMM_WORLD, &request );
-	MPI_Recv(buffer2, bufSize, MPI_INT, idProces,
-		WORK_TAG+50, MPI_COMM_WORLD, &status);	
+			
+	if(Utils::mpi_send(buffer,bufSize,idProces,WORK_TAG+50))
+		return 1;
+	if(Utils::mpi_recv(buffer2,bufSize,idProces,WORK_TAG+50,&status))
+		return 1;
 	
 	for(int i = 0; i<bufSize; ++i)
 		buffer2[i+bufSize] = buffer[i];//moze to po Isend a przed recv
