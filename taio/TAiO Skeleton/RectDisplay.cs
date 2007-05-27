@@ -15,40 +15,28 @@ namespace Kontrolka_do_TAiO
     //TA SAMA REFERENCJA 
     public partial class RectDisplay : UserControl
     {
-        //upper right corner of rectangle - used only when creating one
+        //prawy gorny rog prostokata
         private DoublePoint realValue = new DoublePoint();
-        //mouse position in real coordinate
+        //rzeczywist wspolrzedna myszki
         private DoublePoint realMousePosition = new DoublePoint();
-        //rectangle to display
+        //prostokat do wysietlenia
         private Taio.Rectangle rectangle;
-        //list of extracted rectangles from complex rectangle
+        //lista prostokatow skladajaca sie na prostokat zlozony
         private List<Taio.Rectangle> extractedRectangles;
-        //maximum x and y coordinate to display, when scale = 1
         private int maxX, maxY;
-        //scale
         private double scale = 0.25;
         private double minScale = 0.125 / 4;
-        //information whether user can create new rectangle
+        //czy mozna rysowac
         private bool canDraw = true;
-        //pen used to draw axis
         private Pen axisPen = new Pen(Brushes.Black, 2);
-        //brush used to draw text under axis
         private Brush axisTextBrush = Brushes.Black;
-        //font used to draw axis text
         private Font axisTextFont;
-        //whole control background color
         private Color backgroundColor = Color.White;
-        //distance from axis to border of a whole control
         private int xBorder = 5;
-        //distance from axis to border of a whole control
         private int yBorder = 5;
-        //size of zoomin, zoomout button
         private int zoomControlSize;
-        //x-coordinate of a point (0,0) in image coordinate
         private int yDrawingStartValue;
-        //y-coordinate of a point (0,0) in image coordinate
         private int xDrawingStartValue;
-        //maximum possible scale
         private int maxScale = 256;
         private int indexOfRectangleToDisplay;
         private int alfa = 175;
@@ -70,7 +58,7 @@ namespace Kontrolka_do_TAiO
         }
 
         #region rect_info
-        //tries to get information about rectangle which is pointed by mouse pointer
+        //probuje popbrac informacje o prostokacie wskazywanym przez kursor
         private void TrySetRectangleInfo()
         {
             rectInfo.Items.Clear();
@@ -85,7 +73,7 @@ namespace Kontrolka_do_TAiO
             }
         }
 
-        //tries to get information about rectangle from complex rectangle which is pointed by mouse pointer
+        //probuje popbrac informacje o prostokacie ze zlozonoego prostokata wskazywanego przez kursor
         private void TrySetComplexRectangleInfo(float rX, float rY)
         {
             for (int i = 0; i < extractedRectangles.Count; ++i)
@@ -116,7 +104,7 @@ namespace Kontrolka_do_TAiO
             PaintAxis(e.Graphics);
         }
 
-        //draw rectangle
+        //rysuje prostokat
         private void DrawRectangle(Graphics graph)
         {
             if (rectangle != null)
@@ -133,7 +121,7 @@ namespace Kontrolka_do_TAiO
             }
         }
 
-        //draw complex rectangle
+        //rysuje zlozony prostokat
         private void DrawComplexRectangle(Graphics graph)
         {
             for (int i = 0; i < extractedRectangles.Count; ++i)
@@ -155,7 +143,6 @@ namespace Kontrolka_do_TAiO
             return Color.FromArgb(255 - color.R, 255 - color.G, 255 - color.B);
         }
 
-        //draw axis
         private void PaintAxis(Graphics graph)
         {
             //osie
@@ -186,7 +173,7 @@ namespace Kontrolka_do_TAiO
         }
         #endregion
 
-        //display mouse coordinates in real coordinates, and check whether this coordinates are above axis
+        //wyswietla wspolrzedne myszki sprawdzajac czy mieszcza sie na wykresie
         private bool DisplayMousePosition(int mX, int mY)
         {
             bool validPosition = true;
@@ -222,7 +209,7 @@ namespace Kontrolka_do_TAiO
             return validPosition;
         }
 
-        //converts real coordinates to image coordinates
+        //konweruje rzeczywiste wspolrzedne myszki do wspolrzednych kontrolki
         private DoublePoint ConvertRealPostionToImagePosition(DoublePoint realPos)
         {
             float imgX, imgY;
@@ -321,7 +308,7 @@ namespace Kontrolka_do_TAiO
         }
         #endregion
 
-        //rescales rectangle in the way that longest side is shown as half of longer axis
+        //przeskalowuje prostokat aby miescil sie na ekranie
         private void Rescale(int maxSide)
         {
             if (this.autoScaleCheckBox.Checked)
@@ -340,7 +327,7 @@ namespace Kontrolka_do_TAiO
             }
         }
 
-        //creates colors for rectangles
+        //dobiera kolory dla prostokatow
         private void SetColors()
         {
             int MYSTERIOUS_VALUE = 2 << 24;
@@ -370,7 +357,7 @@ namespace Kontrolka_do_TAiO
         }
 
         #region public_methods
-        //set visibility of rectangle with given number at tommost
+        //ustawia wybrany prostokat na przodzie
         public void SelectRectangleByNumber(int number)
         {
             if (extractedRectangles != null)
@@ -391,7 +378,6 @@ namespace Kontrolka_do_TAiO
             }
         }
 
-        //changle colors of control
         public void ChangeColor()
         {
             this.label1.BackColor = Taio.Properties.Settings.Default.color;
@@ -399,7 +385,7 @@ namespace Kontrolka_do_TAiO
             this.label3.BackColor = Taio.Properties.Settings.Default.color;
         }
 
-        //clears view area
+        //ustawia ustawienia kontrolki na domyslne
         public void Clear()
         {
             this.rectangle = null;
