@@ -118,9 +118,10 @@ void ShellSorter::sendLocalSetChanged(int myId, bool localSetChanged)
 	if(localSetChanged)
 		setChanged = OE_CHANGED;
 		
-	MPI_Send(&setChanged, 1, MPI_INT, 0,
-		OE_RESULT, MPI_COMM_WORLD);
-	
+	//MPI_Send(&setChanged, 1, MPI_INT, 0, OE_RESULT, MPI_COMM_WORLD);
+	if(Utils::mpi_send(&setChanged, 1, 0, OE_RESULT)!=0)
+		Utils::exitWithError();
+		
 	cout<<"#"<<myId<<" changes report sent."<<endl;
 }
 
@@ -129,8 +130,11 @@ int ShellSorter::receiveStopCondition(int myId)
 	MPI_Status mpi_status;
 	int stopCondition;
 	cout<<"Process #"<<myId<<" waiting for stop condition..."<<endl;
-	//MPI_Recv(&stopCondition, sizeof(int), MPI_INT, 0, OE_STOP_CONDITION /*+ myId*/, MPI_COMM_WORLD, &mpi_status);
-	MPI_Recv(&stopCondition, 1, MPI_INT, 0, OE_STOP_CONDITION, MPI_COMM_WORLD, &mpi_status);
+	
+//	MPI_Recv(&stopCondition, 1, MPI_INT, 0, OE_STOP_CONDITION, MPI_COMM_WORLD, &mpi_status);
+	if(Utils::mpi_recv(&stopCondition, 1, 0, OE_STOP_CONDITION, &mpi_status)!=0)
+		Utils::exitWithError();
+
 	if(stopCondition == OE_SORTING_DONE)
 		cout<<"Process #"<<myId<<" received stop condition: OE_SORTING_DONE"<<endl;
 	else if(stopCondition == OE_SORTING_UNDONE)
@@ -213,8 +217,12 @@ int ShellSorter::compareSplit(int otherPId, int myId, int* buffer, int bufferSiz
 	MPI_Isend( buffer, bufferSize, MPI_INT, otherPId,
 		COMPARE_SPLIT, MPI_COMM_WORLD, &request );
 	
-	MPI_Recv(buffer2, bufferSize, MPI_INT, otherPId,
-		COMPARE_SPLIT, MPI_COMM_WORLD, &status);	
+	//MPI_Recv(buffer2, bufferSize, MPI_INT, otherPId,
+	//	COMPARE_SPLIT, MPI_COMM_WORLD, &status);	
+	
+	if(Utils::mpi_recv(buffer2, bufferSize, otherPId,
+	 COMPARE_SPLIT, &status)!= 0)
+		Utils::exitWithError();
 
 	for(int i = 0; i<bufferSize; ++i)
 		buffer2[i+bufferSize] = buffer[i];
@@ -264,8 +272,12 @@ int ShellSorter::compareSplit(int otherPId, int myId, int* buffer, int bufferSiz
 	MPI_Isend( buffer, bufferSize, MPI_INT, otherPId,
 		COMPARE_SPLIT + myId, MPI_COMM_WORLD, &request );
 	
-	MPI_Recv(buffer2, bufferSize, MPI_INT, otherPId,
-		COMPARE_SPLIT + otherPId, MPI_COMM_WORLD, &status);	
+	//MPI_Recv(buffer2, bufferSize, MPI_INT, otherPId,
+		//COMPARE_SPLIT + otherPId, MPI_COMM_WORLD, &status);
+		
+	if(Utils::mpi_recv(buffer2, bufferSize, otherPId,
+	 COMPARE_SPLIT + otherPId, &status)!= 0)
+		Utils::exitWithError();	
 
 	for(int i = 0; i<bufferSize; ++i)
 		buffer2[i+bufferSize] = buffer[i];

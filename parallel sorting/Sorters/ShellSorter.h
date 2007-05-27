@@ -6,8 +6,10 @@
 
 #include "Sorter.h"
 #include "LocalQSorter.h"
+#include "../Tools/Utils.h"
 using namespace std;
 using namespace MPI;
+using namespace tools;
 
 #define COMPARE_SPLIT 2000
 #define OE_RESULT 1900

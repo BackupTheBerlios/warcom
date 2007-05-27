@@ -18,8 +18,8 @@ namespace tools
 		MyIO::my_read(fileh, &setSize,  sizeof(int),  0,  SEEK_CUR);
 		cout<<"setSize: "<<setSize<<endl;
 		
-		//this->bufferSize = (setSize%pcsCount != 0) ? setSize/pcsCount+1 : setSize/pcsCount;
-		this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/pcsCount : setSize/(pcsCount-1);
+		//this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/pcsCount : setSize/(pcsCount-1);
+		this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/(pcsCount-1) + 1 : setSize/(pcsCount-1);
 		cout<<"bufferSize: "<<this->bufferSize<<endl;
 		
 		buffer = new int*[bufferSize];
@@ -58,11 +58,20 @@ namespace tools
 		
 		if(buffer[bufferNo] == NULL)
 		 buffer[bufferNo] = new int[bufferSize];
-		 	
-		MyIO::my_read(fileh, buffer[bufferNo], bufferSize*sizeof(int), 0, SEEK_CUR);
-		/*for(int j=0; j< bufferSize; j++)
-			cout<<buffer[j]<<" ";
-		cout<<endl;*/ 
+		
+		int res = MyIO::my_read(fileh, buffer[bufferNo], bufferSize*sizeof(int), 0, SEEK_CUR);
+		if (res == -1)
+			Utils::exitWithError();
+		if(res < bufferSize*sizeof(int))
+		{
+			int sentinelsCount = (bufferSize*sizeof(int) - res)/sizeof(int);
+			for(int i = bufferSize - sentinelsCount; i<bufferSize; i++)
+				buffer[bufferNo][i] = -1; 
+		}
+		
+		for(int j=0; j< bufferSize; j++)
+			cout<<buffer[bufferNo][j]<<" ";
+		cout<<endl; 
 		
 		return buffer[bufferNo];
 	}
@@ -73,8 +82,6 @@ namespace tools
 			for(int i=0; i<bufferSize; i++)
 				buffer[0] = 0;
 		return loadData(0);
-		
-		//return buffer[0];
 	}
 	
 	void DataLoader::saveData(int* array, int size, string outputFile)
@@ -86,11 +93,13 @@ namespace tools
 		int* buff;
 		
 		//cout<<"Sending bufferSize"<<endl;
+//		for(int i=0; i< pcsCount; i++)
+//			MPI_Send( &this->bufferSize, 1, MPI_INT, i, BUFFER_SIZE_TAG, MPI_COMM_WORLD);
 		for(int i=0; i< pcsCount; i++)
-			MPI_Send( &this->bufferSize, 1, MPI_INT, i, BUFFER_SIZE_TAG, MPI_COMM_WORLD);
+			if(Utils::mpi_send( &this->bufferSize, 1, i, BUFFER_SIZE_TAG)!=0)
+				Utils::exitWithError();
 			
 		
-		//for(int i=1; i< pcsCount; i++)
 		for(int i=pcsCount-1; i> 0; i--)
 		{
 			buff = loadData(i);

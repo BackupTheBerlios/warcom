@@ -56,7 +56,9 @@ void ShellSorterWorker::sort()
 			buffer = shells->sort(buffer, bufSize);
 		
 		//wysłać procesowi głownemu
-		MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
+		//MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
+		if(Utils::mpi_send(buffer, bufSize, 0, END_TAG)!= 0)
+				Utils::exitWithError();
 		
 		if(buffer != NULL)
 			delete(buffer);
@@ -81,7 +83,9 @@ void ShellSorterWorker::manageStopCondition(int numprocs)
 			
 			for(int i=1; i<numprocs; i++)
 			{
-				MPI_Recv(&noChangesRes, 1, MPI_INT, i, OE_RESULT, MPI_COMM_WORLD, &mpi_status);
+				//MPI_Recv(&noChangesRes, 1, MPI_INT, i, OE_RESULT, MPI_COMM_WORLD, &mpi_status);
+				if(Utils::mpi_recv(&noChangesRes, 1, i, OE_RESULT, &mpi_status)!= 0)
+						Utils::exitWithError();
 				cout<<"Changes report received from #"<<i<<endl;
 				if(noChangesRes == OE_CHANGED)
 					sortingDone = false;

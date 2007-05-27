@@ -56,12 +56,9 @@ int Utils:: mpi_recv(int* buf, int count, int source, int tag, MPI_Status *statu
 
 int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
 {
-	MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &mpi_status);
- 	/*if(Utils::mpi_recv(&bufSize, 1, 0, BUFFER_SIZE_TAG, &mpi_status) != 0)
-    {
-    	MPI::Finalize();
-    	return 1;
-    }*/
+	//MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &mpi_status);
+ 	if(Utils::mpi_recv(&bufSize, 1, 0, BUFFER_SIZE_TAG, &mpi_status) != 0)
+	    Utils::exitWithError();
     
     cout<<"Process #"<<myrank<<": I received bufferSize="<<bufSize<<endl;
     if(bufSize <= 0)
@@ -75,12 +72,9 @@ int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
 	for(int i=0; i< bufSize; i++)
    		buffer[i] = 0;	
 	
-	MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &mpi_status);
-	/*if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &mpi_status) != 0)
-    {
-    	MPI::Finalize();
-    	return 1;
-    }*/
+	//MPI_Recv(buffer, bufSize, MPI_INT, 0, WORK_TAG, MPI_COMM_WORLD, &mpi_status);
+	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &mpi_status) != 0)
+		Utils::exitWithError();
 	
 	return buffer;
 }
