@@ -14,6 +14,12 @@ void Utils::example()
 	cout<<"TEST";
 }
 
+void OemSorterWorker::exitWithError()
+{
+	MPI::Finalize();
+	exit(1);
+}
+
 int Utils::mpi_send(int* buf, int count, int dest, int tag)
 {
 	int ret = MPI_Send((void*) buf, count, MPI_INT,

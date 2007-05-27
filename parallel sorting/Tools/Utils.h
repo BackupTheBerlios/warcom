@@ -22,6 +22,8 @@ public:
 	
 	static int compare(int a, int b);
 	static int* recv_init_buffer(int& bufSize, int myrank, MPI_Status& status);
+	
+	static void exitWithError();
 };
 
 }
