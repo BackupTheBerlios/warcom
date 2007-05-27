@@ -14,7 +14,7 @@ void Utils::example()
 	cout<<"TEST";
 }
 
-void OemSorterWorker::exitWithError()
+void Utils::exitWithError()
 {
 	MPI::Finalize();
 	exit(1);
