@@ -2,11 +2,13 @@
 #define BSORTER_H_
 #include<iostream>
 #include "Sorter.h"
+#include "../Tools/Utils.h"
 
 #define ASCENDING true
 #define DESCENDING false
 
 using namespace std;
+using namespace tools;
 
 
 namespace sorting

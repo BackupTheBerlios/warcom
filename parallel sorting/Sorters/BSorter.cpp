@@ -48,7 +48,7 @@ void BSorter::bitonicSort(int lo, int n, bool dir)
 
 void BSorter::compare(int i, int j, bool dir)
 {
-	if(dir == (a[i] > a[j]))
+	if(dir == (!Utils::compare(a[j],a[i])))
 		exchange(i, j);
 }
 

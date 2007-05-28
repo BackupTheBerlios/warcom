@@ -3,10 +3,12 @@
 namespace sorting
 {
 
-OemSorterWorker::OemSorterWorker(string inFile, string outFile)
+OemSorterWorker::OemSorterWorker(string inFile, string outFile, int argc, char** args)
 {
 	this->inFile = inFile;
 	this->outFile = outFile;
+	this->argc = argc;
+	this->args = args;
 }
 
 int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufSize)
@@ -91,18 +93,19 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
 		Utils::exitWithError();
 	if(buffer != NULL)
 		delete(buffer);
+	
 }
 
 int OemSorterWorker::sort()
 {
-	MPI::Init();
+	MPI::Init(argc, args);
    	int myrank = COMM_WORLD.Get_rank(); 
    	int numprocs = COMM_WORLD.Get_size(); 
    	if(myrank == 0)
    		supervisorAction(numprocs);
    	else
    		slaveAction(numprocs, myrank);
-   	MPI::Finalize();
+	MPI::Finalize();
    	return 0;
 }
 }

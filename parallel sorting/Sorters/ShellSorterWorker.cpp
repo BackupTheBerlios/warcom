@@ -3,16 +3,18 @@
 namespace sorting
 {
 
-ShellSorterWorker::ShellSorterWorker(string inFile, string outFile)
+ShellSorterWorker::ShellSorterWorker(string inFile, string outFile, int argc, char** args)
 {
 	this->inFile = inFile;
 	this->outFile = outFile;
+	this->argc = argc;
+	this->args = args;
 }
 
 void ShellSorterWorker::sort()
 {
 	Status status; 
-   	MPI::Init();
+   	MPI::Init(argc, args);
    	int myrank = COMM_WORLD.Get_rank(); 
    	int numprocs = COMM_WORLD.Get_size();
    	

@@ -18,11 +18,13 @@ namespace sorting
 class OemSorterWorker
 {
 public:
-	OemSorterWorker(string inFile, string outFile);
+	OemSorterWorker(string inFile, string outFile, int argc, char** args);
 	int sort();
 	
 private:
 	string inFile;
+	int argc;
+	char** args;
 	string outFile; 
 	int canTransferInThisStep(int,int,int);
 	int findPartner(int, int,int);

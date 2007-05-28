@@ -22,10 +22,12 @@ namespace sorting
 class BSorterWorker
 {
 public:
-	BSorterWorker(string inFile, string outFile);
+	BSorterWorker(string inFile, string outFile, int argc, char** args);
 	int sort();
 	
 private:
+	int argc;
+	char** args;
 	string inFile;
 	string outFile; 
 

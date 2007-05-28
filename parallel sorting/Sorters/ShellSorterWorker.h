@@ -15,11 +15,13 @@ namespace sorting
 class ShellSorterWorker
 {
 public:
-	ShellSorterWorker(string inFile, string outFile);
+	ShellSorterWorker(string inFile, string outFile, int argc, char** args);
 	void sort();
 	
 private:
 	string inFile;
+	int argc;
+	char** args;
 	string outFile; 
 	
 	void manageStopCondition(int numprocs);

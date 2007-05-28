@@ -28,7 +28,7 @@ namespace sorting
 		int pivot = a[first];
 
 		for( int i = first+1 ; i <= last ; i++ ) {
-			if( (a[i] <= pivot) == dir  ) {
+			if(!Utils::compare(pivot, a[i]) == dir) {
 				p++;
 				swap( a[i], a[p] );
 			}

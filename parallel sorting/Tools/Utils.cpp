@@ -84,8 +84,13 @@ int Utils::compare(int a, int b)
 	struct timespec ts;
 	ts.tv_sec = 0;
     ts.tv_nsec = COMPARE_SLEEP_NS;
-    nanosleep (&ts, NULL);
-	
+   // nanosleep (&ts, NULL);
+	int temp;	
+for(int i=0;i<10000;i++)
+	{
+		temp+=2;
+		temp-=2;
+	}	
 	if(a < b)
 		return 1;
 	else

@@ -28,10 +28,10 @@ void BSorterWorker:: slaveAction(int numprocs, int myrank)
 	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status))
    		Utils::exitWithError(); 
 	//
-	cout<<"Process #"<<myrank<<" My buffer: ";		
-	for(int i=0; i<bufSize; i++)
-		cout<<buffer[i]<<" ";
-	cout<<endl;		
+	//cout<<"Process #"<<myrank<<" My buffer: ";		
+	//for(int i=0; i<bufSize; i++)
+	//	cout<<buffer[i]<<" ";
+	//cout<<endl;		
 	//
 	for(int i=0; i<log2(numprocs-1); ++i)
 	{
@@ -45,10 +45,10 @@ void BSorterWorker:: slaveAction(int numprocs, int myrank)
 		}			
 	}
 //	
-	cout<<"Sorted proces #: "<<myrank<<": ";
-	for(int i = 0; i<bufSize; ++i)
-		cout<< buffer[i]<<" ";
-	cout<<endl;	
+//	cout<<"Sorted proces #: "<<myrank<<": ";
+//	for(int i = 0; i<bufSize; ++i)
+//		cout<< buffer[i]<<" ";
+//	cout<<endl;	
 //
 	if(Utils::mpi_send(buffer, bufSize, 0, END_TAG))
 		Utils::exitWithError();	
@@ -57,10 +57,12 @@ void BSorterWorker:: slaveAction(int numprocs, int myrank)
 	
 }
 
-BSorterWorker::BSorterWorker(string inFile, string outFile)
+BSorterWorker::BSorterWorker(string inFile, string outFile, int argc, char** args)
 {
 	this->inFile = inFile;
 	this->outFile = outFile;
+	this->argc = argc;
+	this->args = args;
 }
 
 /* The most important procedure of this class. If process's myrank is 0 - process will load data, send parts od data to others and in the end will collect sorted data from other processes.
@@ -69,7 +71,7 @@ Otherwise process will communicate with rest and exchange data using function co
 int BSorterWorker::sort()
 {
 	Status status; 
-   	MPI::Init();
+   	MPI::Init(argc, args);
    	int myrank = COMM_WORLD.Get_rank(); 
    	int numprocs = COMM_WORLD.Get_size(); 
    	if(myrank == 0)

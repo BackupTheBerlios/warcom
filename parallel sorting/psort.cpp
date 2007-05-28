@@ -53,7 +53,7 @@ void localOem()
 	OemSorter* os = new OemSorter();
 	os->sort(buffer, bufferSize);
 	tt->endTask("sort", 1);
-	tt->startTask("display");
+	tt->startTask("save");
 	int fd = MyIO::my_open(outputFile.c_str(),O_CREAT | O_TRUNC | O_WRONLY );
 	if(fd != -1)
 	{
@@ -62,7 +62,7 @@ void localOem()
 			sizeof(int), SEEK_SET);
 		MyIO::my_close(fd);
 	}
-	tt->endTask("display",1);
+	tt->endTask("save",1);
 }
 
 void localBitonic()
@@ -77,11 +77,18 @@ void localBitonic()
 	BSorter* bs = new BSorter();
 	bs->sort(buffer, bufferSize);
 	tt->endTask("sort", 1);
-	tt->startTask("display");
-	for(int i=0;i<bufferSize;i++)
-		cout<<buffer[i]<<" ";
-	cout<<endl;
-	tt->endTask("display",1);
+	tt->startTask("save");
+	
+	int fd = MyIO::my_open(outputFile.c_str(),O_CREAT | O_TRUNC | O_WRONLY );
+        if(fd != -1)
+        {
+                MyIO::my_write(fd, &bufferSize, sizeof(int), 0, SEEK_CUR);
+                MyIO::my_write(fd, buffer, bufferSize * sizeof(int),
+                        sizeof(int), SEEK_SET);
+                MyIO::my_close(fd);
+        }
+
+	tt->endTask("save",1);
 }
 
 void localShell()
@@ -96,11 +103,16 @@ void localShell()
 	ShellLocalSorter* shlocs = new ShellLocalSorter();
 	shlocs->sort(buffer, bufferSize);
 	tt->endTask("sort", 1);
-	tt->startTask("display");
-	for(int i=0;i<bufferSize;i++)
-		cout<<buffer[i]<<" ";
-	cout<<endl;
-	tt->endTask("display",1);
+	tt->startTask("save");
+	int fd = MyIO::my_open(outputFile.c_str(),O_CREAT | O_TRUNC | O_WRONLY );
+        if(fd != -1)
+        {
+                MyIO::my_write(fd, &bufferSize, sizeof(int), 0, SEEK_CUR);
+                MyIO::my_write(fd, buffer, bufferSize * sizeof(int),
+                        sizeof(int), SEEK_SET);
+                MyIO::my_close(fd);
+        }
+	tt->endTask("save",1);
 }
 
 bool checkInput(char* args[], int argc)
@@ -134,17 +146,17 @@ int main(int argc, char* args[])
 	{
 		if(oem)
 		{
-			 OemSorterWorker* osw = new OemSorterWorker(inputFile, outputFile);
+			 OemSorterWorker* osw = new OemSorterWorker(inputFile, outputFile, argc, args);
 			 osw->sort(); 
 		}
 		if(shell)
 		{
-			ShellSorterWorker* shsw = new ShellSorterWorker(inputFile, outputFile);
+			ShellSorterWorker* shsw = new ShellSorterWorker(inputFile, outputFile, argc, args);
 			shsw->sort();
 		}	
 		if(bitonic)
 		{
-			BSorterWorker* bsw = new BSorterWorker(inputFile, outputFile);
+			BSorterWorker* bsw = new BSorterWorker(inputFile, outputFile, argc, args);
 			bsw->sort();
 		}
 		if(oemlocal)

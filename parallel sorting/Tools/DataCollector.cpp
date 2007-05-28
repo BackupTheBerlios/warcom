@@ -41,9 +41,8 @@ void DataCollector::collectData()
 			{
 				firstTask = 0;
 				tt->startTask("collect");
-				globalVal = val;
 			}
-			
+			globalVal += val;
 			int shift = (( i - 1 ) * (bufferSize) - globalVal) * sizeof(int) + start;
 			if(shift < start)
 				shift = start;
