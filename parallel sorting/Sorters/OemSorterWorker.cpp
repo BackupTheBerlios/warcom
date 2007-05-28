@@ -36,7 +36,7 @@ int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 {
 	if(j > 0 )
 	{
-		int forbiden = (int)pow(2,j - 1);
+		int forbiden = (int)pow(2,i - j);
 		int block = 2 << i;
 		int modulo = ((k - 1) % block) + 1;
 		if(modulo <= forbiden || modulo > (block - forbiden)) 
@@ -48,10 +48,10 @@ int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 int OemSorterWorker::findPartner(int k , int i ,int j)
 {
 	int block = 2 << i;
-	int partner =  k + i + 1 - j;
-	int expr = (( k - 1 ) % block) + i + 2 - j;
-	if(expr > block || !canTransferInThisStep(partner, i,j))
-		partner = k - i - 1 + j;
+	int partner =  k + (int)pow(2, i - j);
+	int expr = (( k - 1 ) % block) + (int)pow(2, i - j) + 1;
+	if(expr > block || !canTransferInThisStep(partner, i,j) || ((k % 2 == 1) && ( i >=2 ) && (i == j)))
+		partner = k - (int)pow(2, i - j);
 	return partner;
 }
 

@@ -13,7 +13,6 @@ DataCollector::DataCollector(string fileName, int pcsCount, int bufferSize)
 
 DataCollector::~DataCollector()
 {
-	MyIO::my_close(fd);
 }
 
 int DataCollector::removeGuars(int *buffer, int size)
@@ -54,6 +53,7 @@ void DataCollector::collectData()
 	int size = (pcsCount - 1) * bufferSize - globalVal;
 	MyIO::my_write(fd, &size, sizeof(int), 0, SEEK_SET);
 	tt->endTask("collect",1);
+	MyIO::my_close(fd);
 }
 
 }

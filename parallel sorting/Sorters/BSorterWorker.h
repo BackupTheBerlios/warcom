@@ -32,6 +32,8 @@ private:
 	int getIdToCompSplit(int etap, int myId,  int coutProc,int* idProces);
 	int getDirectionToCompSplit(int etap, int myId,  int coutProc,bool* direction, int idProces);
 	int compareSplit(int idProces,int myId, bool direction,int* buffer, int bufSize); 
+	void supervisorAction(int numprocs);
+	void slaveAction(int numprocs, int myrank);
 };
 }
 #endif /*BSORTERWORKER_H_*/
