@@ -16,7 +16,7 @@ namespace SONStock
         private double minYVal = double.PositiveInfinity;
         //private double maxYVal = double.NegativeInfinity;
         
-        private int xUnit, yUnit;
+        private int xUnit /*, yUnit*/;
         private int xValuesCounter = 15;
 
         public int XValuesCounter
@@ -44,7 +44,7 @@ namespace SONStock
         //distance from axis to border of a whole control
         private int yBorder = 5;
         //size of zoomin, zoomout button
-        private int zoomControlSize;
+        //private int zoomControlSize;
         //x-coordinate of a point (0,0) in image coordinate
         private int yDrawingStartValue;
         //y-coordinate of a point (0,0) in image coordinate
@@ -77,7 +77,7 @@ namespace SONStock
             this.dataBrushes.Clear();
             this.data.Clear();
             this.minYVal = double.PositiveInfinity;
-            this.xValuesCounter = 1;
+            //this.xValuesCounter = 1;
             this.dataSeriesComboBox.Items.Clear();
             this.estimatedValueMarker = -1;
             //this.estimatedValues = 0;

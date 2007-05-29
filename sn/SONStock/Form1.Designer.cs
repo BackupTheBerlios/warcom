@@ -50,7 +50,7 @@ namespace SONStock
             this.wyczyœæDaneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.elmanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.garchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            //this.garchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.elmanNetErrorTextBox = new System.Windows.Forms.TextBox();
             this.elmanNetErrorPanel = new System.Windows.Forms.Panel();
             this.errorLabel = new System.Windows.Forms.Label();
@@ -218,7 +218,7 @@ namespace SONStock
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.elmanToolStripMenuItem,
-            this.garchToolStripMenuItem});
+            /*this.garchToolStripMenuItem*/});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.settingsToolStripMenuItem.Text = "&Ustawienia";
@@ -232,10 +232,10 @@ namespace SONStock
             // 
             // garchToolStripMenuItem
             // 
-            this.garchToolStripMenuItem.Name = "garchToolStripMenuItem";
-            this.garchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.garchToolStripMenuItem.Text = "&Garch";
-            this.garchToolStripMenuItem.Click += new System.EventHandler(this.garchToolStripMenuItem_Click);
+            //this.garchToolStripMenuItem.Name = "garchToolStripMenuItem";
+            //this.garchToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            //this.garchToolStripMenuItem.Text = "&Garch";
+            //this.garchToolStripMenuItem.Click += new System.EventHandler(this.garchToolStripMenuItem_Click);
             // 
             // elmanNetErrorTextBox
             // 
@@ -339,7 +339,7 @@ namespace SONStock
         private System.Windows.Forms.ToolStripMenuItem newNetworkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem shrinkLearninDataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem elmanToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem garchToolStripMenuItem;
+        //private System.Windows.Forms.ToolStripMenuItem garchToolStripMenuItem;
     }
 }
 

@@ -12,7 +12,7 @@ namespace SONStock
     {
         private double eps;
         //TODO: dodac obsluge metody przewidywania (enum + Properties....)
-        private int estimationMethod;
+        //private int estimationMethod;
         private int estimationTime;
 
         public SettingsForm()
@@ -35,7 +35,7 @@ namespace SONStock
                 Properties.Settings.Default.estimationTime = (int)this.estTimeNumericUpDown.Value;
                 Properties.Settings.Default.hiddenLayerSize = (int)this.hiddenLayerNumericUpDown.Value;
                 Properties.Settings.Default.entryLayerSize = (int)this.entryLayerNumericUpDown.Value;
-                Properties.Settings.Default.estimationMethod = this.estMethodComboBox.SelectedIndex;
+                //Properties.Settings.Default.estimationMethod = this.estMethodComboBox.SelectedIndex;
                 Properties.Settings.Default.useTechnicalAnalysis = this.useTechnicalAnalysisCheckBox.Checked;
                 Properties.Settings.Default.Save();
                 this.DialogResult = DialogResult.OK;
@@ -61,7 +61,7 @@ namespace SONStock
             eps = Properties.Settings.Default.eps;
             estimationTime = Properties.Settings.Default.estimationTime;
 
-            this.estMethodComboBox.SelectedIndex = Properties.Settings.Default.estimationMethod;
+            //this.estMethodComboBox.SelectedIndex = Properties.Settings.Default.estimationMethod;
             this.epsTextBox.Text = eps.ToString();
             this.estTimeNumericUpDown.Value = estimationTime;
             this.entryLayerNumericUpDown.Value = Properties.Settings.Default.entryLayerSize;
