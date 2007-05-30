@@ -2,16 +2,24 @@
 
 TaskTimer::TaskTimer()
 {
-	time_t seconds;
-
-  seconds = time (NULL);
 }
 
+/*
+ * Starts counting time for a task with given name
+ * name - name of a task
+ */
 void TaskTimer::startTask(string name)
 {
 	tasks[name] = time(NULL);
 }
 
+/*
+ * Ends counting time for a task with given name
+ * name - name of a task
+ * showInfo - whether to display info about elapsed time
+ * return - number of elapsed time in seconds or -1 if task with given
+ * 			name doesn't exist
+ */
 int TaskTimer::endTask(string name, int showInfo)
 {
 	time_t now = time(NULL);

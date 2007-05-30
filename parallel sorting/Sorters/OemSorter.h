@@ -3,7 +3,6 @@
 #include<iostream>
 #include<stack>
 
-#include "Sorter.h"
 #include "../Tools/Utils.h"
 using namespace std;
 using namespace tools;

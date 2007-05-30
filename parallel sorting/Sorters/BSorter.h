@@ -1,7 +1,6 @@
 #ifndef BSORTER_H_
 #define BSORTER_H_
 #include<iostream>
-#include "Sorter.h"
 #include "../Tools/Utils.h"
 
 #define ASCENDING true
@@ -14,7 +13,7 @@ using namespace tools;
 namespace sorting
 {
 
-class BSorter : public Sorter
+class BSorter
 {
 public:
 	BSorter();

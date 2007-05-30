@@ -4,7 +4,6 @@
 #include<math.h>
 #include<mpi.h>
 
-#include "Sorter.h"
 #include "LocalQSorter.h"
 #include "../Tools/Utils.h"
 using namespace std;

@@ -59,14 +59,27 @@ int OemSorterWorker::findPartner(int k , int i ,int j)
 
 void OemSorterWorker::supervisorAction(int numprocs)
 {
+	int partner, bufSize;
 	TaskTimer* tt = new TaskTimer();
+	OemSorter* oem = new OemSorter();
    	tt->startTask("whole");
 	tt->startTask("load");
    	DataLoader dl(inFile, numprocs);
+   	bufSize = dl.getBufferSize();
    	dl.loadAndSendData();
 	tt->endTask("load",1);
-	DataCollector dc(outFile, numprocs,dl.getBufferSize());
-	dc.collectData();
+	DataCollector dc(outFile, numprocs, bufSize);
+	int* buffer;
+	oem->sort(buffer, bufSize);
+	for(int i=0;i<log2(numprocs);i++)
+		for(int j=0;j<=i;j++)
+				if(canTransferInThisStep(0, i, j))
+				{
+					partner = findPartner(0, i, j);
+					if(compareSplit(partner, 0, buffer, bufSize))
+						Utils::exitWithError();
+				}
+	dc.collectData(buffer);
 	tt->endTask("whole",1);
 }	
 
@@ -81,7 +94,7 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
    	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status))
    		Utils::exitWithError(); 
 	oem->sort(buffer, bufSize);
-	for(int i=0;i<log2(numprocs - 1);i++)
+	for(int i=0;i<log2(numprocs);i++)
 		for(int j=0;j<=i;j++)
 				if(canTransferInThisStep(myrank, i, j))
 				{

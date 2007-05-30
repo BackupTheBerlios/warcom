@@ -18,12 +18,15 @@ public:
 	DataCollector(string fileName, int pcsCount, int bufferSize);
 	~DataCollector();
 	void collectData();
+	void collectData(int *buffer);
+	void commonAction(int numProcs, int *buffer);
 private:
 	string fileName;
 	int pcsCount;
 	int bufferSize;
 	int fd;
-	int removeGuars(int* buffer, int size);
+	int removeGuards(int* buffer, int size);
+	
 };
 
 }
