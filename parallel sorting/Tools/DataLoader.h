@@ -19,6 +19,7 @@ namespace tools
 		private:
 			string fileName;
 			int fileh;
+			bool extended;
 			
 			int bufferSize;
 			//int* buffer;
@@ -30,7 +31,7 @@ namespace tools
 			int* loadData(int bufferNo);
 			
 		public:
-			DataLoader(string, int);
+			DataLoader(string, int, bool);
 			~DataLoader();
 			//int* loadData();
 

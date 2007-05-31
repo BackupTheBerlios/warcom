@@ -2,11 +2,12 @@
 
 namespace tools
 {
-	DataLoader::DataLoader(string fileName, int pcsCount)
+	DataLoader::DataLoader(string fileName, int pcsCount, bool extendedDL)
 	{
 		this->fileName = fileName;
 		//cout<<"File to perform: "<<this->fileName << endl;
 		this->pcsCount = pcsCount;
+		this->extended = extendedDL;
 		
 		request = new MPI_Request[pcsCount];
 		
@@ -22,8 +23,11 @@ namespace tools
 		//cout<<"setSize: "<<setSize<<endl;
 		
 		//this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/pcsCount : setSize/(pcsCount-1);
-		this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/(pcsCount-1) + 1 : setSize/(pcsCount-1);
-		//cout<<"bufferSize: "<<this->bufferSize<<endl;
+		if(extended)
+			this->bufferSize = (setSize%(pcsCount) != 0) ? setSize/(pcsCount) + 1 : setSize/(pcsCount);
+		else
+			this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/(pcsCount-1) + 1 : setSize/(pcsCount-1);
+		cout<<"bufferSize: "<<this->bufferSize<<endl;
 		
 		buffer = new int*[bufferSize];
 		for(int i=0; i< pcsCount; i++)
@@ -108,11 +112,11 @@ namespace tools
 			buff = loadData(i);
 			if(buff != NULL)
 			{
-				//cout<<"Sending buffer to "<<i<<endl;
-				/*cout<<". Buffer content: ";
+				cout<<"Sending buffer to "<<i<<endl;
+				cout<<". Buffer content: ";
 				for(int j=0; j<bufferSize; j++)
 					cout<<buff[j]<<" ";
-				cout<<endl;*/
+				cout<<endl;
 				MPI_Isend( buff, bufferSize, MPI_INT, i, WORK_TAG, MPI_COMM_WORLD, &request[i] );
 			}
 		}
