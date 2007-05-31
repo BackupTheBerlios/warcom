@@ -11,7 +11,7 @@ void BSorterWorker:: supervisorAction(int numprocs)
 	TaskTimer* tt = new TaskTimer();
    	tt->startTask("whole");
 	tt->startTask("load");
-	DataLoader dl(inFile, numprocs);
+	DataLoader dl(inFile, numprocs, true);
    	dl.loadAndSendData();	
 	buffer = dl.loadPrimeProcessData();
     bufSize = dl.getBufferSize() ;
@@ -35,7 +35,7 @@ void BSorterWorker:: supervisorAction(int numprocs)
 	
 	DataCollector dc(outFile, numprocs,dl.getBufferSize());
 	tt->startTask("collect");
-	dc.collectData();
+	dc.collectData(buffer);
 	tt->endTask("collect",1);	
 	tt->endTask("whole",1);	
 }	
