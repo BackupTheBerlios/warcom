@@ -5,14 +5,38 @@ namespace sorting
 
 void BSorterWorker:: supervisorAction(int numprocs)
 {
+	int bufSize,idProces,*buffer;
+	bool direction;
+	
 	TaskTimer* tt = new TaskTimer();
    	tt->startTask("whole");
 	tt->startTask("load");
 	DataLoader dl(inFile, numprocs);
-   	dl.loadAndSendData();
+   	dl.loadAndSendData();	
+	buffer = dl.loadPrimeProcessData();
+    bufSize = dl.getBufferSize() ;
 	tt->endTask("load",1);
+	
+	for(int i=0; i<log2(numprocs/*-1*/); ++i)
+	{
+		for(int j=i; j>=0; --j)
+		{
+			getIdToCompSplit(j,0,numprocs/*-1*/,&idProces);
+			getDirectionToCompSplit(i,0,numprocs/*-1*/,
+			&direction,idProces);
+			if(compareSplit(idProces, 0, direction, buffer, bufSize))
+				Utils::exitWithError(); 
+		}			
+	}
+		cout<<"Sorted proces #: 0: ";
+	for(int i = 0; i<bufSize; ++i)
+		cout<< buffer[i]<<" ";
+	cout<<endl;	
+	
 	DataCollector dc(outFile, numprocs,dl.getBufferSize());
+	tt->startTask("collect");
 	dc.collectData();
+	tt->endTask("collect",1);	
 	tt->endTask("whole",1);	
 }	
 void BSorterWorker:: slaveAction(int numprocs, int myrank)
@@ -33,23 +57,23 @@ void BSorterWorker:: slaveAction(int numprocs, int myrank)
 	//	cout<<buffer[i]<<" ";
 	//cout<<endl;		
 	//
-	for(int i=0; i<log2(numprocs-1); ++i)
+	for(int i=0; i<log2(numprocs/*-1*/); ++i)
 	{
 		for(int j=i; j>=0; --j)
 		{
-			getIdToCompSplit(j,myrank,numprocs-1,&idProces);
-			getDirectionToCompSplit(i,myrank,numprocs-1,
+			getIdToCompSplit(j,myrank,numprocs/*-1*/,&idProces);
+			getDirectionToCompSplit(i,myrank,numprocs/*-1*/,
 			&direction,idProces);
 			if(compareSplit(idProces, myrank, direction, buffer, bufSize))
 				Utils::exitWithError(); 
 		}			
 	}
-//	
-//	cout<<"Sorted proces #: "<<myrank<<": ";
-//	for(int i = 0; i<bufSize; ++i)
-//		cout<< buffer[i]<<" ";
-//	cout<<endl;	
-//
+	
+	cout<<"Sorted proces #: "<<myrank<<": ";
+	for(int i = 0; i<bufSize; ++i)
+		cout<< buffer[i]<<" ";
+	cout<<endl;	
+
 	if(Utils::mpi_send(buffer, bufSize, 0, END_TAG))
 		Utils::exitWithError();	
 	if(buffer != NULL)
@@ -117,8 +141,8 @@ function getDirectionToCompSplit
 int BSorterWorker:: getDirectionToCompSplit(int etap, int myId,  int coutProc,bool* direction, int idProces)
 {
 	int et = (int)pow(2, etap);	
-	myId-=1; //zeby byly od zera
-	idProces -=1;	
+	//myId-=1; //zeby byly od zera
+	//idProces -=1;	
 	if(myId%(et*4) < et*2 )
 	{
 		if(myId<idProces)
@@ -139,14 +163,14 @@ int BSorterWorker:: getDirectionToCompSplit(int etap, int myId,  int coutProc,bo
 
 int BSorterWorker:: getIdToCompSplit(int depth, int myId,  int coutProc, int* idProces)
 {
-	myId-=1; //zeby byly od zera
+	//myId-=1; //zeby byly od zera
 	int et = (int)pow(2, depth);	
 	int p;	
 	int m = myId%(et*2);		
 		
 	if(m<et)p = myId+et;
 	else p = myId-et;	
-	*idProces = p+1; //		
+	*idProces = p;//+1; //		
 	return 0;
 }
 
