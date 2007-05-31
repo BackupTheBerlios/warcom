@@ -3,6 +3,13 @@
 namespace sorting
 {
 
+/*
+ * Constructor
+ * inFile - file with data to save
+ * outFile - file where to save data
+ * argc - entry of the program
+ * args - number of arguments
+ */
 OemSorterWorker::OemSorterWorker(string inFile, string outFile, int argc, char** args)
 {
 	this->inFile = inFile;
@@ -11,6 +18,13 @@ OemSorterWorker::OemSorterWorker(string inFile, string outFile, int argc, char**
 	this->args = args;
 }
 
+/*
+ * Compare split operation
+ * idProcess - id of process with which compare split operation is process
+ * myId - id of process with which compare split operation is process
+ * buffer - to send, it also contains data after operation is finished
+ * bufSize - size of a buffer to send
+ */
 int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufSize)
 {	
 	
@@ -34,8 +48,15 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 	return 0;	
 }
 
+/*
+ * Checks whether process can transfer data in stage describe by i and j
+ * k - process id
+ * i and j - stage description
+ * return - boolean information whether can transfer
+ */
 int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 {
+	k = k + 1;
 	if(j > 0 )
 	{
 		int forbiden = (int)pow(2,i - j);
@@ -47,14 +68,21 @@ int OemSorterWorker::canTransferInThisStep(int k ,int i ,int j)
 	return 1;
 }
 
+/*
+ * Finds partner for a given process with which compare operation will be process
+ * k - process id
+ * i and j - stage description
+ * return - partner id
+ */
 int OemSorterWorker::findPartner(int k , int i ,int j)
 {
+	k = k + 1;
 	int block = 2 << i;
 	int partner =  k + (int)pow(2, i - j);
 	int expr = (( k - 1 ) % block) + (int)pow(2, i - j) + 1;
 	if(expr > block || !canTransferInThisStep(partner, i,j) || ((k % 2 == 1) && ( i >=2 ) && (i == j)))
 		partner = k - (int)pow(2, i - j);
-	return partner;
+	return partner - 1;
 }
 
 void OemSorterWorker::supervisorAction(int numprocs)
@@ -80,6 +108,8 @@ void OemSorterWorker::supervisorAction(int numprocs)
 						Utils::exitWithError();
 				}
 	dc.collectData(buffer);
+	/*DataCollector dc(outFile, numprocs, bufSize);
+	dc.collectData();*/
 	tt->endTask("whole",1);
 }	
 
@@ -94,7 +124,7 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
    	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status))
    		Utils::exitWithError(); 
 	oem->sort(buffer, bufSize);
-	for(int i=0;i<log2(numprocs);i++)
+	for(int i=0;i<log2(numprocs - 1);i++)
 		for(int j=0;j<=i;j++)
 				if(canTransferInThisStep(myrank, i, j))
 				{
@@ -109,6 +139,9 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
 	
 }
 
+/*
+ * Start process, decide which process make which action
+ */
 int OemSorterWorker::sort()
 {
 	MPI::Init(argc, args);

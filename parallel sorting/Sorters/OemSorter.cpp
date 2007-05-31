@@ -7,6 +7,12 @@ OemSorter::OemSorter()
 {
 }
 
+/*
+ * Sorts given array with odd-even mergeosort algorithm
+ * a - array to sort
+ * size - size of a array
+ * return - sorted array
+ */
 int* OemSorter::sort(int a[], int size)
 {
 	int n = size;
