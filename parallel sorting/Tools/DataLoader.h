@@ -33,9 +33,7 @@ namespace tools
 		public:
 			DataLoader(string, int, bool);
 			~DataLoader();
-			//int* loadData();
 
-			void saveData(int*, int size, string);
 			int loadAndSendData();
 			int* loadPrimeProcessData();
 			int getBufferSize() { return bufferSize;};

@@ -2,6 +2,10 @@
 
 namespace tools
 {
+	/*
+	 * Constructor
+	 * fileName - file with data
+	 */
 	FDataLoader::FDataLoader(string fileName)
 	{
 		this->fileName = fileName;
@@ -22,6 +26,9 @@ namespace tools
 			MyIO::my_close(fileh);
 	}
 	
+	/*
+	 * Destructor.
+	 */
 	FDataLoader::~FDataLoader()
 	{				
 		if(buffer != NULL)

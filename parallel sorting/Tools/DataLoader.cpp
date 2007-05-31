@@ -2,15 +2,19 @@
 
 namespace tools
 {
+	/*
+	 * Constructor
+	 * fileName - file with data
+	 * pcsCount - number of all process
+	 * extendedDL - true if buffer for prime process should be loaded, false otherwise
+	 */
 	DataLoader::DataLoader(string fileName, int pcsCount, bool extendedDL)
 	{
 		this->fileName = fileName;
-		//cout<<"File to perform: "<<this->fileName << endl;
 		this->pcsCount = pcsCount;
 		this->extended = extendedDL;
 		
 		request = new MPI_Request[pcsCount];
-		
 		fileh = MyIO::my_open(this->fileName.c_str(), O_RDONLY);
 		if(fileh == -1)
 		{
@@ -20,21 +24,20 @@ namespace tools
 			
 		int setSize = 0;
 		MyIO::my_read(fileh, &setSize,  sizeof(int),  0,  SEEK_CUR);
-		//cout<<"setSize: "<<setSize<<endl;
 		
-		//this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/pcsCount : setSize/(pcsCount-1);
 		if(extended)
 			this->bufferSize = (setSize%(pcsCount) != 0) ? setSize/(pcsCount) + 1 : setSize/(pcsCount);
 		else
 			this->bufferSize = (setSize%(pcsCount-1) != 0) ? setSize/(pcsCount-1) + 1 : setSize/(pcsCount-1);
-		cout<<"bufferSize: "<<this->bufferSize<<endl;
 		
 		buffer = new int*[bufferSize];
 		for(int i=0; i< pcsCount; i++)
 			buffer[i] = new int[bufferSize];
-	//	cout<<"Initialization for data loading done."<<endl<<"-------------"<<endl;
 	}
 	
+	/*
+	 * Destructor 
+	 */
 	DataLoader::~DataLoader()
 	{
 		MPI_Status s;
@@ -55,6 +58,12 @@ namespace tools
 			MyIO::my_close(fileh);
 	}
 	
+	/*
+	 * Loads data from file to buffer with bufferNo. If there is less data than buffer size,
+	 * then the rest of the buffer is going to be filled with sentinels (-1).
+	 * 
+	 * Returns loaded buffer. 
+	 */
 	int* DataLoader::loadData(int bufferNo)
 	{
 		if(fileh == -1 || bufferNo < 0 || bufferNo > pcsCount)
@@ -82,7 +91,13 @@ namespace tools
 		
 		return buffer[bufferNo];
 	}
-	
+
+	/*
+	 * Loads data from file to buffer for prime process. If there is less data than buffer size,
+	 * then the rest of the buffer is going to be filled with sentinels (-1).
+	 * 
+	 * Returns loaded buffer. 
+	 */	
 	int* DataLoader::loadPrimeProcessData()
 	{		
 		if(buffer[0] != NULL)
@@ -90,11 +105,13 @@ namespace tools
 				buffer[0] = 0;
 		return loadData(0);
 	}
-	
-	void DataLoader::saveData(int* array, int size, string outputFile)
-	{
-	}
 
+	/*
+	 * Loads data from file and sends buffers to MPI_COMM_WORLD processes. If there is less data than buffer size,
+	 * then the rest of the buffer is going to be filled with sentinels (-1).
+	 * 
+	 * Returns 0 if done. 
+	 */
 	int DataLoader::loadAndSendData()
 	{
 		int* buff;
@@ -112,8 +129,8 @@ namespace tools
 			buff = loadData(i);
 			if(buff != NULL)
 			{
-				cout<<"Sending buffer to "<<i<<endl;
-				cout<<". Buffer content: ";
+				cout<<"Sending buffer to "<<i<<"."<<endl;
+				cout<<"Buffer content: ";
 				for(int j=0; j<bufferSize; j++)
 					cout<<buff[j]<<" ";
 				cout<<endl;

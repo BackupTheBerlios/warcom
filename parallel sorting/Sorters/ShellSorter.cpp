@@ -92,8 +92,8 @@ int* ShellSorter::sort(int a[], int size)
 		MPI_Barrier(MPI_COMM_WORLD);
 	}
 	
-	//cout<<"Process #"<<myId<<" completed sorting. "<<endl;
-	//display();
+	cout<<"Process #"<<myId<<" completed sorting. "<<endl;
+	display();
 	return a;
 }
 

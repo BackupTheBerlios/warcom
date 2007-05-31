@@ -30,7 +30,7 @@ void ShellSorterWorker::sort()
    		tt->startTask("whole");
 		tt->startTask("load");
 		
-   		DataLoader dl(inFile, numprocs);
+   		DataLoader dl(inFile, numprocs, false);
 		dl.loadAndSendData();
 		tt->endTask("load",1);
 		

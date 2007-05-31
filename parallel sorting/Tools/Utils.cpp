@@ -54,6 +54,9 @@ int Utils:: mpi_recv(int* buf, int count, int source, int tag, MPI_Status *statu
 	}	
 }
 
+/*
+ * Receives first buffer with data to sort.
+ */
 int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
 {
 	//MPI_Recv(&bufSize, 1, MPI_INT, 0, BUFFER_SIZE_TAG, MPI_COMM_WORLD, &mpi_status);
@@ -79,14 +82,17 @@ int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
 	return buffer;
 }
 
+/*
+ * Compares two integers.
+ */
 int Utils::compare(int a, int b)
 {
-	struct timespec ts;
-	ts.tv_sec = 0;
-    ts.tv_nsec = COMPARE_SLEEP_NS;
-   // nanosleep (&ts, NULL);
+	//struct timespec ts;
+	//ts.tv_sec = 0;
+    //ts.tv_nsec = COMPARE_SLEEP_NS;
+   	// nanosleep (&ts, NULL);
 	int temp;	
-for(int i=0;i<10000;i++)
+	for(int i=0;i<10000;i++)
 	{
 		temp+=2;
 		temp-=2;

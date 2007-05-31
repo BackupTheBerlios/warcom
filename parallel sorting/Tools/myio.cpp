@@ -1,13 +1,12 @@
 #include "myio.h"
 
-//Projekt
 /*************************************************************************************************************************************
-Funkcje o nazwach rozpoczynajacych sie przedrostkiem "my_-" sa wrapperami funkcji systemowych. Jeli nie zaznaczono przy ich definicji
-inaczej, przyjmuja takie argumenty i zwracaja taka wartosc jak funkcja opakowywana.
+Functions with precondition "my_-" are system functions' wrappers.
+They get the same parameters and returns the same values like the original ones. Otherwise, it is specified in comments before definition. 
 *************************************************************************************************************************************/
 namespace tools
 {
-	//fd, buffer, n, offset - jak w write, offset, start - jak w lseek
+	//fd, buffer, n, offset - like in write, offset, start - like in lseek
 	size_t MyIO::my_read(int fd, void* buffer, size_t n, off_t offset, int start)
 	{
 		size_t res=0, overall=0;
@@ -32,7 +31,7 @@ namespace tools
 		return overall;
 	}
 	
-	//fd, buffer, n, offset - jak w write, offset, start - jak w lseek
+	//fd, buffer, n, offset - like in write, offset, start - like in lseek
 	size_t MyIO::my_write(int fd, const void *buffer, size_t n, off_t offset, int start)
 	{
 		size_t res=0, overall=0;
@@ -74,7 +73,7 @@ namespace tools
 		return res;
 	}
 	
-	//path - sciezka do pliku
+	//path - filepath
 	int MyIO::my_filesize(char* path)
 	{
 		static struct stat statbuf;
