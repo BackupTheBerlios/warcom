@@ -85,6 +85,9 @@ int OemSorterWorker::findPartner(int k , int i ,int j)
 	return partner - 1;
 }
 
+/*
+ * supervisor process action - load data , then sends and receives data, after all save data
+ */
 void OemSorterWorker::supervisorAction(int numprocs)
 {
 	int partner, bufSize;
@@ -99,6 +102,10 @@ void OemSorterWorker::supervisorAction(int numprocs)
 	DataCollector dc(outFile, numprocs, bufSize);
 	int* buffer;
 	oem->sort(buffer, bufSize);
+	cout<<"Jo "<<0<<endl;
+	for(int i = 0;i<bufSize;i++)
+		cout<<buffer[i]<<" ";
+	cout<<endl;
 	for(int i=0;i<log2(numprocs);i++)
 		for(int j=0;j<=i;j++)
 				if(canTransferInThisStep(0, i, j))
@@ -107,12 +114,19 @@ void OemSorterWorker::supervisorAction(int numprocs)
 					if(compareSplit(partner, 0, buffer, bufSize))
 						Utils::exitWithError();
 				}
+	cout<<"Jo "<<0<<endl;
+	for(int i = 0;i<bufSize;i++)
+		cout<<buffer[i]<<" ";
+	cout<<endl;
 	dc.collectData(buffer);
 	/*DataCollector dc(outFile, numprocs, bufSize);
 	dc.collectData();*/
 	tt->endTask("whole",1);
 }	
 
+/*
+ * Slave process action - only sends and receives data
+ */
 void OemSorterWorker::slaveAction(int numprocs, int myrank)
 {
 	OemSorter* oem = new OemSorter();
@@ -124,7 +138,11 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
    	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status))
    		Utils::exitWithError(); 
 	oem->sort(buffer, bufSize);
-	for(int i=0;i<log2(numprocs - 1);i++)
+	cout<<"Jo "<<myrank<<endl;
+	for(int i = 0;i<bufSize;i++)
+		cout<<buffer[i]<<" ";
+	cout<<endl;
+	for(int i=0;i<log2(numprocs);i++)
 		for(int j=0;j<=i;j++)
 				if(canTransferInThisStep(myrank, i, j))
 				{
@@ -132,6 +150,10 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
 					if(compareSplit(partner, myrank, buffer, bufSize))
 						Utils::exitWithError();
 				}
+	cout<<"Jo "<<myrank<<endl;
+	for(int i = 0;i<bufSize;i++)
+		cout<<buffer[i]<<" ";
+	cout<<endl;
 	if(Utils::mpi_send(buffer, bufSize, 0, END_TAG))
 		Utils::exitWithError();
 	if(buffer != NULL)
