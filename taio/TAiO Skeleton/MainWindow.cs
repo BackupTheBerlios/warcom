@@ -33,6 +33,10 @@ namespace Taio
         /// Interfejs do algorytmów.
         /// </summary>
         private IAlgorithm algorithm;
+        /// <summary>
+        /// Œcie¿ka dostêpu do katalogu roboczego
+        /// </summary>
+        private string path;
         private BackgroundWorker bw;
         private DateTime dt;
         private String text;
@@ -51,6 +55,8 @@ namespace Taio
             solutions = new List<Solution>();
             InitializeComponent();
             this.ChangeColor();
+            path = Directory.GetCurrentDirectory();
+            
         }
 
         #region Funkcje klasy
@@ -414,23 +420,23 @@ namespace Taio
         private void programHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // szuka w bin/Debug
-            FileInfo fileInfo = new FileInfo("Resources/help.pdf");
+            FileInfo fileInfo = new FileInfo(path + "/Resources/help.pdf");
 
             if (fileInfo.Exists)
-                System.Diagnostics.Process.Start("Resources/help.pdf");
+                System.Diagnostics.Process.Start(path + "/Resources/help.pdf");
             else
             {
                 // szuka w Resources w Taio Skeleton a nie w bin/Debug
-                fileInfo = new FileInfo("../../Resources/help.pdf");
+                fileInfo = new FileInfo(path + "/../../Resources/help.pdf");
                 if (fileInfo.Exists)
-                    System.Diagnostics.Process.Start("../../Resources/help.pdf");
+                    System.Diagnostics.Process.Start(path + "/../../Resources/help.pdf");
                 else
                 {
-                    fileInfo = new FileInfo("help.pdf");
+                    fileInfo = new FileInfo(path + "help.pdf");
                     if (fileInfo.Exists)
-                        System.Diagnostics.Process.Start("help.pdf");
+                        System.Diagnostics.Process.Start(path + "help.pdf");
                     else
-                        MessageBox.Show("Brak pliku pomocy help.pdf w katalogu Resources i w bie¿¹cym katalogu", "Informacja", MessageBoxButtons.OK);
+                        MessageBox.Show("Brak pliku pomocy help.pdf w katalogu Resources i w katalogu roboczym", "Informacja", MessageBoxButtons.OK);
                 }
             }
         }
