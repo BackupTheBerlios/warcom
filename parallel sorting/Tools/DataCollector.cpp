@@ -43,11 +43,12 @@ int DataCollector::removeGuards(int *buffer, int size)
 void DataCollector::commonAction(int numProcs, int* buffer2)
 {
 	int* buffer = new int[this->bufferSize];
-	int start =(int)sizeof(int), firstTask = 1, globalVal = 0;
+	int start =(int)sizeof(int), firstTask = 1, globalVal = 0, move = 1;
 	MPI_Request request;
 	MPI_Status status; 
 	TaskTimer *tt = new TaskTimer();
 	if(buffer2 != NULL)	{
+		move = 0;
 		globalVal = removeGuards(buffer2, bufferSize);
 		MyIO::my_write(fd, buffer2 + globalVal , 
 				(bufferSize - globalVal) * sizeof(int), start, SEEK_SET);	
@@ -60,7 +61,7 @@ void DataCollector::commonAction(int numProcs, int* buffer2)
 				tt->startTask("collect");
 			}
 			globalVal += val;
-			int shift = (i  * bufferSize - globalVal) * sizeof(int) + start;
+			int shift = (( i - move) * bufferSize - globalVal) * sizeof(int) + start;
 			if(shift < start)
 				shift = start;
 			MyIO::my_write(fd, buffer + val , 
