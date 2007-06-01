@@ -410,7 +410,7 @@ namespace Taio
         #endregion
         #endregion
 
-        #region Pawe³
+        #region Korekta
         /// <summary>
         /// Metoda sprwadza, czy prostok¹t o danych wspó³rzêdnych i wymiarach znajduje siê
         /// ju¿ na liœcie.
