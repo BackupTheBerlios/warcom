@@ -80,7 +80,7 @@ int OemSorterWorker::findPartner(int k , int i ,int j)
 	int block = 2 << i;
 	int partner =  k + (int)pow(2, i - j);
 	int expr = (( k - 1 ) % block) + (int)pow(2, i - j) + 1;
-	if(expr > block || !canTransferInThisStep(partner, i,j) || ((k % 2 == 1) && ( i >=2 ) && (i == j)))
+	if(expr > block || !canTransferInThisStep(partner - 1, i,j) || ((k % 2 == 1) && ( i >=2 ) && (i == j)))
 		partner = k - (int)pow(2, i - j);
 	return partner - 1;
 }
@@ -95,17 +95,13 @@ void OemSorterWorker::supervisorAction(int numprocs)
 	OemSorter* oem = new OemSorter();
    	tt->startTask("whole");
 	tt->startTask("load");
-   	DataLoader dl(inFile, numprocs);
+   	DataLoader dl(inFile, numprocs, true);
    	bufSize = dl.getBufferSize();
    	dl.loadAndSendData();
 	tt->endTask("load",1);
 	DataCollector dc(outFile, numprocs, bufSize);
-	int* buffer;
+	int* buffer = dl.loadPrimeProcessData();
 	oem->sort(buffer, bufSize);
-	cout<<"Jo "<<0<<endl;
-	for(int i = 0;i<bufSize;i++)
-		cout<<buffer[i]<<" ";
-	cout<<endl;
 	for(int i=0;i<log2(numprocs);i++)
 		for(int j=0;j<=i;j++)
 				if(canTransferInThisStep(0, i, j))
@@ -114,13 +110,7 @@ void OemSorterWorker::supervisorAction(int numprocs)
 					if(compareSplit(partner, 0, buffer, bufSize))
 						Utils::exitWithError();
 				}
-	cout<<"Jo "<<0<<endl;
-	for(int i = 0;i<bufSize;i++)
-		cout<<buffer[i]<<" ";
-	cout<<endl;
 	dc.collectData(buffer);
-	/*DataCollector dc(outFile, numprocs, bufSize);
-	dc.collectData();*/
 	tt->endTask("whole",1);
 }	
 
@@ -138,10 +128,6 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
    	if(Utils::mpi_recv(buffer, bufSize, 0, WORK_TAG, &status))
    		Utils::exitWithError(); 
 	oem->sort(buffer, bufSize);
-	cout<<"Jo "<<myrank<<endl;
-	for(int i = 0;i<bufSize;i++)
-		cout<<buffer[i]<<" ";
-	cout<<endl;
 	for(int i=0;i<log2(numprocs);i++)
 		for(int j=0;j<=i;j++)
 				if(canTransferInThisStep(myrank, i, j))
@@ -150,10 +136,6 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
 					if(compareSplit(partner, myrank, buffer, bufSize))
 						Utils::exitWithError();
 				}
-	cout<<"Jo "<<myrank<<endl;
-	for(int i = 0;i<bufSize;i++)
-		cout<<buffer[i]<<" ";
-	cout<<endl;
 	if(Utils::mpi_send(buffer, bufSize, 0, END_TAG))
 		Utils::exitWithError();
 	if(buffer != NULL)
