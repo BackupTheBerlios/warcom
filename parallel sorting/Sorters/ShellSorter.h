@@ -46,10 +46,10 @@ private:
 	
 	
 	int getPIDForCompSplit(int myId, int sortPcsCount, int stage);
-	//int getPIDForCompSplit(int stage);
 	int compareSplit(int otherPId, int myId, int* buffer, int bufferSize);
 	int compareSplit(int otherPId, int myId, int* buffer, int bufferSize, bool& changed);
-	//int compareSplit(int otherPId);
+	void saveSortedBufferPart(bool greaterPart, int* destinationBuffer, int bufferSize, int* sortedBuffer);
+
 };
 
 }

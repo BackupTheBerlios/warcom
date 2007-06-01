@@ -3,6 +3,13 @@
 namespace sorting
 {
 
+/*
+ * Constructor
+ * inFile - file with data to save
+ * outFile - file where to save data
+ * args - entry of the program
+ * argc - number of arguments
+ */
 ShellSorterWorker::ShellSorterWorker(string inFile, string outFile, int argc, char** args)
 {
 	this->inFile = inFile;
@@ -11,33 +18,32 @@ ShellSorterWorker::ShellSorterWorker(string inFile, string outFile, int argc, ch
 	this->args = args;
 }
 
+/*
+ * Main ShellSorterWOrker function.
+ * For prime process it creates DataLoader and sends data to sorting processes,
+ * then manages distributed stop condition, and finally creates DataCollector,
+ * receives sorted data from sorting processes and save it.
+ */
 void ShellSorterWorker::sort()
 {
-	Status status; 
    	MPI::Init(argc, args);
    	int myrank = COMM_WORLD.Get_rank(); 
    	int numprocs = COMM_WORLD.Get_size();
-   	
    	MPI_Status mpi_status;
    	MPI_Request request;
-   	
-   	int* buffer;
-   	int bufSize;
+   	int *buffer, bufSize;
    	
    	if(myrank == 0)
    	{
    		TaskTimer* tt = new TaskTimer();
    		tt->startTask("whole");
-		tt->startTask("load");
-		
+		tt->startTask("load");		
    		DataLoader dl(inFile, numprocs, false);
 		dl.loadAndSendData();
 		tt->endTask("load",1);
 		
 		//in sorter - before entering 2nd phase
-		//cout<<"Process #0 before msc barrier"<<endl;
 		MPI_Barrier(MPI_COMM_WORLD);
-		//cout<<"Process #0 after msc barrier"<<endl;
 		manageStopCondition(numprocs);
 		
 		DataCollector dc(outFile, numprocs,dl.getBufferSize());
@@ -46,46 +52,41 @@ void ShellSorterWorker::sort()
    	}
    	else
    	{
-   		//cout<<"allSortersCount = "<< numprocs-1<<endl;
-   		ShellSorter* shells = new ShellSorter(myrank, numprocs-1);
-   		
+   		ShellSorter* shells = new ShellSorter(myrank, numprocs-1);	
 		buffer = Utils::recv_init_buffer(bufSize, myrank, mpi_status);
-		//cout<<"Process #"<<myrank<<": Buffer received"<<endl;
-		//displayBuffer("Buffer received");
-		
 		
 		if(buffer != NULL)
 			buffer = shells->sort(buffer, bufSize);
-		
-		//wysłać procesowi głownemu
-		//MPI_Send( buffer, bufSize, MPI_INT, 0, END_TAG, MPI_COMM_WORLD);
+		//sending sorted buffer to prime process
 		if(Utils::mpi_send(buffer, bufSize, 0, END_TAG)!= 0)
 				Utils::exitWithError();
-		
 		if(buffer != NULL)
 			delete(buffer);
    	}
-   	
    	MPI::Finalize();
 }
 
+/*
+ * Manages distributed stop condition.
+ * Receives change report (whether local buffer has changed after last odd-even phase) 
+ * from each of sorting process (OE_CHANGED or OE_UNCHANGED) and sends them command 
+ * OE_SORTING_DONE (if there were no changes in all buffers) or OE_SORTING_DONE (if at least one process submitted changes). 
+ * 
+ * numprocs - number of all processes
+ */
 void ShellSorterWorker::manageStopCondition(int numprocs)
 {	
 	   	MPI_Status mpi_status;
    		MPI_Request request;	
 	
 		bool done = false;
-		//while(!done)
 		for(int i=1; i<numprocs; i++)
 		{
 			int noChangesRes;
 			bool sortingDone = true;
 			
-			
-			
 			for(int i=1; i<numprocs; i++)
 			{
-				//MPI_Recv(&noChangesRes, 1, MPI_INT, i, OE_RESULT, MPI_COMM_WORLD, &mpi_status);
 				if(Utils::mpi_recv(&noChangesRes, 1, i, OE_RESULT, &mpi_status)!= 0)
 						Utils::exitWithError();
 				//cout<<"Changes report received from #"<<i<<endl;
@@ -101,18 +102,20 @@ void ShellSorterWorker::manageStopCondition(int numprocs)
 			}
 				
 			for(int i=1; i<numprocs; i++)
-			{
-				//cout<<"Sending stop condition to #"<<i<<endl;			
-				MPI_Isend(&res, 1, MPI_INT, i, OE_STOP_CONDITION, MPI_COMM_WORLD, &request );
-			}
+				MPI_Isend(&res, 1, MPI_INT, i, OE_STOP_CONDITION, MPI_COMM_WORLD, &request);
 			
 			if(done)
 				return;
-			
 			MPI_Barrier(MPI_COMM_WORLD);
 		}
 }
 
+/*
+ * Displays buffer and prints comment on stdout.
+ * idProcess - id of process with which compare split operation is process
+ * buffer - contains data to display
+ * bufSize - size of a buffer to display
+ */
 void ShellSorterWorker::displayBuffer(int* buffer, int bufSize, string comment)
 {
 		cout<<comment<<endl;
