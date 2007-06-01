@@ -28,10 +28,10 @@ void BSorterWorker:: supervisorAction(int numprocs)
 				Utils::exitWithError(); 
 		}			
 	}
-		cout<<"Sorted proces #: 0: ";
-	for(int i = 0; i<bufSize; ++i)
-		cout<< buffer[i]<<" ";
-	cout<<endl;	
+	//	cout<<"Sorted proces #: 0: ";
+	//for(int i = 0; i<bufSize; ++i)
+	//	cout<< buffer[i]<<" ";
+	//cout<<endl;	
 	
 	DataCollector dc(outFile, numprocs,dl.getBufferSize());
 	tt->startTask("collect");
@@ -69,10 +69,10 @@ void BSorterWorker:: slaveAction(int numprocs, int myrank)
 		}			
 	}
 	
-	cout<<"Sorted proces #: "<<myrank<<": ";
-	for(int i = 0; i<bufSize; ++i)
-		cout<< buffer[i]<<" ";
-	cout<<endl;	
+	//cout<<"Sorted proces #: "<<myrank<<": ";
+	//for(int i = 0; i<bufSize; ++i)
+	//	cout<< buffer[i]<<" ";
+	//cout<<endl;	
 
 	if(Utils::mpi_send(buffer, bufSize, 0, END_TAG))
 		Utils::exitWithError();	
