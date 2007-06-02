@@ -103,7 +103,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the largest area without removing it.
+        /// Zwraca prostok¹t o najwiêkszym polu bez usuwania go z list
         /// </summary>
         /// <returns></returns>
         public Rectangle PeekLargestRect()
@@ -115,7 +115,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the largest area and removes it from lists.
+        /// Zwraca prostok¹t o najwiêkszym polu i usuwa go z list
         /// </summary>
         /// <returns></returns>
         public Rectangle GetLargestRect()
@@ -124,7 +124,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the smallest area without removing it.
+        /// Zwraca prostok¹t o najmniejszym polu bez usuwania go z list
         /// </summary>
         /// <returns></returns>
         public Rectangle PeekSmallestRect()
@@ -136,7 +136,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the smallest area and removes it from lists.
+        /// Zwraca prostok¹t o najmniejszym polu i usuwa go z list
         /// </summary>
         /// <returns></returns>
         public Rectangle GetSmallestRect()
@@ -145,7 +145,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the longest side without removing it. If two or more rectangles have the same longest side, the largest one is chosen.
+        /// Zwraca prostok¹t o najd³u¿szym boku bez usuwania go z list. Jeœli dwa lub wiêcej prostok¹tów ma taki sam d³u¿szy bok, zwracany jest ten o najwiêkszym polu.
         /// </summary>
         /// <returns></returns>
         public Rectangle PeekLongestRect()
@@ -171,9 +171,9 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the longest side shorter or equal maxSideLength without removing it.
+        /// Zwraca prosotk¹t o d³u¿szym boku krótszym lub równym  maxSideLength bez usuwania go.
         /// </summary>
-        /// <param name="maxSideLength">Maximal accepted side length</param>
+        /// <param name="maxSideLength">Maksymalna akceptowana d³ugoœæ boku</param>
         /// <returns></returns>
         public Rectangle PeekLongestRect(int maxSideLength)
         {
@@ -211,7 +211,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the longest side and removes it from lists.
+        /// Zwraca prostok¹t o najd³u¿szym boku i usuwa go z list.
         /// </summary>
         /// <returns></returns>
         public Rectangle GetLongestRect()
@@ -220,7 +220,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns a rectangle with the longest side shorter or equal maxSideLength and removes it from lists.
+        /// Zwraca prostok¹t o najd³u¿szym boku krótszym lub równym maxSideLength i usuwa go z list
         /// </summary>
         /// <param name="maxSideLength">Maximal accepted side length</param>
         /// <returns></returns>
@@ -233,7 +233,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns the smallest rectangle with longer side not shorter than given value without removing it from lists.
+        /// Zwraca prostok¹t o najmniejszym polu który ma bok d³u¿szy lub równy minSide bez usuwania go z list
         /// </summary>
         /// <param name="minSide"></param>
         /// <returns></returns>
@@ -267,7 +267,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns the smallest rectangle with longer side not shorter than given value and removes it from lists.
+        /// /// Zwraca prostok¹t o najmniejszym polu który ma bok krótszy lub równy maxSideLength bez usuwania go z list
         /// </summary>
         /// <param name="minSide"></param>
         /// <returns></returns>
@@ -277,7 +277,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns the smallest rectangle covering a rectangle with given sides without removing it from lists.
+        /// Zwraca najmniejszy prosotk¹t pokrywaj¹cy prostok¹t o zadanych bokach bez usuwania go z list.
         /// </summary>
         /// <param name="sideA"></param>
         /// <param name="sideB"></param>
@@ -327,7 +327,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Returns the smallest rectangle covering a rectangle with given sides and removes it from lists.
+        /// Zwraca najmniejszy prosotk¹t pokrywaj¹cy prostok¹t o zadanych bokach i usuwa go z list.
         /// </summary>
         /// <param name="sideA"></param>
         /// <param name="sideB"></param>
@@ -338,7 +338,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Removes rectangle r from lists.
+        /// Usuwa prostok¹t r z list.
         /// </summary>
         /// <param name="r">Rectangle to remove.</param>
         public void RemoveRectangle(Rectangle r)
@@ -354,7 +354,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Indicates whether the RectanglesList is empty.
+        /// Czy listy s¹ puste.
         /// </summary>
         /// <returns></returns>
         public bool IsEmpty()
@@ -363,7 +363,7 @@ namespace Taio
         }
 
         /// <summary>
-        /// Gets the number of elements currently contained in the RectanglesList.
+        /// Liczba aktualnie przechowywanych prostok¹tów w RectanglesList.
         /// </summary>
         /// <returns></returns>
         public int Count()

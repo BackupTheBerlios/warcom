@@ -20,7 +20,7 @@ namespace Taio
         private static int counter = 1;
 
 
-        #region Constructors
+        #region Konstruktory
         /// <summary>
         /// 
         /// </summary>
@@ -114,7 +114,7 @@ namespace Taio
             : this(leftTop, rightDown, counter++) { }
         #endregion
 
-        #region Geometry
+        #region Geometria
         /// <summary>
         /// Czy prostok¹t pokrywa prostok¹t r
         /// </summary>
@@ -242,7 +242,7 @@ namespace Taio
         }
         #endregion
 
-        #region Edition
+        #region Edycja
         /// <summary>
         /// Zmieñ rozmiary prostok¹ta (przesuñ prawy dolny wierzcho³ek, nie zmieniaj¹c lewego górnego)
         /// </summary>
@@ -346,7 +346,7 @@ namespace Taio
         }
         #endregion
 
-        #region Accessors
+        #region Akcesory
         /// <summary>
         /// Lewy górny wierzcho³ek
         /// </summary>
@@ -463,7 +463,7 @@ namespace Taio
         }
         #endregion
 
-        #region Comparing
+        #region Porównywanie
 
         public int CompareTo(Rectangle rhs)
         {

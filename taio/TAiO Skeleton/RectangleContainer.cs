@@ -16,7 +16,7 @@ namespace Taio
         private Rectangle maxPossibleRect;
         private bool isCorrectRectangle = false;
 
-        #region Constructors
+        #region Konstruktory
         /// <summary>
         /// 
         /// </summary>
@@ -27,7 +27,7 @@ namespace Taio
         }
         #endregion
 
-        #region Accessors
+        #region Akcesory
         /// <summary>
         /// Lista prostok¹tów w kontenerze
         /// </summary>
@@ -123,7 +123,7 @@ namespace Taio
         }
         #endregion
 
-        #region Insert methods
+        #region Metody wstawiaj¹ce
         /// <summary>
         /// Wstawia prostok¹ty z listy do kontenera
         /// </summary>
