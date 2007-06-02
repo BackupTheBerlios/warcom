@@ -82,10 +82,7 @@ namespace Taio.Algorithms
                 if (container.IsCorrectRectangle)
                     continue;
 
-                //k = rectanglesList.Count;
-
-                //k-ty krok to SimpleMend czyli proste zalepianie (³atanie)
-                //w kazdym kroku powinien byæ chyba tylko jeden emptyField?
+                //k-ty krok to SimpleMend czyli proste zalepianie
                 int pathWidth = n.ShorterSide;
                 for (int i = 0; i < k - 1; i++)
                 {
@@ -165,7 +162,7 @@ namespace Taio.Algorithms
         }
 
         /// <summary>
-        /// Tries to mend empty fields using smallest covering rectangles.
+        /// Próbuje za³ataæ puste pola u¿ywaj¹c najmniejszych pokrywaj¹cych prostok¹tów
         /// </summary>
         /// <param name="container"></param>
         private void SimpleMend(RectangleContainer container)
@@ -192,7 +189,7 @@ namespace Taio.Algorithms
         }
 
         /// <summary>
-        /// Tries to mend first empty field on container's EmptyFields list using rectangle r
+        /// Próbuje pierwsze puste pole z listy u¿ywaj¹c najmniejszych pokrywaj¹cych prostok¹tów
         /// </summary>
         /// <param name="container"></param>
         /// <param name="r"></param>
@@ -222,7 +219,12 @@ namespace Taio.Algorithms
         }
 
 
-
+        /// <summary>
+        /// Sprawdza warunek poprawnoœci prostok¹ta
+        /// </summary>
+        /// <param name="sideA"></param>
+        /// <param name="sideB"></param>
+        /// <returns></returns>
         private bool IsShapeConditionValid(int sideA, int sideB)
         {
             double prop = sideA / (double)sideB;
