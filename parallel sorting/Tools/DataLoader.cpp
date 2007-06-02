@@ -129,11 +129,11 @@ namespace tools
 			buff = loadData(i);
 			if(buff != NULL)
 			{
-				cout<<"Sending buffer to "<<i<<"."<<endl;
+				/*cout<<"Sending buffer to "<<i<<"."<<endl;
 				cout<<"Buffer content: ";
 				for(int j=0; j<bufferSize; j++)
 					cout<<buff[j]<<" ";
-				cout<<endl;
+				cout<<endl;*/
 				MPI_Isend( buff, bufferSize, MPI_INT, i, WORK_TAG, MPI_COMM_WORLD, &request[i] );
 			}
 		}
