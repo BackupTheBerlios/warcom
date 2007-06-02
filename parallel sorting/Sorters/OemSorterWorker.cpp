@@ -19,7 +19,8 @@ OemSorterWorker::OemSorterWorker(string inFile, string outFile, int argc, char**
 }
 
 /*
- * Compare split operation
+ * Compare split operation - both processes send each other own buffer, then sort it
+ * after buffer is sorted, each process take only half of the buffer
  * idProcess - id of process with which compare split operation is process
  * myId - id of process with which compare split operation is process
  * buffer - to send, it also contains data after operation is finished
@@ -53,7 +54,8 @@ int OemSorterWorker::compareSplit(int idProcess, int myId, int* buffer, int bufS
 }
 
 /*
- * Checks whether process can transfer data in stage describe by i and j
+ * Checks whether process can transfer data in stage describe by i and j, permission
+ * is based on sorting network of size of number of procesess 
  * k - process id
  * i and j - stage description
  * return - boolean information whether can transfer
@@ -90,7 +92,10 @@ int OemSorterWorker::findPartner(int k , int i ,int j)
 }
 
 /*
- * supervisor process action - load data , then sends and receives data, after all save data
+ * supervisor process action - load data from a file , then sends parts of it
+ * to all other procesess, then take part in sorting.Then receives data from all
+ * processes. After all save data to the file
+ * 
  */
 void OemSorterWorker::supervisorAction(int numprocs)
 {
@@ -119,7 +124,8 @@ void OemSorterWorker::supervisorAction(int numprocs)
 }	
 
 /*
- * Slave process action - only sends and receives data
+ * Slave process action - action for normal sorting process. Receives data from
+ * supervisor process, and then go threw of all stages of sorting network algorithm
  */
 void OemSorterWorker::slaveAction(int numprocs, int myrank)
 {
@@ -148,7 +154,7 @@ void OemSorterWorker::slaveAction(int numprocs, int myrank)
 }
 
 /*
- * Start process, decide which process make which action
+ * Start process, decide which process takes which action
  */
 int OemSorterWorker::sort()
 {
