@@ -13,13 +13,23 @@ void Utils::example()
 {
 	cout<<"TEST";
 }
-
+/*
+* called in case of error, which determine the need to end program.
+* Calls MPI: Finalize() and exit with code of error.
+*/
 void Utils::exitWithError()
 {
 	MPI::Finalize();
 	exit(1);
 }
-
+/*
+* encapsulate operation MPI_Send and provide proper action in case of error. 
+*
+* buf - buffer with data to send
+* count - the size of buffer buf
+* dest - rank of process to which data will be sended
+* tag - the tag of operation 
+*/
 int Utils::mpi_send(int* buf, int count, int dest, int tag)
 {
 	int ret = MPI_Send((void*) buf, count, MPI_INT,
@@ -42,6 +52,14 @@ int Utils::mpi_send(int* buf, int count, int dest, int tag)
 		return 1;
 	}		
 }
+/*
+* encapsulate operation MPI_Recv and provide proper action in case of error. 
+* buf - buffer where receive data will be saven
+* count - the size of expected data and buffer
+* source - rank of process which will send data
+* tag - the tag of operation 
+* status - structure MPI_Status for operation MPI_Recv
+*/
 int Utils:: mpi_recv(int* buf, int count, int source, int tag, MPI_Status *status)
 {
 	int ret = MPI_Recv((void*) buf, count, MPI_INT, source, tag, MPI_COMM_WORLD, status);
@@ -50,12 +68,28 @@ int Utils:: mpi_recv(int* buf, int count, int source, int tag, MPI_Status *statu
 	else
 	{
 		cout<<"mpi_recv error: ";
+		if(ret == MPI_ERR_COMM)
+			cout<<"MPI_ERR_COMM";
+		if(ret == MPI_ERR_COUNT)
+			cout<<"MPI_ERR_COUNT";			
+		if(ret == MPI_ERR_TYPE)
+			cout<<"MPI_ERR_TYPE";
+		if(ret == MPI_ERR_TAG)
+			cout<<"MPI_ERR_TAG";
+		if(ret == MPI_ERR_RANK)
+			cout<<"MPI_ERR_RANK";	
 		return 1;
 	}	
 }
 
 /*
- * Receives first buffer with data to sort.
+ * Receives buffer with data to sort from prime process.
+ * First it calls mpi_recv to receive the size of data, then create buffer and
+ * calls mpi_recv to receive block of data.
+ * Returns buffer with data.
+ * bufSize - size of buffer
+ * myrank - id process which call function
+ * mpi_status - structure MPI_Status for operation MPI_Recv
  */
 int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
 {
@@ -84,6 +118,11 @@ int* Utils::recv_init_buffer(int& bufSize, int myrank, MPI_Status& mpi_status)
 
 /*
  * Compares two integers.
+ * Return 1 if first element is smaller than second and 0 otherwise.
+ * To slow down this operation and simulate  more expensive computations its provide 
+ * the busy waiting computation - 10000 itrations. 
+ * a - first element to compare
+ * b - second element to compare
  */
 int Utils::compare(int a, int b)
 {

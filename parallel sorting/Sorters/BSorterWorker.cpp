@@ -2,7 +2,51 @@
 
 namespace sorting
 {
+/*
+ * Constructor
+ * inFile - file with data to sort
+ * outFile - file where to save sorted data
+ * args - entry of the program
+ * argc - number of arguments
+ */
+BSorterWorker::BSorterWorker(string inFile, string outFile, int argc, char** args)
+{
+	this->inFile = inFile;
+	this->outFile = outFile;
+	this->argc = argc;
+	this->args = args;
+}
+/* 
+ * Main procedure of this class. 
+ * Prime process call function supervisorAction(numprocs),
+ * the rest of processes call slaveAction(numprocs,myrank).
+ */	
+int BSorterWorker::sort()
+{
+	Status status; 
+   	MPI::Init(argc, args);
+   	int myrank = COMM_WORLD.Get_rank(); 
+   	int numprocs = COMM_WORLD.Get_size(); 
+   	if(myrank == 0)
+		supervisorAction(numprocs);
+   	else
+		slaveAction(numprocs,myrank);
+   	MPI::Finalize();
+	return 0;
+}
 
+/* 
+* Function, which is called by prime process.
+* It create DataLoader, which load file and sends blocks of data to other processes.
+* Then it takes the last block of data - prime process also sorts data by proper calling 
+* function compareSplit(). 
+* To get information about id partner-proces to compareSplit and about direction of sorting 
+* in particular phase, process call functions:  getIdToCompSplit and getDirectionToCompSplit 
+* Finally creates DataCollector, which receives sorted data from sorting processes and 
+* save it (it saves also block of data, which was sorted by itself).
+*
+* numprocs - number of all processes
+*/
 void BSorterWorker:: supervisorAction(int numprocs)
 {
 	int bufSize,idProces,*buffer;
@@ -39,6 +83,16 @@ void BSorterWorker:: supervisorAction(int numprocs)
 	tt->endTask("collect",1);	
 	tt->endTask("whole",1);	
 }	
+
+/*
+* Function, which is called by sorting process (all without prime process).
+* It receive block of data from prime process (DataLoader), and sorts data by proper calling 
+* function compareSplit(). The information about parameters of calling compareSplit(),
+* is taken by calling functions: getIdToCompSplit() and	getDirectionToCompSplit().
+* Finally sorted block is sended to prime process (DataCollector).
+* numprocs -  number of all processes
+* myrank - id of process which call this function
+*/
 void BSorterWorker:: slaveAction(int numprocs, int myrank)
 {
 	MPI_Status status;
@@ -81,32 +135,20 @@ void BSorterWorker:: slaveAction(int numprocs, int myrank)
 	
 }
 
-BSorterWorker::BSorterWorker(string inFile, string outFile, int argc, char** args)
-{
-	this->inFile = inFile;
-	this->outFile = outFile;
-	this->argc = argc;
-	this->args = args;
-}
 
-/* The most important procedure of this class. If process's myrank is 0 - process will load data, send parts od data to others and in the end will collect sorted data from other processes.
-Otherwise process will communicate with rest and exchange data using function compareSplit. To get information about id partner-proces to compareSplit and about direction of sorting in particular stage, process call functions:  getIdToCompSplit and getDirectionToCompSplit 
-*/	
-int BSorterWorker::sort()
-{
-	Status status; 
-   	MPI::Init(argc, args);
-   	int myrank = COMM_WORLD.Get_rank(); 
-   	int numprocs = COMM_WORLD.Get_size(); 
-   	if(myrank == 0)
-		supervisorAction(numprocs);
-   	else
-		slaveAction(numprocs,myrank);
-   	MPI::Finalize();
-	return 0;
-}
+/*
+* By this function process communicates with rest of processes and exchange data.
+* It starts from sending its own block of data, then it receives the block of data from process 
+* with idProces. It sorts the sequence of data using LocalQSorter.
+* Then it save greater or lower part of sequence - witch is determined by parameter direction.
 
-
+* idProces - rank of process which is parner in this calling function compareSplit
+* myId - rank of process which call function
+* direction - ascending or descending, information which part of data - lower or greater - should
+*		be saven by process
+* buffer - buffer with data
+* bufSize - size of buffer
+*/
 int BSorterWorker:: compareSplit(int idProces, int myId, bool direction, int* buffer, int bufSize)
 {	
 	MPI_Request request;
@@ -120,7 +162,7 @@ int BSorterWorker:: compareSplit(int idProces, int myId, bool direction, int* bu
 		return 1;
 	
 	for(int i = 0; i<bufSize; ++i)
-		buffer2[i+bufSize] = buffer[i];//moze to po Isend a przed recv
+		buffer2[i+bufSize] = buffer[i];
 	
 	lqs->localSort(ASCENDING); 
 	if(direction == ASCENDING)
@@ -136,9 +178,18 @@ int BSorterWorker:: compareSplit(int idProces, int myId, bool direction, int* bu
 }
 
 /*
-function getDirectionToCompSplit 
-*/
-int BSorterWorker:: getDirectionToCompSplit(int etap, int myId,  int coutProc,bool* direction, int idProces)
+ * Gets direction (ASCENDING or DESCENDING)- information which part(lower or greater) of 
+ * sequence (which will be sorted in CompareSplit()) should be saven in operation CompareSlit()
+ *
+ * etap - current phase of sorting 
+ * myId - rank of process calling this function
+ * coutProc - a number of sorting processes
+ * direction - information which part(lower or greater) of sorted in CompareSplit()
+ * sequence should be saven in operation COmpareSlit()
+ * idProces - rank of process, which take part in operation CompareSplit(), and which save another part
+ *		of sequence
+ */
+int BSorterWorker:: getDirectionToCompSplit(int etap, int myId,  int coutProc, bool* direction, int idProces)
 {
 	int et = (int)pow(2, etap);	
 	//myId-=1; //zeby byly od zera
@@ -161,6 +212,13 @@ int BSorterWorker:: getDirectionToCompSplit(int etap, int myId,  int coutProc,bo
 	return 0;	
 }
 
+/*
+* Gets a rank of process, which will take part in operation CompareSplit()
+* depth - the depth of current phase of sorting
+* myId - rank of process calling this function
+* coutProc - a number of sorting processes
+* idProces - rank of process, which will take part in operation CompareSplit()
+*/
 int BSorterWorker:: getIdToCompSplit(int depth, int myId,  int coutProc, int* idProces)
 {
 	//myId-=1; //zeby byly od zera
