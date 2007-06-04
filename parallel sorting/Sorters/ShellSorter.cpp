@@ -84,8 +84,8 @@ int* ShellSorter::sort(int a[], int size)
 			cout<<"Stop condition receive error in pcs #"<<myId<<"!!!"<<endl;
 		MPI_Barrier(MPI_COMM_WORLD);
 	}
-	cout<<"Process #"<<myId<<" completed sorting. "<<endl;
-	display();
+	//cout<<"Process #"<<myId<<" completed sorting. "<<endl;
+	//display();
 	return a;
 }
 
