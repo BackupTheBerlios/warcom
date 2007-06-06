@@ -23,7 +23,7 @@ namespace LinZadNajmnKwadr
             this.m = a.Rows;
             this.n = a.Columns;
             qk = new Matrix(1, a.Columns);
-            l = Math.Min(this.n, this.m - 1);
+            l = Math.Min(this.n , this.m - 1);
         }
 
         public void Orthogonalization()
@@ -76,10 +76,11 @@ namespace LinZadNajmnKwadr
             get {
                 if (q == null)
                 {
+
                     Matrix I = new Matrix(a.Rows, a.Rows);
                     for (int i = 0; i < I.Columns; i++)
                         I[i, i] = 1;
-                    this.q = new Matrix(a.Rows, a.Rows);
+                    this.q = new Matrix(a.Rows, a.Columns);
 
                     Matrix vk = new Matrix(a.Rows, 1);
                     for (int j = 0; j < this.m; j++)
@@ -93,9 +94,11 @@ namespace LinZadNajmnKwadr
                         for (int j = k; j < this.m; j++)
                             vk[j, 0] = a[j, k];
                         vkt = vk.Transposition();
-                        q *= I - (vk * vkt) / a[k, k];
+                        q *= I - ((vk * vkt) / a[k, k]);
                     }
                 }
+
+
                 return q;
             }
         }
