@@ -49,42 +49,13 @@ namespace LinZadNajmnKwadr
                 r -= leastSquare.GetQ().GetColumn(i) * x[i, 0];
             }
 
-            for (int k = n - 1; k > 0; k--)
+            for (int k = n - 1; k >= 0; k--)
             {
                 x[k, 0] /= leastSquare.GetR()[k, k];
-                for (int i = 0; i < k - 1 ; i++)
+                for (int i = 0; i < k ; i++)
                     x[i, 0] -= leastSquare.GetR()[i, k] * x[k, 0];
             }
         }
-
-        /*
-            r=b;
-            y=[];
-            for j=1:n
-              yj=Q(:,j)'*r;
-              r=r-Q(:,j)*yj;
-              y=[y ; yj];
-            end;
-            y=R\y;
-         */ 
-
-        /*public void Solve()
-        {
-            r = new Matrix(b);
-            for (int j = 0; j < n; j++)
-            {
-                double xj = (leastSquare.GetQ().GetColumn(j).Transposition() * r)[0,0];
-                r -= leastSquare.GetQ().GetColumn(j) * xj;
-                x[j, 0] = xj;
-            }
-            
-            for (int k = n - 1; k > 0; k--)
-            {
-                x[k, 0] /= leastSquare.GetR()[k, k];
-                for (int i = 0; i < k - 1; i++)
-                    x[i, 0] -= leastSquare.GetR()[i, k] * x[k, 0];
-            }
-        }*/
 
         public Matrix X
         {

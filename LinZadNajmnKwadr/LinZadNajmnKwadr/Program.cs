@@ -20,9 +20,10 @@ namespace LinZadNajmnKwadr
             double[] tab = new double[] { 1, 1, 1, 1, 2, 3, 1, 3, 6, 1,4, 10, 1, 5, 15, 1, 6, 21 };
                                         
             double[] tabb = new double[] { -3, 4, 1, 0,2,5 };
+            // rozw [ -1.8000, 0.9429, -0.0000]
             Matrix A = new Matrix(tab, 6, 3);
             Matrix b = new Matrix(tabb, 6, 1);                 //rozw [-0.25 0 0.25]
-
+            
             /*int an = 4, am = 3, bm = 4;
             double[] tab = new double[]{1, 2, 3, 
                                         4, 5, 6, 

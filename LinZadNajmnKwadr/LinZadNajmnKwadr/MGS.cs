@@ -25,39 +25,6 @@ namespace LinZadNajmnKwadr
             this.r = new Matrix(a.Columns, a.Columns);
         }
 
-        /*public void Orthogonalization()
-        {
-            if (a == null)
-                throw new ArgumentNullException();
-
-            for (int k = 0; k < n; k++)
-            {
-                q.SetColumn(k, a, k);
-                for (int i = 0; i < k - 1; i++)
-                {
-                    Matrix temp = q.GetColumn(i).Transposition() * q.GetColumn(k);
-                    r[i, k] = temp[0, 0];
-
-                    temp = q.GetColumn(k) - (q.GetColumn(i) * r[i, k]);
-                    q.SetColumn(k, temp, 0);
-                }
-                r[k, k] = q.GetColumn(k).Norm();
-                Matrix qk = q.GetColumn(k);
-                qk /= r[k, k];
-                q.SetColumn(k, qk, 0);
-            }
-        }*
-
-        /*
-         * for k=1:n
-                R(k,k) = norm(A(:,k));
-                Q(:,k) = A(:,k)/R(k,k);
-                
-         *      R(k,k+1:n) = Q(:,k)'*A(:,k+1:n);
-                A(:,k+1:n) = A(:,k+1:n) - Q(:,k)*R(k,k+1:n);
-            end
-         */
-
         public void Orthogonalization()
         {
             if (a == null)

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace LinZadNajmnKwadr
 {
@@ -9,7 +11,10 @@ namespace LinZadNajmnKwadr
 
         protected double[,] m;
         private int rows;
-        private int columns;	//ilosc wierszy i kolumn 
+        private int columns;	//ilosc wierszy i kolumn
+
+        private static Regex sizesRegex = new Regex(@"(?<rows>\d), *(?<columns>\d)", RegexOptions.Compiled);
+        private static Regex rowRegex = new Regex(@"(?<value>(\d(\.\d*){0,1} +))*", RegexOptions.Compiled);
 
         public int Rows
         {
@@ -56,6 +61,21 @@ namespace LinZadNajmnKwadr
             for (int i = 0; i < rows; i++)
                 for (int j = 0; j < columns; j++)
                     m[i, j] = array[i * columns + j];
+        }
+
+
+
+        public void SaveToFile(string filepath)
+        {
+            StreamWriter wrt = new StreamWriter(filepath);
+            wrt.WriteLine(this.rows + "," + this.columns);
+            for (int i = 0; i < this.rows; i++)
+            {
+                for (int j = 0; j < this.columns; j++)
+                    wrt.Write(this[i, j] + " ");
+                wrt.WriteLine();
+            }
+            wrt.Close();
         }
 
         public double this[int a, int b]
@@ -230,8 +250,6 @@ namespace LinZadNajmnKwadr
 
             return sb.ToString();
         }
-
-
 
         /*Matrix operator/(const Matrix& m, double d)
         {
