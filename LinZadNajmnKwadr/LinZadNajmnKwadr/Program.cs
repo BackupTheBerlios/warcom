@@ -18,7 +18,7 @@ namespace LinZadNajmnKwadr
         private static void LLSTest()
         {
             //int an = 4, am = 3, bm = 4;
-            int an = 4, am = 4, bm = 4;
+            int an = 4, am = 3, bm = 4;
             double[] tab = new double[] { 1, 1, 1, 1, 2, 3, 1, 3, 6, 1,4, 10, 1, 5, 15, 1, 6, 21 };
                                         
             double[] tabb = new double[] { -3, 4, 1, 0,2,5 };
@@ -26,17 +26,17 @@ namespace LinZadNajmnKwadr
             //Matrix A = new Matrix(tab, 6, 3);
             //Matrix b = new Matrix(tabb, 6, 1);                 //rozw [-0.25 0 0.25]
             
-            /*
-            double[] tab = new double[]{1, 2, 3, 
+            
+            double[] tab3 = new double[]{1, 2, 3, 
                                         4, 5, 6, 
                                         7, 8, 9,
-                                        10,11, 13};*/
+                                        10,11, 13};
             /*double[] tab = new double[]{1, 1, 1, 1, 1,
                                         0.00000001, 0, 0, 0, 0,
                                         0, 0.00000001, 0, 0, 0,
                                         0, 0, 0, 0.00000001, 0,
                                         0, 0, 0, 0, 0.00000001};*/
-            //double[] tabb = new double[] { 0, 1, 1, 0 };        // rozw [4 -2 0 1]
+            double[] tabb3 = new double[] { 0, 1, 1, 0 };        // rozw [4 -2 0 1]
             //double[] tabb = new double[] { 0, 1, 1, 0, 1 };
 
             double[] tab2 = new double[]{1,2,-1,0,
@@ -46,8 +46,8 @@ namespace LinZadNajmnKwadr
             double[] tabb2 = new double[] { 0, 1, 1, 0 };
             
             
-            Matrix A = new Matrix(tab2, an, am);
-            Matrix b = new Matrix(tabb2, bm, 1);
+            Matrix A = new Matrix(tab3, an, am);
+            Matrix b = new Matrix(tabb3, bm, 1);
 
             Console.WriteLine("A:");
             Console.WriteLine(A);

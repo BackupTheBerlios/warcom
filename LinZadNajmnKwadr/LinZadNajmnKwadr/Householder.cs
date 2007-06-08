@@ -96,6 +96,8 @@ namespace LinZadNajmnKwadr
                         vkt = vk.Transposition();
                         q *= I - ((vk * vkt) / a[k, k]);
                     }
+                    if (q.Columns != R.Columns)
+                        q = new Matrix(q, R.Columns);
                 }
 
 

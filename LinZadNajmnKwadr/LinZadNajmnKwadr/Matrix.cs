@@ -34,6 +34,8 @@ namespace LinZadNajmnKwadr
 
         }
 
+
+
         public void SetAllValues(double val)
         {
             for (int i = 0; i < rows; i++)
@@ -45,6 +47,19 @@ namespace LinZadNajmnKwadr
         {
             rows = matrix.Rows;
             columns = matrix.Columns;
+            m = new double[rows, columns];
+
+            for (int i = 0; i < rows; i++)
+                for (int j = 0; j < columns; j++)
+                    m[i, j] = matrix[i, j];
+        }
+
+        public Matrix(Matrix matrix, int numberOfColumns)
+        {
+            if(numberOfColumns < 1 || numberOfColumns > matrix.columns)
+                throw new IndexOutOfRangeException();
+            rows = matrix.Rows;
+            columns = numberOfColumns;
             m = new double[rows, columns];
 
             for (int i = 0; i < rows; i++)
