@@ -324,6 +324,8 @@ namespace SONStock
                         for (int j = 0; j < numberOfHiddenNeurons + 1; ++j)
                             startVals[i,k,j] = temp[i,k,j];
             }
+            if(errors == null)
+                errors = new List<double>();
             for (int i = 0; i < correctExits.Length; ++i)
                 errors.Add(correctExits[i] - exitValues[i]);
         }
@@ -331,6 +333,8 @@ namespace SONStock
         public double CountError()
         {
             double error = 0;
+            if (errors == null)
+                errors = new List<double>();
             for (int i = 0; i < errors.Count; ++i)
                 error += errors[i] * errors[i];
             return error / errors.Count;
